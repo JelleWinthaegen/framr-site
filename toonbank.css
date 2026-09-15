@@ -1,0 +1,91 @@
+/* De toonbank: het portaal in een apparaat dat rechtop komt als je scrolt.
+
+   Losse laag, want zowel de vloerenpagina als straks de hoofdpagina wil hem tonen, en
+   twee keer hetzelfde schrijven is twee keer onderhouden. Gebruikt de tokens uit
+   stijl.css; zet er een <section class="tb-scene"> op de pagina en laad toonbank.js.
+
+   Het apparaat staat als data-toestel op .tb-apparaat: laptop (een deksel dat opengaat
+   vanaf bijna dicht, met een onderstuk) of tablet (een iPad in de breedte, die alleen een
+   slag rechtop komt, want een tablet heeft geen scharnier). Jelle koos op 14-09-2026 voor
+   de iPad op de vloerenpagina: het opengaande deksel beviel hem niet.
+
+   Klassen beginnen met tb-, want de gedeelde stijl.css heeft zelf al een vak, raster,
+   maat, opschrift en voet. */
+
+.tb-scene { --p: 0; position: relative; height: 190vh; }
+.tb-plakker { position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column;
+              align-items: center; justify-content: center; gap: clamp(16px, 2.6vh, 34px); overflow: hidden; }
+
+.tb-woord { text-align: center; max-width: 820px; padding: 0 20px;
+            transform: translateY(calc(var(--p) * -70px)); }
+.tb-woord .opschrift { justify-content: center; }
+.tb-woord h2 { font-size: clamp(26px, 4.4vw, 50px); line-height: 1.05; margin: 10px 0 0; letter-spacing: -.03em; }
+.tb-woord h2 em { font-style: normal; color: var(--oranje); }
+
+.tb-toneel { position: relative; perspective: 1400px; width: min(1040px, 92vw, 94vh); }
+/* Een tablet is 4 bij 3 en dus hoger; smaller houden, anders past hij niet naast de kop. */
+.tb-toneel:has(.tb-apparaat[data-toestel="tablet"]) { width: min(920px, 90vw, 84vh); }
+.tb-apparaat { position: relative; margin: 0 auto; transform-style: preserve-3d;
+               transform: scale(calc(1.04 - .04 * var(--p))); transform-origin: 50% 90%; }
+
+/* Het deksel draait om het scharnier: bijna dicht als je aan komt scrollen, rechtop als
+   je erlangs bent. De hoek, de verhouding en de rondingen komen per apparaat. */
+.tb-apparaat { --kantel: 76deg; --ar: 16 / 10; --rand-r: 16px; --rand-d: 11px; --scherm-r: 8px; }
+.tb-apparaat[data-toestel="tablet"] { --kantel: 18deg; --ar: 4 / 3; --rand-r: 30px; --rand-d: 16px; --scherm-r: 16px; }
+.tb-deksel { transform-origin: 50% 100%; transform: rotateX(calc((1 - var(--p)) * var(--kantel))); }
+.tb-rand { position: relative; background: #15181C; border-radius: var(--rand-r); padding: var(--rand-d); border: 1px solid #262C33;
+           box-shadow: 0 2px 4px rgba(0,0,0,.18), 0 18px 40px rgba(0,0,0,.22), 0 60px 90px rgba(0,0,0,.16); }
+/* De camera bovenin de rand van de tablet. */
+.tb-camera { display: none; position: absolute; left: 50%; top: 5px; width: 6px; height: 6px; margin-left: -3px;
+             border-radius: 50%; background: #2C333A; z-index: 3; }
+.tb-apparaat[data-toestel="tablet"] .tb-camera { display: block; }
+.tb-scherm { position: relative; width: 100%; aspect-ratio: var(--ar); border-radius: var(--scherm-r);
+             overflow: hidden; background: var(--grond); }
+.tb-scherm iframe { position: absolute; left: 0; top: 0; border: 0; transform-origin: 0 0;
+                    background: var(--grond); opacity: 0; transition: opacity .62s ease;
+                    pointer-events: none; }
+.tb-scherm iframe.tb-voor { opacity: 1; }
+.tb-glans { position: absolute; inset: 0; z-index: 2; pointer-events: none;
+            background: linear-gradient(103deg, rgba(255,255,255,.22) 0 32%, rgba(255,255,255,0) 54%);
+            opacity: calc((1 - var(--p)) * 1.1); }
+
+/* Draait de dev-server niet, dan staat hier dit in plaats van een wit gat. */
+.tb-terugval { position: absolute; inset: 0; z-index: 1; display: flex; flex-direction: column;
+               align-items: center; justify-content: center; gap: 10px; text-align: center; padding: 24px;
+               background: var(--grond); }
+.tb-terugval .tb-merk { font-family: var(--merk); font-weight: var(--merk-gewicht); font-size: 32px;
+                        color: var(--inkt); -webkit-text-stroke: var(--merk-dikte) currentColor; }
+.tb-terugval .tb-merk span { color: var(--oranje); }
+.tb-terugval p { font-size: 13px; color: var(--label); max-width: 38ch; line-height: 1.55; margin: 0; }
+.tb-scherm.tb-live .tb-terugval { display: none; }
+
+/* Het onderstuk van de laptop. Een tablet heeft er geen. */
+.tb-onderstuk { position: relative; margin: 0 auto; width: 104%; }
+.tb-apparaat[data-toestel="tablet"] .tb-onderstuk { display: none; }
+.tb-scharnier { height: 7px; margin: 0 auto; width: 94%; background: #0E1114; border-radius: 0 0 4px 4px; }
+.tb-blad { position: relative; height: 15px; background: linear-gradient(#20262C 0%, #171C21 55%, #0F1317 100%);
+           clip-path: polygon(0 0, 100% 0, 97.5% 100%, 2.5% 100%); box-shadow: 0 20px 34px rgba(0,0,0,.2); }
+.tb-groef { position: absolute; left: 50%; top: 0; transform: translateX(-50%); width: 15%; height: 5px;
+            background: #0B0E11; border-radius: 0 0 6px 6px; }
+
+/* Het onderschrift bij de stap, met de stippen die de stand tonen. */
+.tb-bijschrift { position: absolute; left: 50%; bottom: -64px; transform: translateX(-50%);
+                 display: flex; flex-direction: column; align-items: center; gap: 11px; z-index: 5;
+                 width: max-content; max-width: 92vw; opacity: calc(var(--p) * 1.8 - .8); }
+.tb-zin { font-family: var(--kop); font-weight: 600; font-size: clamp(15px, 2vw, 20px); color: var(--inkt);
+          letter-spacing: -.01em; text-align: center; animation: tb-opzin .5s ease both; }
+@keyframes tb-opzin { from { opacity: 0; transform: translateY(7px); } to { opacity: 1; transform: none; } }
+.tb-stippen { display: flex; gap: 7px; }
+.tb-stippen i { display: block; width: 6px; height: 6px; border-radius: 50%; background: var(--lijn);
+                transition: background .3s ease, width .3s ease; }
+.tb-stippen i.tb-nu { background: var(--oranje); width: 20px; border-radius: 3px; }
+
+@media (max-width: 720px) {
+  .tb-scene { height: 150vh; }
+  .tb-bijschrift { bottom: -56px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tb-deksel { transform: none; }
+  .tb-zin { animation: none; }
+}

@@ -1,0 +1,101 @@
+/* Het proefpaneel voor het tweede deel van de vloerenlandingspagina (15-09-2026, het systeem zelf).
+
+   Schakelaars op de echte pagina, zodat Jelle per blok kiest in plaats van uit hele versies; dat
+   werkte op 14-09-2026 uitstekend. Elke keuze is een data-pf-attribuut op <html>; zonder attribuut
+   doet geen enkele regel hier iets, en zonder paneel staat alles aan.
+
+   Tijdelijk. Zodra Jelle gekozen heeft gaat de gekozen variant in index.html en gaan proef.css en
+   proef.js weg, zoals het paneel van 14-09-2026 op 15-09-2026 is weggehaald.
+
+   Klassen beginnen met pf-. Geen lange streepjes en geen emoji, conform de afspraken. */
+
+/* De blokken aan of uit. */
+html[data-pf-portaal="uit"] #portaal { display: none; }
+html[data-pf-gebouwd="uit"] #gebouwd { display: none; }
+html[data-pf-vergelijk="uit"] #vergelijk { display: none; }
+html[data-pf-vragen="uit"] .v3-vragen details[data-pf-nieuw] { display: none; }
+html[data-pf-portaal="uit"] .menu a[href="#portaal"] { display: none; }
+
+/* De tabbladen: links naast het scherm (de stand) of als rij erboven. */
+html[data-pf-tabs="boven"] .v3-portaal { grid-template-columns: 1fr; gap: 16px; }
+html[data-pf-tabs="boven"] .v3-tabs { flex-direction: row; flex-wrap: wrap; border-left: 0; border-bottom: 1px solid var(--lijn);
+                                       padding: 0 0 12px; position: static; gap: 4px; }
+html[data-pf-tabs="boven"] .v3-tabs button { padding: 9px 14px; border-radius: 999px; }
+html[data-pf-tabs="boven"] .v3-tabs button::before { display: none; }
+
+/* De foto achter de kop: de gelegde vloer (de stand, keuze Jelle 15-09-2026) of de vloer die half
+   gelegd wordt. */
+html[data-pf-foto="leggen"] .hero.v3-banner { background-image: url(../beeld/vloer-visgraat-leggen.jpg); }
+
+/* De kop: de volle hoogte (de stand) of de lagere kop van vanmiddag; de tekst links op de wand (de
+   stand, keuze Jelle 15-09-2026 avond) of in het midden en iets groter. */
+html[data-pf-kophoogte="lager"] .v3-kopduo { min-height: min(42vw, 88vh); }
+html[data-pf-koptekst="midden"] .v3-kopduo .woord { margin: 0 auto; text-align: center; align-items: center;
+                                                     padding-top: clamp(120px, 16vh, 220px); max-width: calc(980px + 2 * max(22px, 5.75vw)); }
+html[data-pf-koptekst="midden"] .v3-kopduo .woord h1 { max-width: 20ch; font-size: clamp(34px, 4.2vw, 58px); }
+html[data-pf-koptekst="midden"] .v3-kopduo .woord .opschrift { justify-content: center; }
+html[data-pf-koptekst="midden"] .v3-kopduo .woord .opschrift::before { display: none; }
+html[data-pf-koptekst="midden"] .v3-kopduo .woord .leidend { margin-left: auto; margin-right: auto; font-size: clamp(17px, 1.45vw, 21px); max-width: 50ch; }
+html[data-pf-koptekst="midden"] .v3-kopduo .woord .knoppen { justify-content: center; }
+
+/* De overgang na de kop: vloeiend (de stand: warme tint die doorloopt, de strook begrensd, de beweging
+   volgt de scroll) of zoals net (off-white, volle breedte, de vlakken springen op via de waarnemer). */
+html[data-pf-vloei="uit"] .hero.v3-banner::after { background: linear-gradient(to bottom, rgba(247, 247, 245, 0), var(--grond)); }
+html[data-pf-vloei="uit"] .v3-beelden { background: none; padding-bottom: 0; }
+html[data-pf-vloei="uit"] .v3-beelden .strook { max-width: none; }
+html[data-pf-vloei="uit"] .v3-boekenvak, html[data-pf-vloei="uit"] .v3-brochure-vak { background: #F1EDE6; border-color: #E5DFD4; }
+html[data-pf-vloei="uit"] .v3-kopduo .woord, html[data-pf-vloei="uit"] .hero.v3-banner { animation: none; }
+html[data-pf-vloei="uit"] .v3-beelden:not(.v3-in) .strook .beeldslot { opacity: 0; animation: none; }
+html[data-pf-vloei="uit"] .v3-beelden.v3-in .strook .beeldslot { animation: v3-opkomen .9s cubic-bezier(.2, .7, .2, 1) backwards; animation-timeline: auto; animation-range: normal; }
+html[data-pf-vloei="uit"] .v3-beelden.v3-in .strook .beeldslot:nth-child(2) { animation-delay: .14s; }
+html[data-pf-vloei="uit"] .v3-beelden.v3-in .strook .beeldslot:nth-child(3) { animation-delay: .28s; }
+
+/* Meer beweging door de pagina (de stand) of zoals net. */
+html[data-pf-animatie="minder"] :is(section .kopblok, section .duo, #marge .v3-calc, .v3-portaal, .v3-meet, .v3-etalage, .v3-levering, .v3-vergelijk, #service .binnen > *, #leads .binnen > *, #aanmelden .knoppen, .v3-vragen, .kc-kaarten > *, .v3-vier > *, .v3-punten-twee > li, .v3-producten > *, .v3-niveaus > *, .v3-showrooms > *, .v3-inbegrepen > div) { animation: none; }
+html[data-pf-animatie="minder"] section .opschrift::before { animation: none; }
+html[data-pf-animatie="minder"] .v3-schermrand img.v3-voor { animation: none; }
+html[data-pf-animatie="minder"] .knop:hover { translate: none; box-shadow: none; }
+html[data-pf-animatie="minder"] .v3-vragen details::details-content { transition: none; }
+
+/* Wat er onder de banner komt: niets (de stand, meteen het verdienmodel), drie kleine wegwijzers, of de
+   drie blokken zoals net. */
+html[data-pf-onder="wegwijzers"] .v3-wegwijzers { display: block; }
+html[data-pf-onder="vlakken"] .v3-beelden { display: block; }
+html[data-pf-onder="wegwijzers"] #verdienmodel.lijn-boven, html[data-pf-onder="vlakken"] #verdienmodel.lijn-boven {
+  background: none; border-top: 1px solid var(--lijn); padding-top: 104px; }
+html[data-pf-onder="wegwijzers"] #verdienmodel .kopblok, html[data-pf-onder="wegwijzers"] #verdienmodel .v3-stap,
+html[data-pf-onder="wegwijzers"] #verdienmodel .v3-som-regel, html[data-pf-onder="vlakken"] #verdienmodel .kopblok,
+html[data-pf-onder="vlakken"] #verdienmodel .v3-stap, html[data-pf-onder="vlakken"] #verdienmodel .v3-som-regel { animation: none; }
+html[data-pf-vloei="uit"] #verdienmodel.lijn-boven { background: none; }
+html[data-pf-vloei="uit"] #verdienmodel .kopblok, html[data-pf-vloei="uit"] #verdienmodel .v3-stap, html[data-pf-vloei="uit"] #verdienmodel .v3-som-regel { animation: none; }
+
+/* De drie vlakken onder de kop: komen omhoog (de stand) of staan stil, en dicht onder de kop zoals eerst. */
+html[data-pf-vlakken="stil"] .v3-beelden:not(.v3-in) .strook .beeldslot { opacity: 1; }
+html[data-pf-vlakken="stil"] .v3-beelden.v3-in .strook .beeldslot { animation: none; }
+html[data-pf-vlakken="stil"] .v3-beelden { padding-top: 12px; }
+
+/* De overgang onderaan de foto naar de achtergrondkleur: aan (de stand) of uit. */
+html[data-pf-overgang="uit"] .hero.v3-banner::after { display: none; }
+
+/* Het paneel zelf. */
+.pf-paneel { position: fixed; left: 18px; bottom: 18px; z-index: 95; width: 312px; background: rgba(255,255,255,.96);
+             backdrop-filter: blur(10px); border: 1px solid var(--lijn); border-radius: 14px;
+             box-shadow: 0 18px 50px rgba(20,22,26,.16); font-family: var(--lopend); color: var(--inkt); }
+.pf-kop { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; }
+.pf-kop b { font-family: var(--mono); font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase;
+            color: var(--oranje); font-weight: 500; }
+.pf-kop button { font-family: var(--lopend); font-size: 12px; color: var(--label); background: transparent; border: 0;
+                 cursor: pointer; padding: 2px 4px; }
+.pf-kop button:hover { color: var(--inkt); }
+.pf-groep { padding: 9px 14px; border-top: 1px solid var(--lijn); }
+.pf-naam { display: block; font-size: 12px; color: var(--label); margin-bottom: 6px; }
+.pf-keuze { display: flex; flex-wrap: wrap; gap: 4px; }
+.pf-keuze button { font-family: var(--lopend); font-size: 12.5px; color: var(--tekst); background: transparent;
+                   border: 1px solid var(--lijn); border-radius: 999px; padding: 5px 11px; cursor: pointer; }
+.pf-keuze button:hover { color: var(--inkt); border-color: var(--inkt); }
+.pf-keuze button[aria-pressed="true"] { background: var(--oranje-zacht); border-color: #F3CDB4; color: var(--oranje-donker); }
+.pf-lees { padding: 10px 14px 12px; border-top: 1px solid var(--lijn); font-family: var(--mono); font-size: 10.5px;
+           letter-spacing: .06em; color: var(--label); line-height: 1.6; }
+.pf-paneel.pf-dicht { width: auto; }
+.pf-paneel.pf-dicht .pf-groep, .pf-paneel.pf-dicht .pf-lees, .pf-paneel.pf-dicht [data-pf-terug] { display: none; }
+@media (max-width: 760px) { .pf-paneel { left: 10px; right: 10px; bottom: 10px; width: auto; } }
