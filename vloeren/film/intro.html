@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Framr.One, de film: intro</title>
+<meta name="robots" content="noindex, nofollow">
+<!-- De intro van de film (25-09-2026): vijf seconden, de vloer van de banner met de regel die Jelle
+     wil, verdien meer aan iedere vloer, en dan een overgang naar het portaal. Wordt opgenomen door
+     opnemen.mjs; staat nooit als pagina in het menu. De letters komen van Google Fonts, of, bij het
+     opnemen, van de lokaal gezette exemplaren. Geen lange streepjes en geen emoji. -->
+<link href="https://fonts.googleapis.com/css2?family=Questrial&family=Poppins:wght@400;500;600&family=Public+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --inkt: #14161A; --oranje: #EA5B10; --grond: #F7F7F5; }
+  html, body { margin: 0; height: 100%; background: var(--grond); overflow: hidden; }
+  .doek { position: fixed; inset: 0; background: var(--inkt) url(../../beeld/vloer-visgraat-licht.jpg) center 42% / cover no-repeat;
+          animation: doek-in 1.6s ease both, doek-uit .7s ease 4.6s both; }
+  .doek::after { content: ""; position: absolute; inset: 0;
+                 background: linear-gradient(to top, rgba(20, 22, 26, .78) 0%, rgba(20, 22, 26, .28) 45%, rgba(20, 22, 26, 0) 75%); }
+  .woord { position: absolute; left: 7vw; bottom: 12vh; z-index: 2; color: #fff; max-width: 60vw; }
+  .kicker { font-family: 'IBM Plex Mono', monospace; font-size: 15px; letter-spacing: .22em; text-transform: uppercase; color: var(--oranje);
+            display: flex; align-items: center; gap: 14px; margin-bottom: 26px; animation: op .8s ease .5s both; }
+  .kicker::before { content: ""; width: 40px; height: 1px; background: var(--oranje); }
+  h1 { font-family: 'Poppins', sans-serif; font-weight: 600; font-size: clamp(48px, 6.4vw, 96px); line-height: 1.02; letter-spacing: -.035em;
+       margin: 0; animation: op 1s cubic-bezier(.2, .7, .2, 1) .9s both; }
+  h1 em { font-style: normal; color: var(--oranje); }
+  p { font-family: 'Public Sans', sans-serif; font-size: clamp(18px, 1.7vw, 26px); line-height: 1.45; color: rgba(255, 255, 255, .86);
+      margin: 26px 0 0; max-width: 34ch; animation: op .9s ease 1.9s both; }
+  .merk { position: absolute; left: 7vw; top: 7vh; z-index: 2; font-family: 'Questrial', sans-serif; font-size: 36px; color: #fff;
+          -webkit-text-stroke: .026em currentColor; paint-order: stroke fill; animation: op .8s ease .2s both; }
+  .merk span { color: var(--oranje); }
+  @keyframes op { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
+  @keyframes doek-in { from { transform: scale(1.06); } to { transform: none; } }
+  @keyframes doek-uit { to { opacity: 0; } }
+  .uit { position: fixed; inset: 0; background: var(--grond); opacity: 0; animation: wit .7s ease 4.6s both; pointer-events: none; }
+  @keyframes wit { to { opacity: 1; } }
+</style>
+</head>
+<body>
+<div class="doek"></div>
+<div class="merk">Framr<span>.One</span></div>
+<div class="woord">
+  <div class="kicker">Framr.One Vloeren</div>
+  <h1>Verdien meer aan <em>iedere</em> vloer.</h1>
+  <p>Partnerprijzen op JOKA-vloeren, en het portaal erbij. Gratis. Dit is een klus, van begin tot eind.</p>
+</div>
+<div class="uit"></div>
+</body>
+</html>
