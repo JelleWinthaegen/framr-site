@@ -1,0 +1,1665 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Framr.One Vloeren, meer verdienen aan iedere vloerklus</title>
+<meta name="description" content="Framr.One Vloeren: koop JOKA-vloeren en materiaal tegen partnerprijzen, bepaal zelf je verkoopprijs en regel de klus van inmeten tot factuur vanuit een omgeving. Het portaal is gratis.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Questrial&family=Poppins:wght@400;500;600&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../stijl.css">
+<link rel="stylesheet" href="../toonbank.css">
+<!-- Tijdelijk: het proefpaneel voor het tweede deel (15-09-2026). Gaat weg na de keuze van Jelle. -->
+<link rel="stylesheet" href="proef.css?v=2026-09-15c">
+<style>
+  /* De vloerenlandingspagina (framr.one/vloeren). Sinds 14-09-2026 is dit versie 3: rond
+     marge in plaats van rond software, met drie bewegende momenten (de toonbank, de
+     projectflow en de calculator die reageert); de rest staat stil. De eerdere versies
+     staan ernaast als versie-1.html (het origineel van 12-09) en versie-2.html.
+
+     Eigen klassen beginnen met v3-, naar de versie waaruit de pagina komt. De gedeelde
+     stijl.css levert vak, raster, opschrift, duo, punten en de knoppen. */
+
+  .v3-bewijsrij { list-style: none; margin: 22px 0 0; padding: 0; display: flex; flex-wrap: wrap;
+                  gap: 10px 22px; font-family: var(--mono); font-size: 10.5px; letter-spacing: .14em;
+                  text-transform: uppercase; color: var(--label); }
+  .v3-bewijsrij li { display: flex; align-items: center; gap: 9px; }
+  .v3-bewijsrij li::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: var(--oranje); }
+
+  /* De calculator. Schuifjes links, de uitkomst groot rechts. */
+  .v3-calc { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 40px; margin-top: 40px;
+             background: var(--vlak); border: 1px solid var(--lijn); border-radius: 18px; padding: 34px; }
+  .v3-schuif { display: block; margin-bottom: 22px; }
+  .v3-schuif .v3-rij { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+  .v3-schuif .v3-wat { font-size: 14px; color: var(--tekst); }
+  .v3-schuif .v3-stand { font-family: var(--mono); font-size: 13px; color: var(--inkt); }
+  .v3-schuif input[type="range"] { width: 100%; accent-color: var(--oranje); }
+  .v3-schuif select { width: 100%; font-family: var(--lopend); font-size: 14px; padding: 9px 12px;
+                      border: 1px solid var(--lijn); border-radius: 8px; background: var(--grond); color: var(--inkt); }
+  .v3-uitkomst { display: flex; flex-direction: column; justify-content: center; gap: 22px; }
+  .v3-groot .v3-cijfer { display: block; font-family: var(--kop); font-weight: 600; letter-spacing: -.03em;
+                         font-size: clamp(40px, 5.6vw, 66px); line-height: 1; color: var(--oranje);
+                         font-variant-numeric: tabular-nums; }
+  .v3-groot .v3-onder { display: block; margin-top: 10px; font-size: 15px; color: var(--tekst); }
+  .v3-regels { border-top: 1px solid var(--lijn); }
+  .v3-regels div { display: flex; justify-content: space-between; gap: 16px; padding: 10px 0;
+                   border-bottom: 1px solid var(--lijn); font-size: 14px; color: var(--tekst); }
+  .v3-regels div span:last-child { font-family: var(--mono); font-size: 13px; color: var(--inkt); white-space: nowrap; }
+  .v3-noot { font-size: 13px; color: var(--label); line-height: 1.55; margin-top: 4px; }
+
+  /* De projectflow: de maatlijn met zes stations die oplichten. */
+  .v3-lat { --q: 0; position: relative; margin-top: 46px; padding-left: 92px; }
+  .v3-lat .v3-staaf { position: absolute; left: 44px; top: 6px; bottom: 6px; width: 2px; background: var(--lijn); }
+  .v3-lat .v3-getekend { position: absolute; left: 44px; top: 6px; width: 2px; background: var(--oranje);
+                         height: calc(var(--q) * 100%); max-height: calc(100% - 12px); }
+  .v3-lat .v3-loper { position: absolute; left: 44px; top: 6px; width: 14px; height: 14px; margin: -7px 0 0 -6px;
+                      border-radius: 50%; background: var(--oranje); box-shadow: 0 0 0 6px rgba(234,91,16,.14);
+                      transform: translateY(calc(var(--q) * var(--lat-h, 0px))); }
+  .v3-station { position: relative; padding: 22px 0 40px; opacity: .32; transition: opacity .45s ease; }
+  .v3-station.v3-aan { opacity: 1; }
+  .v3-station::before { content: ""; position: absolute; left: -54px; top: 30px; width: 22px; height: 2px; background: var(--maatlijn); }
+  .v3-station.v3-aan::before { background: var(--oranje); }
+  .v3-station .nr { font-family: var(--mono); font-size: 11px; letter-spacing: .18em; color: var(--oranje); }
+  .v3-station h3 { font-size: clamp(20px, 2.6vw, 28px); margin: 8px 0 8px; letter-spacing: -.02em; }
+  .v3-station p { font-size: 15px; color: var(--tekst); line-height: 1.7; max-width: 52ch; margin: 0; }
+
+  /* Twee kolommen met een streep ertussen, voor Framr.One tegenover Oaklyn. */
+  .v3-tweeluik { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-top: 40px;
+                 border: 1px solid var(--lijn); border-radius: 18px; overflow: hidden; }
+  .v3-tweeluik > div { padding: 34px; }
+  .v3-tweeluik > div + div { border-left: 1px solid var(--lijn); }
+  .v3-tweeluik .merk { font-size: 26px; display: inline-block; }
+  .v3-tweeluik .v3-voor { font-family: var(--mono); font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase;
+                          color: var(--oranje); display: block; margin: 10px 0 14px; }
+  .v3-tweeluik p { font-size: 15px; color: var(--tekst); line-height: 1.7; margin: 0; }
+
+  /* Het grote statement. */
+  .v3-statement { text-align: center; padding: 96px max(22px, 5.75vw); }
+  .v3-statement h2 { font-size: clamp(30px, 4.8vw, 56px); letter-spacing: -.03em; max-width: 18ch; margin: 0 auto; }
+  .v3-statement h2 em { font-style: normal; color: var(--oranje); }
+  .v3-statement p { font-size: 17px; color: var(--tekst); max-width: 54ch; margin: 22px auto 0; line-height: 1.7; }
+
+  /* De niveaus: brons nu, zilver en goud erboven. */
+  .v3-niveaus { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 30px; }
+
+  /* De etalage van 555 Wooden Styles: een kamerbeeld met de naam erop, de stalen als strook eronder. */
+  .v3-etalage { margin-top: 40px; }
+  .v3-etalage-kamer { position: relative; aspect-ratio: 16 / 10; border-radius: 18px; overflow: hidden;
+                      background: var(--vlak); border: 1px solid var(--lijn); }
+  .v3-etalage-kamer img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .7s ease; }
+  .v3-etalage-kamer img.v3-voor { opacity: 1; }
+  .v3-etalage-naam { position: absolute; left: 26px; bottom: 26px; z-index: 2; padding: 16px 22px 14px;
+                     background: rgba(255,255,255,.94); border-radius: 14px; }
+  .v3-etalage-nr { display: block; font-family: var(--mono); font-size: 10.5px; letter-spacing: .16em; color: var(--oranje); }
+  .v3-etalage-naam b { display: block; font-family: var(--kop); font-weight: 600; font-size: 24px; letter-spacing: -.02em; color: var(--inkt); margin: 4px 0 2px; }
+  .v3-etalage-naam i { display: block; font-style: normal; font-size: 13px; color: var(--label); }
+  .v3-etalage-patroon { position: absolute; right: 22px; top: 22px; z-index: 2; display: flex; gap: 4px; padding: 5px;
+                        background: rgba(255,255,255,.94); border-radius: 999px; }
+  .v3-etalage-patroon button { font-family: var(--kop); font-weight: 500; font-size: 13px; padding: 8px 16px; border-radius: 999px;
+                               border: 0; background: transparent; color: var(--inkt); cursor: pointer; }
+  .v3-etalage-patroon button[aria-pressed="true"] { background: var(--inkt); color: #fff; }
+  .v3-etalage-patroon button[disabled] { opacity: .35; cursor: default; }
+  .v3-etalage-stalen { display: grid; grid-template-columns: repeat(8, 1fr); gap: 12px; margin-top: 14px; }
+  .v3-staalknop { appearance: none; -webkit-appearance: none; border: 1px solid var(--lijn); background: var(--vlak); border-radius: 12px;
+                  padding: 8px 8px 10px; cursor: pointer; text-align: left; font: inherit; color: inherit;
+                  transition: transform .2s ease, border-color .2s ease; }
+  .v3-staalknop:hover { transform: translateY(-3px); border-color: var(--label); }
+  .v3-staalknop[aria-pressed="true"] { border-color: var(--inkt); box-shadow: inset 0 0 0 1px var(--inkt); }
+  .v3-staalbeeld { display: block; aspect-ratio: 3 / 4; border-radius: 7px; background-size: cover; background-position: 50% 50%; }
+  .v3-staalknop b { display: block; margin-top: 9px; font-family: var(--kop); font-weight: 600; font-size: 13.5px; letter-spacing: -.01em; }
+  .v3-staalknop i { display: block; font-style: normal; font-family: var(--mono); font-size: 10px; letter-spacing: .12em; color: var(--label); margin-top: 2px; }
+  @media (max-width: 900px) {
+    .v3-etalage-stalen { grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .v3-etalage-kamer { aspect-ratio: 4 / 3; }
+    .v3-etalage-naam { left: 14px; bottom: 14px; padding: 12px 16px 10px; }
+    .v3-etalage-naam b { font-size: 19px; }
+    .v3-etalage-patroon { right: 12px; top: 12px; }
+  }
+
+  /* De stalenboeken: de echte collectieboxen van JOKA in een vitrine. De box van Design 340 is een
+     productfoto in perspectief; het boek van 555 Wooden Styles is een platte omslag die hier een rug en
+     een kwartslag krijgt, zodat de twee elkaar aankijken. Ze komen omhoog zodra het blok in beeld komt. */
+  .v3-stalen { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; align-items: center;
+               margin: 44px 0 52px; padding: 30px 46px; background: var(--vlak); border: 1px solid var(--lijn); border-radius: 18px; }
+  .v3-vitrine { position: relative; height: 420px; }
+  .v3-boekdoos { position: absolute; bottom: 30px; display: block; opacity: 0; transform: translateY(26px);
+                 filter: drop-shadow(0 28px 26px rgba(20,22,26,.2));
+                 transition: opacity .7s ease calc(var(--i) * 180ms), transform .9s cubic-bezier(.2, .7, .2, 1) calc(var(--i) * 180ms); }
+  .v3-vitrine.open .v3-boekdoos { opacity: 1; transform: none; }
+  .v3-boekdoos img { display: block; width: 100%; height: auto; }
+  .v3-doos-340 { left: 3%; width: 44%; z-index: 2; }
+  .v3-doos-555 { right: 5%; width: 34%; perspective: 1100px; }
+  .v3-boek3d { display: block; position: relative; transform-style: preserve-3d; transform-origin: 0 50%; transform: rotateY(-26deg); }
+  .v3-boek3d img { border-radius: 2px 5px 5px 2px; box-shadow: 0 1px 3px rgba(20,22,26,.35); }
+  .v3-doos-rug { position: absolute; left: 0; top: 2px; bottom: 2px; width: 34px; display: block;
+                 transform-origin: 0 50%; transform: rotateY(90deg);
+                 background: linear-gradient(to right, #202327, #0F1114 60%, #17191C); border-radius: 3px 0 0 3px; }
+  .v3-stalen-woord h3 { font-size: clamp(22px, 2.2vw, 30px); letter-spacing: -.025em; margin: 10px 0 16px; max-width: 16ch; }
+  .v3-stalen-woord p { font-size: 16px; line-height: 1.6; color: var(--tekst); margin: 0 0 18px; max-width: 46ch; }
+  .v3-stalen-lijst { list-style: none; margin: 0; padding: 0; max-width: 46ch; }
+  .v3-stalen-lijst li { padding: 10px 0; border-top: 1px solid var(--lijn); font-size: 14.5px; color: var(--tekst); }
+  .v3-stalen-lijst li:last-child { border-bottom: 1px solid var(--lijn); }
+  .v3-stalen-lijst b { display: block; font-family: var(--kop); font-weight: 600; font-size: 15px; color: var(--inkt); margin-bottom: 2px; }
+  @media (prefers-reduced-motion: reduce) { .v3-boekdoos { transition: none; } }
+
+  /* De showrooms: vier kaarten met adres, elk een link naar de showroompagina van JOKA. */
+  .v3-showrooms { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-top: 40px; }
+  .v3-showroom { display: flex; flex-direction: column; gap: 10px; padding: 22px 20px 20px; background: var(--vlak);
+                 border: 1px solid var(--lijn); border-radius: 16px; text-decoration: none; color: inherit;
+                 transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease; }
+  .v3-showroom:hover, .v3-showroom:focus-visible { transform: translateY(-4px); box-shadow: 0 18px 36px rgba(20,22,26,.1); border-color: var(--label); }
+  .v3-showroom:focus-visible { outline: 2px solid var(--oranje); outline-offset: 2px; }
+  .v3-showroom-stad { font-family: var(--kop); font-weight: 600; font-size: 20px; letter-spacing: -.02em; color: var(--inkt); }
+  .v3-showroom-adres { font-size: 14.5px; line-height: 1.55; color: var(--tekst); }
+  .v3-showroom-meer { margin-top: auto; padding-top: 10px; font-family: var(--mono); font-size: 10.5px; letter-spacing: .14em;
+                      text-transform: uppercase; color: var(--label); white-space: nowrap; }
+  .v3-showroom-meer .pijl { display: inline-block; margin-left: 4px; color: var(--oranje); transition: transform .25s ease; }
+  .v3-showroom:hover .v3-showroom-meer .pijl { transform: translateX(4px); }
+  /* Service en direct contact: drie punten en de knoppen. */
+  .v3-punten { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-top: 40px; }
+  .v3-punt { padding: 26px 26px 24px; background: var(--vlak); border: 1px solid var(--lijn); border-radius: 16px; }
+  .v3-punt b { display: block; font-family: var(--kop); font-weight: 600; font-size: 18px; letter-spacing: -.015em; color: var(--inkt); margin-bottom: 8px; }
+  .v3-punt p { margin: 0; font-size: 14.5px; line-height: 1.6; color: var(--tekst); }
+  .v3-service-knoppen { margin-top: 30px; display: flex; gap: 12px; flex-wrap: wrap; }
+  /* Extra leads: bescheiden, want de legservice is net gestart. */
+  .v3-fijn { font-size: 14px; line-height: 1.6; color: var(--label); margin: 14px 0 0; max-width: 56ch; }
+  @media (max-width: 900px) { .v3-punten { grid-template-columns: 1fr; } }
+
+
+
+  /* De levering: het magazijn groot, de uitleg ernaast; het magazijnvlak onder de kop wijst hierheen. */
+  .v3-levering { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 48px; align-items: center;
+                 margin: 0 0 52px; padding: 30px 46px 30px 30px; background: var(--vlak); border: 1px solid var(--lijn); border-radius: 18px;
+                 scroll-margin-top: 84px; }
+  .v3-levering-beeld { aspect-ratio: 16 / 10; border-radius: 12px; overflow: hidden; }
+  .v3-levering-beeld img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 40% 50%; }
+  .v3-levering-woord h3 { font-size: clamp(22px, 2.2vw, 30px); letter-spacing: -.025em; margin: 10px 0 16px; max-width: 18ch; }
+  .v3-levering-woord p { font-size: 16px; line-height: 1.6; color: var(--tekst); margin: 0 0 18px; max-width: 46ch; }
+  .v3-levering-lijst { list-style: none; margin: 0; padding: 0; max-width: 46ch; }
+  .v3-levering-lijst li { padding: 10px 0; border-top: 1px solid var(--lijn); font-size: 14.5px; color: var(--tekst); }
+  .v3-levering-lijst li:last-child { border-bottom: 1px solid var(--lijn); }
+  .v3-levering-lijst b { display: block; font-family: var(--kop); font-weight: 600; font-size: 15px; color: var(--inkt); margin-bottom: 2px; }
+  @media (max-width: 900px) { .v3-levering { grid-template-columns: 1fr; gap: 24px; padding: 24px; } }
+  @media (max-width: 900px) {
+    .v3-stalen { grid-template-columns: 1fr; gap: 24px; padding: 24px; }
+    .v3-vitrine { height: 340px; }
+  }
+  .v3-niveau { border: 1px solid var(--lijn); border-radius: 14px; padding: 20px 22px; background: var(--vlak); }
+  .v3-niveau.nu { border-color: var(--oranje); }
+  .v3-niveau .v3-naam { font-family: var(--kop); font-weight: 600; font-size: 18px; }
+  .v3-niveau .v3-tag { font-family: var(--mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase;
+                       color: var(--oranje); margin-left: 8px; }
+  .v3-niveau p { font-size: 13.5px; color: var(--tekst); line-height: 1.55; margin: 8px 0 0; }
+
+  /* Waar het over gaat: de drie kale getallen naast de punten. Stil, geen tellers. */
+  .v3-cijfers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 44px; }
+  .v3-cijfer-vak { border-top: 1px solid var(--lijn); padding-top: 18px; }
+  .v3-cijfer-vak .v3-getal { display: block; font-family: var(--kop); font-weight: 600; letter-spacing: -.03em;
+                             font-size: clamp(38px, 4.4vw, 56px); line-height: 1; color: var(--inkt); font-variant-numeric: tabular-nums; }
+  .v3-cijfer-vak .v3-getal em { font-style: normal; color: var(--oranje); }
+  .v3-cijfer-vak .v3-bij { display: block; margin-top: 10px; font-size: 14.5px; color: var(--tekst); line-height: 1.5; }
+
+  /* De inmeetdemo: dezelfde bouw als de calculator, velden links, de lijst rechts. */
+  .v3-meet { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 40px; margin-top: 40px;
+             background: var(--vlak); border: 1px solid var(--lijn); border-radius: 18px; padding: 34px; }
+  .v3-velden { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 20px; }
+  .v3-veld { display: block; }
+  .v3-veld.breed { grid-column: 1 / -1; }
+  .v3-veld .v3-wat { display: block; font-size: 14px; color: var(--tekst); margin-bottom: 7px; }
+  .v3-veld input[type="number"], .v3-veld select { width: 100%; font-family: var(--lopend); font-size: 15px; padding: 10px 12px;
+                                                   border: 1px solid var(--lijn); border-radius: 8px; background: var(--grond); color: var(--inkt); }
+  .v3-veld input[type="number"] { font-family: var(--mono); font-size: 14px; }
+  .v3-veld.vink { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--tekst); }
+  .v3-veld.vink input { accent-color: var(--oranje); width: 16px; height: 16px; margin: 0; }
+  .v3-lijst { border-top: 1px solid var(--lijn); }
+  .v3-lijst div { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 16px; padding: 12px 0; border-bottom: 1px solid var(--lijn); }
+  .v3-lijst .v3-l { font-size: 14.5px; color: var(--inkt); }
+  .v3-lijst .v3-r { font-family: var(--mono); font-size: 13px; color: var(--inkt); white-space: nowrap; text-align: right; }
+  .v3-lijst .v3-hoe { grid-column: 1 / -1; font-size: 12.5px; color: var(--label); line-height: 1.5; }
+  .v3-lijst div.v3-som .v3-l, .v3-lijst div.v3-som .v3-r { font-family: var(--kop); font-weight: 600; font-size: 17px; }
+  .v3-lijst div.v3-som .v3-r { color: var(--oranje); font-family: var(--mono); font-weight: 500; }
+
+  /* Een woonkamer, twee manieren: twee kolommen met een streep ertussen. */
+  .v3-twee { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-top: 40px; border: 1px solid var(--lijn); border-radius: 18px; overflow: hidden; }
+  .v3-twee > div { padding: 34px; }
+  .v3-twee > div + div { border-left: 1px solid var(--lijn); background: var(--vlak); }
+  .v3-twee .v3-hoe-kop { font-family: var(--mono); font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--label); }
+  .v3-twee > div + div .v3-hoe-kop { color: var(--oranje); }
+  .v3-twee h3 { font-size: 22px; margin: 10px 0 18px; letter-spacing: -.02em; }
+  .v3-twee ol { margin: 0; padding: 0; list-style: none; counter-reset: stap; }
+  .v3-twee ol li { counter-increment: stap; position: relative; padding: 11px 0 11px 40px; border-top: 1px solid var(--lijn); font-size: 15px; color: var(--tekst); }
+  .v3-twee ol li:last-child { border-bottom: 1px solid var(--lijn); }
+  .v3-twee ol li::before { content: counter(stap, decimal-leading-zero); position: absolute; left: 0; top: 13px;
+                           font-family: var(--mono); font-size: 11px; letter-spacing: .14em; color: var(--maatlijn); }
+  .v3-twee > div + div ol li::before { color: var(--oranje); }
+  .v3-twee ol li s { color: var(--label); text-decoration-color: var(--maatlijn); }
+  .v3-twee .v3-onderaan { margin-top: 18px; font-size: 13.5px; color: var(--label); line-height: 1.55; }
+
+  /* Vloeren nu, kozijnen volgt. */
+  .v3-vakgebieden { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 44px; }
+
+  /* De banner van Jelle achter de kop (14-09-2026). Het beeld is 2 bij 1; op een breed scherm vult
+     het de hele kop en valt er links en rechts iets af, op een smal scherm staat de kop erboven
+     en de vloer eronder. */
+  /* De foto achter de kop is de gelegde visgraatvloer van Jelle (beeld/vloer-visgraat-licht.jpg).
+     Op 15-09-2026 (avond) is de vloer die half gelegd wordt geprobeerd (vloer-visgraat-leggen.jpg);
+     Jelle koos toch de gelegde vloer. De andere blijft bewaard en staat in het proefpaneel. */
+  .hero.v3-banner { background: var(--grond) url(../beeld/vloer-visgraat-licht.jpg) center 35% / cover no-repeat; }
+  .hero.v3-banner .woord .leidend { color: var(--inkt); }
+  .hero.v3-banner .woord .fijn { color: var(--tekst) !important; }
+
+  /* De drie beeldvlakken onder de kop (Jelle, 15-09-2026): links de JOKA-brochure om door te bladeren,
+     in het midden een gelegde vloer, rechts het magazijn. De strook komt uit stijl.css. */
+  /* De drie vlakken staan een flink stuk onder de kop en komen omhoog het scherm in zodra ze in beeld
+     komen, een voor een (wens Jelle, 15-09-2026 avond: speelser en een betere overgang na de foto). De
+     animatie vult niet na, zodat de lift bij aanwijzen daarna gewoon werkt; zonder waarnemer of bij
+     prefers-reduced-motion staan ze meteen. */
+  /* De kleur loopt mee (Jelle, 15-09-2026 avond: de achtergrond liep niet mooi mee, en op de ultrawide
+     klopten de verhoudingen niet). De foto loopt onderaan uit in een warme tint, tussen de wand en het
+     off-white van de pagina in; die tint loopt onder de vlakken door en koelt daar af naar de grond van
+     de pagina. De vlakken zelf zijn een tint lichter dan die grond, zodat ze er zacht op liggen. De
+     strook heeft een maximale breedte, zodat de vlakken op een ultrawide niet tot brede platte repen
+     worden uitgerekt. */
+  :root { --v3-warm: #EFE7DC; --v3-warm-vlak: #F7F3ED; --v3-warm-lijn: #E7DFD3; }
+  /* Sinds 15-09-2026 (avond) staan de drie blokken UIT: Jelle vond ze onder de banner toch niet mooi. Ze
+     staan nog in het proefpaneel als vergelijking, naast twee andere varianten: niets ertussen (het
+     verdienmodel volgt meteen op de kop, de stand) en drie kleine wegwijzers in een smalle rij. */
+  .v3-beelden { display: none; }
+  .v3-beelden { padding: clamp(110px, 16vh, 200px) 0 56px;
+                background: linear-gradient(to bottom, var(--v3-warm) 0%, var(--v3-warm) 45%, var(--grond) 100%); }
+  .v3-beelden .strook { max-width: 1680px; margin: 0 auto; }
+  .v3-beelden:not(.v3-in) .strook .beeldslot { opacity: 0; }
+  @keyframes v3-opkomen { from { opacity: 0; transform: translateY(64px); } to { opacity: 1; transform: none; } }
+  .v3-beelden.v3-in .strook .beeldslot { animation: v3-opkomen .9s cubic-bezier(.2, .7, .2, 1) backwards; }
+  .v3-beelden.v3-in .strook .beeldslot:nth-child(2) { animation-delay: .14s; }
+  .v3-beelden.v3-in .strook .beeldslot:nth-child(3) { animation-delay: .28s; }
+  @media (prefers-reduced-motion: reduce) {
+    .v3-beelden:not(.v3-in) .strook .beeldslot { opacity: 1; }
+    .v3-beelden.v3-in .strook .beeldslot { animation: none; }
+  }
+  /* Variant: drie kleine wegwijzers in een smalle rij op de warme grond (uit; het paneel zet ze aan). */
+  .v3-wegwijzers { display: none; padding: 0 0 48px; background: linear-gradient(to bottom, var(--v3-warm) 0%, var(--v3-warm) 40%, var(--grond) 100%); }
+  .v3-wegwijzer-rij { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .v3-wegwijzer { display: flex; align-items: center; gap: 16px; padding: 14px 18px 14px 14px; background: var(--v3-warm-vlak);
+                  border: 1px solid var(--v3-warm-lijn); border-radius: 16px; text-decoration: none; color: inherit; font: inherit;
+                  text-align: left; cursor: pointer; appearance: none; -webkit-appearance: none; width: 100%;
+                  transition: translate .3s ease, box-shadow .3s ease; }
+  .v3-wegwijzer:hover, .v3-wegwijzer:focus-visible { translate: 0 -3px; box-shadow: 0 18px 36px rgba(20,22,26,.10); outline: none; }
+  .v3-wegwijzer img { width: 56px; height: 56px; object-fit: cover; border-radius: 10px; flex: none; background: var(--vlak); }
+  .v3-wegwijzer > span:not(.pijl) { min-width: 0; }
+  .v3-wegwijzer b { display: block; font-family: var(--kop); font-weight: 600; font-size: 15.5px; letter-spacing: -.01em; color: var(--inkt); }
+  .v3-wegwijzer i { display: block; font-style: normal; font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em;
+                    text-transform: uppercase; color: var(--label); margin-top: 3px; }
+  .v3-wegwijzer .pijl { margin-left: auto; color: var(--oranje); flex: none; }
+  @media (max-width: 900px) { .v3-wegwijzer-rij { grid-template-columns: 1fr; } }
+  /* De stand: het verdienmodel volgt meteen op de kop. De warme tint uit de foto loopt onder de kop van
+     het verdienmodel door en koelt daar af naar de grond van de pagina; geen lijn erboven. */
+  #verdienmodel.lijn-boven { border-top: 0; padding-top: clamp(96px, 14vh, 170px);
+                             background: linear-gradient(to bottom, var(--v3-warm) 0%, var(--v3-warm) 26%, var(--grond) 72%); }
+  /* De regel bij De collectie die de brochure opent, sinds de blokken uit zijn. */
+  .v3-brochure-regel { margin: 18px 0 0; }
+  .v3-brochure-regel .v3-tekstlink { background: none; border: 0; padding: 0; cursor: pointer; }
+  /* Meer beweging door de hele pagina (Jelle, 15-09-2026 avond: iets speelser). Een taal: alles komt zacht
+     omhoog terwijl het in beeld scrolt (op translate, zodat de lifts op transform bij aanwijzen blijven
+     werken), rasters een voor een; het streepje voor elk opschrift tekent zichzelf; de knoppen komen iets
+     omhoog en veren bij het klikken; het scherm van het portaal schuift bij het wisselen; de getallen van
+     het verdienmodel tellen op (script onderaan); een vraag klapt zacht open. Wie bewegingen uit heeft
+     staan, of een browser zonder scrollgebonden animaties, ziet alles gewoon staan. In het proefpaneel:
+     meer (de stand) of zoals net. */
+  @keyframes v3-opkomen-zacht { from { opacity: 0; translate: 0 44px; } to { opacity: 1; translate: 0 0; } }
+  @keyframes v3-streep { from { width: 0; } to { width: 28px; } }
+  @keyframes v3-schermwissel { from { opacity: 0; translate: 0 14px; } }
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      section .kopblok, section .duo, #marge .v3-calc, .v3-portaal, .v3-meet, .v3-etalage, .v3-levering, .v3-vergelijk, #service .binnen > *, #leads .binnen > *, #aanmelden .knoppen, .v3-vragen, .kc-kaarten > *, .v3-vier > *, .v3-punten-twee > li, .v3-producten > *, .v3-niveaus > *, .v3-showrooms > *, .v3-inbegrepen > div {
+        animation: v3-opkomen-zacht linear both; animation-timeline: view(); animation-range: entry 0% entry 45%; }
+      .v3-portaal, .v3-meet, .v3-etalage, #marge .v3-calc { animation-range: entry 0% entry 22%; }
+      .kc-kaarten > :nth-child(2), .v3-vier > :nth-child(2), .v3-producten > :nth-child(2), .v3-niveaus > :nth-child(2),
+      .v3-showrooms > :nth-child(2), .v3-inbegrepen > :nth-child(2), .v3-punten-twee > :nth-child(2n) { animation-range: entry 8% entry 53%; }
+      .kc-kaarten > :nth-child(3), .v3-vier > :nth-child(3), .v3-producten > :nth-child(3), .v3-niveaus > :nth-child(3),
+      .v3-showrooms > :nth-child(3), .v3-inbegrepen > :nth-child(3) { animation-range: entry 16% entry 61%; }
+      .v3-vier > :nth-child(4), .v3-producten > :nth-child(4), .v3-showrooms > :nth-child(4) { animation-range: entry 24% entry 69%; }
+      .v3-showrooms > :nth-child(5) { animation-range: entry 32% entry 77%; }
+      section .opschrift::before { animation: v3-streep linear both; animation-timeline: view(); animation-range: entry 0% entry 60%; }
+    }
+    .v3-schermrand img.v3-voor { animation: v3-schermwissel .5s ease; }
+  }
+  .knop { transition: translate .2s ease, box-shadow .2s ease, background .2s ease, border-color .2s ease, scale .15s ease; }
+  .knop:hover { translate: 0 -2px; box-shadow: 0 10px 24px rgba(20,22,26,.14); }
+  .knop:active { translate: 0 0; scale: .98; box-shadow: none; }
+  @supports (interpolate-size: allow-keywords) {
+    .v3-vragen { interpolate-size: allow-keywords; }
+    .v3-vragen details::details-content { block-size: 0; overflow: hidden; transition: block-size .35s ease, content-visibility .35s allow-discrete; }
+    .v3-vragen details[open]::details-content { block-size: auto; }
+  }
+
+  /* Waar de browser het kan volgt de beweging de scroll in plaats van te springen (Jelle: nog te hak
+     op de tak). De vlakken schuiven omhoog en worden zichtbaar naarmate ze het scherm in komen, elk
+     iets later; de koptekst vervaagt zachtjes en de foto schuift een klein stuk mee terwijl je
+     wegscrolt. Zonder deze ondersteuning blijft de sprong via de waarnemer hierboven staan. */
+  @keyframes v3-wegscrollen { to { opacity: 0; transform: translateY(-36px); } }
+  @keyframes v3-meeschuiven { to { background-position: center 48%; } }
+  @supports (animation-timeline: view()) {
+    .v3-beelden:not(.v3-in) .strook .beeldslot, .v3-beelden.v3-in .strook .beeldslot {
+      opacity: 1; animation: v3-opkomen linear both; animation-timeline: view(); animation-range: entry 0% entry 65%; animation-delay: 0s; }
+    .v3-beelden .strook .beeldslot:nth-child(2) { animation-range: entry 8% entry 73%; }
+    .v3-beelden .strook .beeldslot:nth-child(3) { animation-range: entry 16% entry 81%; }
+    #verdienmodel .kopblok, #verdienmodel .v3-stap, #verdienmodel .v3-som-regel {
+      animation: v3-opkomen linear both; animation-timeline: view(); animation-range: entry 0% entry 55%; }
+    #verdienmodel .v3-stap:nth-child(2) { animation-range: entry 8% entry 63%; }
+    #verdienmodel .v3-stap:nth-child(3) { animation-range: entry 16% entry 71%; }
+    @media (min-width: 1061px) {
+      .v3-kopduo .woord { animation: v3-wegscrollen linear both; animation-timeline: scroll(root); animation-range: 0 60vh; }
+      .hero.v3-banner { animation: v3-meeschuiven linear both; animation-timeline: scroll(root); animation-range: 0 100vh; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .v3-beelden .strook .beeldslot, .v3-kopduo .woord, .hero.v3-banner,
+      #verdienmodel .kopblok, #verdienmodel .v3-stap, #verdienmodel .v3-som-regel { animation: none; }
+    }
+  }
+  .v3-beelden .strook .beeldslot { min-height: 360px; }
+  /* De drie vlakken zijn knoppen en moeten zo voelen (Jelle, 15-09-2026): een pijl in het onderschrift, en bij
+     aanwijzen komt het vlak iets omhoog, zoomt de foto licht in en schuift de pijl door. */
+  /* De lift bij aanwijzen zit op translate, niet op transform, zodat hij naast de animatie op transform
+     (de vlakken die omhoog komen) blijft werken. */
+  .strook a.beeldslot, .strook button.beeldslot { cursor: pointer; transition: translate .3s ease, box-shadow .3s ease; }
+  .strook a.beeldslot:hover, .strook button.beeldslot:hover,
+  .strook a.beeldslot:focus-visible, .strook button.beeldslot:focus-visible { translate: 0 -5px; box-shadow: 0 24px 46px rgba(20,22,26,.14); }
+  .v3-fotovak > img { transition: transform .7s ease; }
+  a.v3-fotovak:hover > img, a.v3-fotovak:focus-visible > img { transform: scale(1.035); }
+  .v3-vlak-tekst b .pijl { display: inline-block; margin-left: 6px; color: var(--oranje); transition: transform .25s ease; }
+  .strook .beeldslot:hover .v3-vlak-tekst b .pijl, .strook .beeldslot:focus-visible .v3-vlak-tekst b .pijl { transform: translateX(4px); }
+  @media (prefers-reduced-motion: reduce) { .strook a.beeldslot, .strook button.beeldslot, .v3-fotovak > img, .v3-vlak-tekst b .pijl { transition: none; } }
+  /* Het onderschrift in elk vlak: op een wit plaatje linksonder, zonder donkere loop (Jelle, 15-09-2026). */
+  .v3-vlak-tekst { position: absolute; left: 18px; right: auto; bottom: 18px; z-index: 4; text-align: left;
+                   padding: 12px 18px 11px; background: rgba(255,255,255,.94); border-radius: 12px;
+                   font-family: var(--mono); font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase;
+                   color: var(--label); line-height: 1.7; }
+  .v3-vlak-tekst b { display: block; font-family: var(--kop); font-weight: 600; font-size: 17px; letter-spacing: -.01em;
+                     text-transform: none; color: var(--inkt); margin-bottom: 3px; }
+  /* Een foto vult het vlak (de afgeronde klus en het magazijn). */
+  .v3-fotovak { padding: 0; background: var(--vlak); display: block; text-decoration: none; color: inherit; }
+  a.v3-fotovak:focus-visible { outline: 2px solid var(--oranje); outline-offset: 2px; }
+  .v3-fotovak > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  /* Het vlak met de stalenboeken (vooraan, op wens van Jelle 15-09-2026): de twee boxen klein, als wegwijzer
+     naar de vitrine onder Je materiaal. Zelfde lichte ondergrond als het brochurevlak. */
+  .v3-boekenvak { display: block; padding: 0; background: var(--v3-warm-vlak); border-color: var(--v3-warm-lijn); background-image: none;
+                  text-decoration: none; color: inherit; }
+  .v3-mini-340, .v3-mini-555 { position: absolute; bottom: 100px; display: block;
+                               filter: drop-shadow(0 18px 18px rgba(20,22,26,.2)); }
+  .v3-mini-340 { left: 15%; width: 31%; z-index: 2; }
+  .v3-mini-555 { right: 17%; width: 24%; perspective: 900px; }
+  .v3-mini-340 img, .v3-mini-555 img { display: block; width: 100%; height: auto; }
+  .v3-boekenvak:focus-visible { outline: 2px solid var(--oranje); outline-offset: 2px; }
+  /* Het brochurevlak: licht, met de brochure open erop; om de paar seconden slaat een pagina om (brochure.js). */
+  .v3-brochure-vak { padding: 18px 0 92px; width: 100%; appearance: none; -webkit-appearance: none; cursor: pointer;
+                     font: inherit; color: inherit; background: var(--v3-warm-vlak); border-color: var(--v3-warm-lijn); background-image: none; }
+  .v3-brochure-vak .v3-boek { width: 300px; height: 212px; transition: opacity .38s ease; }
+  .v3-brochure-vak:focus-visible { outline: 2px solid var(--oranje); outline-offset: 2px; }
+
+  /* Het boek (brochure.js): twee bladen naast elkaar en een vel dat om de rug omslaat. */
+  .bk { position: relative; display: block; perspective: 1600px; }
+  .bk-blad { position: absolute; top: 0; height: 100%; width: 50%; display: block; background: #fff; overflow: hidden;
+             box-shadow: 0 14px 30px rgba(20,22,26,.16); }
+  .bk-links { left: 0; }
+  .bk-rechts { left: 50%; }
+  .bk-blad.bk-leeg { visibility: hidden; }
+  .bk img { display: block; width: 100%; height: 100%; }
+  .bk-links::after, .bk-rechts::after { content: ""; position: absolute; inset: 0; pointer-events: none; }
+  .bk-links::after { background: linear-gradient(to left, rgba(20,22,26,.09), rgba(20,22,26,0) 16%); }
+  .bk-rechts::after { background: linear-gradient(to right, rgba(20,22,26,.09), rgba(20,22,26,0) 16%); }
+  .bk-vel { position: absolute; top: 0; height: 100%; width: 50%; display: block; transform-style: preserve-3d; z-index: 3;
+            transition: transform .95s cubic-bezier(.45, .05, .25, 1); pointer-events: none; }
+  .bk-vel.bk-uit { display: none; }
+  .bk-voor, .bk-achter { position: absolute; inset: 0; display: block; background: #fff; overflow: hidden;
+                         backface-visibility: hidden; -webkit-backface-visibility: hidden;
+                         box-shadow: 0 14px 30px rgba(20,22,26,.16); }
+  .bk-achter { transform: rotateY(180deg); }
+  .bk-vel.bk-verder { left: 50%; transform-origin: 0 50%; }
+  .bk-vel.bk-verder.bk-draait { transform: rotateY(-180deg); }
+  .bk-vel.bk-terug { left: 0; transform-origin: 100% 50%; }
+  .bk-vel.bk-terug.bk-draait { transform: rotateY(180deg); }
+  .bk.bk-enkel .bk-links { display: none; }
+  .bk.bk-enkel .bk-rechts { left: 0; width: 100%; }
+  .bk.bk-enkel .bk-rechts::after { display: none; }
+  @media (prefers-reduced-motion: reduce) { .bk-vel { transition: none; } }
+
+  /* De brochure zelf: een licht blad met het boek in het midden, een pagina tegelijk op een smal scherm. */
+  dialog.v3-brochure { border: 1px solid var(--lijn); border-radius: 18px; padding: 0; width: min(1180px, 96vw); max-width: none;
+                       height: min(92vh, 900px); max-height: none; background: var(--grond); color: var(--inkt); overflow: hidden; }
+  dialog.v3-brochure::backdrop { background: rgba(20,22,26,.5); }
+  .v3-brochure-kop { display: flex; align-items: center; gap: 16px; height: 54px; padding: 0 14px 0 24px;
+                     border-bottom: 1px solid var(--lijn); }
+  .v3-brochure-kop .v3-brochure-titel { font-family: var(--kop); font-weight: 600; font-size: 15px; }
+  .v3-brochure-kop .v3-brochure-stand { margin-left: auto; font-family: var(--mono); font-size: 11px; letter-spacing: .14em;
+                                        text-transform: uppercase; color: var(--label); }
+  .v3-brochure-kop .v3-brochure-dicht { background: none; border: 0; color: var(--inkt); font-size: 28px; line-height: 1;
+                                        padding: 4px 10px; cursor: pointer; opacity: .75; }
+  .v3-brochure-kop .v3-brochure-dicht:hover { opacity: 1; }
+  .v3-brochure-blad { height: calc(100% - 54px); display: grid; grid-template-columns: 56px minmax(0, 1fr) 56px; }
+  .v3-brochure-pijl { background: none; border: 0; color: var(--inkt); font-size: 26px; cursor: pointer; opacity: .7; }
+  .v3-brochure-pijl:hover { opacity: 1; }
+  .v3-brochure-pijl[disabled] { opacity: .15; cursor: default; }
+  .v3-brochure-boek { display: flex; justify-content: center; align-items: center; height: 100%; min-height: 0; }
+  @media (max-width: 760px) {
+    .v3-brochure-blad { grid-template-columns: 40px minmax(0, 1fr) 40px; }
+    .v3-brochure-kop { padding-left: 16px; }
+  }
+
+  /* De kop: alleen de tekst op de wand, ruim en rustig. */
+  .hero.v3-banner { position: relative; }
+  /* De kop is een volledige productbanner op het eerste scherm, zoals bij mrhoof.com (wens Jelle,
+     15-09-2026, avond): het hele venster hoog, met 62 procent van de breedte als grens voor een smal
+     en hoog venster, zodat de foto niet te ver opzij wordt gesneden. Eerder die dag was het 42
+     procent van de breedte met 88 procent van het venster als grens; daarvoor had de kop op elke
+     breedte een vaste hoogte van ongeveer 600 pixels, waardoor de foto op een ultrawide tot een reep
+     planken werd gesneden. De foto hangt op 35 procent: op een brede monitor blijft de kale wand
+     linksboven dan hoog genoeg om de tekst te dragen, want Jelle vond de tekst op de vloer niet
+     duidelijk genoeg. Onder ongeveer 1500 breed is de inhoud zelf hoger en verandert er niets. */
+  .v3-kopduo { position: relative; grid-template-columns: 1fr; min-height: min(100vh, 62vw); }
+  /* De tekst staat links op de kale wand, zoals vanaf het begin (Jelle, 15-09-2026 avond: de tekst
+     in het midden en iets groter is geprobeerd en afgewezen, nee, aan de linkerkant zoals het was).
+     Het blok begint bovenin, zodat het op de wand staat en niet op de vloer. De zijmarge telt niet
+     mee in de breedte van het tekstblok; anders brak de kop op een brede monitor in vier regels.
+     Het proefpaneel kan de tekst nog in het midden zetten om te vergelijken. */
+  .v3-kopduo .woord { padding: 156px max(22px, 5.75vw) 120px; max-width: calc(760px + 2 * max(22px, 5.75vw));
+                      justify-content: flex-start; }
+  .v3-kopduo .woord h1 { max-width: 14ch; }
+  .v3-kopduo .woord .leidend { font-size: 19px; max-width: 46ch; }
+  .v3-kopduo .woord .knoppen { align-items: center; gap: 22px; }
+  /* Onderaan loopt de foto over in de achtergrondkleur van de site (wens Jelle, 15-09-2026 avond),
+     zodat de vloer niet hard tegen de pagina eronder stoot. */
+  .hero.v3-banner::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 32%; pointer-events: none;
+                           background: linear-gradient(to bottom, rgba(239, 231, 220, 0), var(--v3-warm)); }
+  /* Alleen het woord gratis valt op, in het oranje; een eigen regel vond Jelle te veel (15-09-2026). */
+  .v3-kopduo .woord .leidend em { font-style: normal; font-weight: 600; color: var(--oranje); }
+  .v3-tekstlink { font-family: var(--kop); font-weight: 500; font-size: 14.5px; color: var(--inkt); text-decoration: none;
+                  border-bottom: 1px solid var(--oranje); padding-bottom: 2px; background: none; border-top: 0; border-left: 0; border-right: 0; cursor: pointer; }
+  .v3-tekstlink:hover { color: var(--oranje); }
+  .v3-som-regel .v3-som-kop { color: var(--label); font-weight: 400; }
+  .v3-drie .v3-stap-getal { margin-top: 6px; }
+  .v3-drie .v3-stap p { margin-top: 14px; }
+
+  /* De kluscalculator: rustig. Schuifjes links, de uitkomst rechts, weinig tekst (Jelle, 14-09-2026). */
+  #marge { padding: 64px 0 72px; }
+  .kc-kopblok { margin-bottom: 22px; }
+  .kc-kopblok h2 { font-size: clamp(30px, 3.4vw, 44px); }
+  .kc-vloeren { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-bottom: 22px; }
+  .kc-tegel { text-align: left; background: var(--vlak); border: 1px solid var(--lijn); border-radius: 12px; padding: 9px; cursor: pointer;
+              font-family: var(--lopend); color: var(--inkt); display: flex; align-items: center; gap: 11px; min-width: 0; transition: border-color .15s, box-shadow .15s; }
+  .kc-tegel:hover { border-color: var(--inkt); }
+  .kc-tegel[aria-pressed="true"] { border-color: var(--oranje); box-shadow: 0 0 0 1px var(--oranje); }
+  .kc-foto { display: block; width: 54px; height: 54px; flex: none; border-radius: 8px; background: #EFEBE3 center / cover no-repeat; }
+  .kc-tekst { display: flex; flex-direction: column; min-width: 0; }
+  .kc-naam { font-family: var(--kop); font-weight: 600; font-size: 13px; line-height: 1.2; }
+  .kc-col { font-size: 11px; color: var(--label); line-height: 1.3; margin-top: 2px; }
+  .kc-prijs { font-family: var(--mono); font-size: 11px; color: var(--inkt); margin-top: 3px; }
+  .kc { display: grid; grid-template-columns: 320px minmax(0, 1fr); gap: 32px; align-items: start; }
+  .kc-links { padding-top: 6px; }
+  .kc-schuif { display: block; margin-bottom: 24px; }
+  .kc-schuif .kc-rij { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; font-size: 14px; color: var(--tekst); margin-bottom: 8px; }
+  .kc-schuif .kc-rij b { font-family: var(--mono); font-weight: 500; font-size: 14px; color: var(--inkt); white-space: nowrap; }
+  .kc-schuif input[type="range"] { width: 100%; accent-color: var(--oranje); }
+  .kc-chips-kop { font-family: var(--mono); font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--label); margin: 4px 0 8px; }
+  .kc-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .kc-chips button { font-family: var(--lopend); font-size: 13px; color: var(--tekst); background: transparent; border: 1px solid var(--lijn);
+                     border-radius: 999px; padding: 6px 13px; cursor: pointer; }
+  .kc-chips button:hover { border-color: var(--inkt); color: var(--inkt); }
+  .kc-chips button[aria-pressed="true"] { background: var(--oranje-zacht); border-color: #F3CDB4; color: var(--oranje-donker); }
+  .kc-uitkomst { background: var(--vlak); border: 1px solid var(--lijn); border-radius: 18px; padding: 26px 30px 28px; }
+  .kc-gekozen { font-size: 13.5px; color: var(--tekst); margin: 0 0 14px; }
+  .kc-gekozen b { color: var(--inkt); }
+  .kc-groot { display: flex; align-items: baseline; justify-content: space-between; gap: 12px 24px; flex-wrap: wrap; }
+  .kc-groot-wat { font-family: var(--kop); font-weight: 600; font-size: 19px; }
+  .kc-groot-bedrag { font-family: var(--kop); font-weight: 600; letter-spacing: -.03em; font-size: clamp(40px, 4.4vw, 58px); line-height: 1; color: var(--oranje); font-variant-numeric: tabular-nums; }
+  .kc-maand { font-size: 14px; color: var(--tekst); margin: 6px 0 0; text-align: right; }
+  .kc-maand b { color: var(--inkt); }
+  .kc-regels { margin-top: 18px; border-top: 1px solid var(--lijn); }
+  .kc-regel { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 16px; align-items: baseline; padding: 9px 0; border-bottom: 1px solid var(--lijn); font-size: 14px; color: var(--inkt); }
+  .kc-regel span:nth-child(2) { font-family: var(--mono); font-size: 12.5px; color: var(--label); white-space: nowrap; }
+  .kc-regel b { font-family: var(--mono); font-weight: 500; font-size: 13.5px; color: var(--oranje); white-space: nowrap; min-width: 6.5em; text-align: right; }
+  .kc-som { font-size: 13px; color: var(--label); margin: 12px 0 0; }
+  .kc-som b { font-family: var(--mono); font-weight: 500; color: var(--inkt); }
+  .kc-noot { font-size: 12px; color: var(--label); line-height: 1.5; margin: 6px 0 18px; }
+  .kc-uitkomst .knop.klein-knop { font-size: 13.5px; padding: 10px 18px; }
+
+  /* De drie voorbeeldprojecten. */
+  .kc-kaarten { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+  .kc-kaart { border: 1px solid var(--lijn); border-radius: 16px; background: var(--vlak); overflow: hidden; display: flex; flex-direction: column; }
+  .kc-kaart-foto { display: block; aspect-ratio: 16 / 10; background: #EFEBE3 center / cover no-repeat; }
+  .kc-kaart-tekst { padding: 20px 22px 22px; display: flex; flex-direction: column; flex: 1; }
+  .kc-kaart h3 { font-size: 20px; margin: 0 0 8px; letter-spacing: -.02em; }
+  .kc-kaart-maat { font-size: 14px; color: var(--inkt); margin: 0; }
+  .kc-kaart-mat { font-size: 13px; color: var(--label); line-height: 1.5; margin: 6px 0 0; }
+  .kc-kaart-som { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin: 16px 0 16px; padding-top: 12px; border-top: 1px solid var(--lijn); font-size: 14px; }
+  .kc-kaart-som b { font-family: var(--kop); font-weight: 600; font-size: 24px; color: var(--oranje); letter-spacing: -.02em; }
+  .kc-kaart .knop { margin-top: auto; align-self: flex-start; }
+
+  /* Het verdienmodel: drie stappen op een rij, de derde in oranje, en de som eronder. */
+  .v3-drie { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .v3-stap { border-top: 1px solid var(--lijn); padding-top: 22px; display: flex; flex-direction: column; }
+  .v3-stap .nr { font-family: var(--mono); font-size: 11px; letter-spacing: .18em; color: var(--oranje); }
+  .v3-stap h3 { font-size: 21px; margin: 10px 0 10px; letter-spacing: -.02em; }
+  .v3-stap p { font-size: 15px; color: var(--tekst); line-height: 1.6; margin: 0 0 18px; }
+  .v3-stap-getal { display: block; margin-top: auto; font-family: var(--kop); font-weight: 600; font-size: 34px;
+                   letter-spacing: -.02em; color: var(--inkt); font-variant-numeric: tabular-nums; }
+  .v3-stap.oranje .v3-stap-getal { color: var(--oranje); }
+  .v3-stap-bij { font-size: 13px; color: var(--label); margin-top: 4px; }
+  .v3-som-regel { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 18px; margin-top: 40px; padding: 16px 26px;
+                  border: 1px solid var(--lijn); border-radius: 999px; width: max-content; max-width: 100%;
+                  font-family: var(--kop); font-weight: 500; font-size: 16px; }
+  .v3-som-regel b { font-family: var(--mono); color: var(--label); font-weight: 400; }
+  .v3-som-regel .oranje { color: var(--oranje); font-weight: 600; }
+
+  /* De toonbank: een regel onder de kop over wat je ziet. */
+  .tb-woord .tb-sub { font-size: 15.5px; color: var(--tekst); max-width: 58ch; margin: 12px auto 0; line-height: 1.55; }
+
+  /* Calculator: oppervlakte en klussen eerst, de rest onder een klapper; twee grote getallen. */
+  .v3-invoer { display: flex; flex-direction: column; }
+  .v3-meer { border-top: 1px solid var(--lijn); padding-top: 14px; margin-bottom: 18px; }
+  .v3-meer summary { cursor: pointer; font-size: 14.5px; color: var(--inkt); font-weight: 500; list-style: none;
+                     display: flex; align-items: center; gap: 10px; }
+  .v3-meer summary::-webkit-details-marker { display: none; }
+  .v3-meer summary::before { content: ""; width: 8px; height: 8px; border-right: 1.5px solid var(--oranje);
+                             border-bottom: 1.5px solid var(--oranje); transform: rotate(-45deg); transition: transform .2s; margin-left: 2px; }
+  .v3-meer[open] summary::before { transform: rotate(45deg); }
+  .v3-meer > :not(summary) { margin-top: 16px; }
+  .v3-meer .v3-schuif { margin-bottom: 4px; }
+  .v3-vloerkeuze { display: flex; align-items: flex-end; gap: 14px; }
+  .v3-twee-groot { display: grid; grid-template-columns: 3fr 2fr; gap: 20px; align-items: end; }
+  .v3-groot.klein .v3-cijfer { font-size: clamp(26px, 3vw, 38px); color: var(--inkt); }
+  .v3-som .v3-som-uit { border-top: 2px solid var(--inkt); }
+  .v3-som .v3-som-uit span { font-weight: 600; color: var(--inkt); }
+  .v3-som .v3-som-uit span:last-child { color: var(--oranje); }
+  .v3-regels.klein div { padding: 7px 0; font-size: 13px; }
+  .v3-regels.klein div span:last-child { font-size: 12px; }
+  .v3-calc-actie { margin-top: 4px; }
+
+  /* Minder lucht tussen de blokken (beoordeling 14-09-2026), ankers onder de balk vandaan, zacht scrollen. */
+  html { scroll-behavior: smooth; }
+  section { padding: 104px 0; scroll-margin-top: 84px; }
+  .kopblok { margin-bottom: 44px; }
+
+  @media (max-width: 1060px) {
+    .kc { grid-template-columns: 1fr; }
+    .kc-vloeren { grid-template-columns: repeat(3, 1fr); }
+    .kc-kaarten { grid-template-columns: 1fr; }
+    .v3-vier, .v3-producten { grid-template-columns: 1fr 1fr; }
+    .v3-inbegrepen { grid-template-columns: 1fr; gap: 24px; }
+    .hero.v3-banner { background-position: center 100%; background-size: auto 60%; background-color: var(--grond); }
+    .v3-kopduo .woord { padding: 130px max(22px, 5.75vw) 300px; }
+    .v3-drie { grid-template-columns: 1fr; }
+  }
+
+  /* De werkwijze: een klus in vier stappen, elk met een schermdetail en een voordeel. */
+  .v3-vier { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .v3-stapkaart { border: 1px solid var(--lijn); border-radius: 16px; background: var(--vlak); padding: 22px; display: flex; flex-direction: column; }
+  .v3-stapkaart .nr { font-family: var(--mono); font-size: 11px; letter-spacing: .18em; color: var(--oranje); }
+  .v3-stapkaart h3 { font-size: 20px; margin: 8px 0 14px; letter-spacing: -.02em; }
+  .v3-scherm { border: 1px solid var(--lijn); border-radius: 10px; background: var(--grond); padding: 12px 14px;
+               font-family: var(--mono); font-size: 11.5px; line-height: 1.75; color: var(--inkt); margin-bottom: 14px; }
+  .v3-scherm .k { display: block; font-size: 9.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--label); margin-bottom: 4px; }
+  .v3-scherm div { display: flex; justify-content: space-between; gap: 10px; }
+  .v3-scherm div span:last-child { white-space: nowrap; }
+  .v3-scherm div.som { border-top: 1px solid var(--lijn); margin-top: 4px; padding-top: 4px; color: var(--oranje); }
+  .v3-stapkaart p { font-size: 14px; color: var(--tekst); line-height: 1.55; margin: 0; }
+  .v3-stapkaart .v3-voordeel { margin-top: auto; padding-top: 14px; font-size: 13.5px; color: var(--inkt); }
+  .v3-stapkaart .v3-voordeel::before { content: ""; display: inline-block; width: 12px; height: 1px; background: var(--oranje); vertical-align: middle; margin-right: 8px; }
+
+  /* Materiaal: vier producten met echte beelden uit de winkel, de niveaus eronder. */
+  .v3-producten { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 48px; }
+  .v3-product { border: 1px solid var(--lijn); border-radius: 16px; background: var(--vlak); overflow: hidden; }
+  .v3-product .v3-foto { display: block; aspect-ratio: 4 / 3; background: #F1EFE9 center / cover no-repeat; }
+  .v3-product .v3-foto.pas { background-size: contain; background-color: #fff; background-origin: content-box; padding: 14px; box-sizing: border-box; }
+  .v3-product .v3-tekst { padding: 16px 18px 18px; }
+  .v3-product .v3-soort { font-family: var(--mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--oranje); }
+  .v3-product h3 { font-size: 16px; margin: 6px 0 6px; letter-spacing: -.01em; }
+  .v3-product p { font-size: 13.5px; color: var(--tekst); line-height: 1.5; margin: 0; }
+  .v3-product p b { color: var(--inkt); font-family: var(--mono); font-weight: 500; }
+
+  /* Inbegrepen: een donker blok, drie kolommen. */
+  .v3-inbegrepen { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 48px; }
+  .v3-inbegrepen > div { border-top: 1px solid rgba(255,255,255,.18); padding-top: 20px; }
+  .v3-groot-woord { display: block; font-family: var(--kop); font-weight: 600; font-size: 32px; letter-spacing: -.02em; color: #fff; }
+  .v3-groot-woord em { font-style: normal; color: var(--oranje); }
+  .v3-inbegrepen h3 { font-size: 18px; margin: 10px 0 10px; }
+  .v3-inbegrepen p, .v3-inbegrepen li { font-size: 14.5px; color: rgba(255,255,255,.74); line-height: 1.6; }
+  .v3-inbegrepen ul { margin: 12px 0 0; padding: 0; list-style: none; }
+  .v3-inbegrepen li { padding: 6px 0; border-top: 1px solid rgba(255,255,255,.12); }
+  .v3-inbegrepen li b { color: #fff; font-weight: 500; display: inline-block; min-width: 9.5em; }
+
+  /* De vragen: klappers onder de knoppen. */
+  .v3-vragen { max-width: 760px; margin: 52px auto 0; text-align: left; border-top: 1px solid var(--lijn); }
+  .v3-vragen details { border-bottom: 1px solid var(--lijn); }
+  .v3-vragen summary { cursor: pointer; list-style: none; padding: 16px 0; font-family: var(--kop); font-weight: 500;
+                       font-size: 17px; display: flex; justify-content: space-between; gap: 16px; }
+  .v3-vragen summary::-webkit-details-marker { display: none; }
+  .v3-vragen summary::after { content: "+"; font-family: var(--mono); color: var(--oranje); flex: none; }
+  .v3-vragen summary::after { transition: rotate .3s ease; }
+  .v3-vragen details[open] summary::after { rotate: 45deg; }
+  .v3-vragen details p { font-size: 15px; color: var(--tekst); line-height: 1.6; margin: 0 0 18px; max-width: 64ch; }
+
+  /* Plan een demo: het paneel. */
+  dialog.v3-demo { border: 1px solid var(--lijn); border-radius: 18px; padding: 0; width: min(460px, 92vw);
+                   box-shadow: 0 30px 80px rgba(20,22,26,.22); }
+  dialog.v3-demo::backdrop { background: rgba(20,22,26,.42); }
+  .v3-demo-binnen { padding: 30px; }
+  .v3-demo h3 { font-size: 22px; margin: 0 0 6px; }
+  .v3-demo p { font-size: 14px; color: var(--tekst); line-height: 1.6; margin: 0 0 18px; }
+  .v3-demo label { display: block; font-size: 13px; color: var(--label); margin: 12px 0 5px; }
+  .v3-demo input, .v3-demo select { width: 100%; font-family: var(--lopend); font-size: 15px; padding: 10px 12px;
+                                    border: 1px solid var(--lijn); border-radius: 8px; background: var(--grond); color: var(--inkt); }
+  .v3-demo .knoppen { margin-top: 22px; }
+  .v3-demo .v3-klaar { display: none; }
+  .v3-demo.v3-verstuurd form { display: none; }
+  .v3-demo.v3-verstuurd .v3-klaar { display: block; }
+
+  @media (max-width: 760px) {
+    .kc-vloeren { grid-template-columns: 1fr 1fr; }
+    .kc-uitkomst { padding: 18px; }
+    .v3-vier, .v3-producten { grid-template-columns: 1fr; }
+    .v3-twee-groot { grid-template-columns: 1fr; }
+    .v3-som-regel { border-radius: 18px; }
+    .v3-meet { grid-template-columns: 1fr; padding: 24px; gap: 28px; }
+    .v3-velden { grid-template-columns: 1fr; }
+    .v3-cijfers { grid-template-columns: 1fr; gap: 18px; }
+    .v3-twee { grid-template-columns: 1fr; }
+    .v3-twee > div + div { border-left: none; border-top: 1px solid var(--lijn); }
+    .v3-vakgebieden { grid-template-columns: 1fr; }
+    .v3-tweeluik { grid-template-columns: 1fr; }
+    .v3-tweeluik > div + div { border-left: none; border-top: 1px solid var(--lijn); }
+    .v3-niveaus { grid-template-columns: 1fr; }
+    .v3-lat { padding-left: 62px; }
+    .v3-lat .v3-staaf, .v3-lat .v3-getekend, .v3-lat .v3-loper { left: 20px; }
+    .v3-station::before { left: -46px; width: 16px; }
+  }
+
+  /* Het tweede deel: het systeem zelf (15-09-2026). */
+
+  /* Het portaal, scherm voor scherm. Links de tabbladen zoals in het menu van het portaal
+     (streepje, icoon, woord), rechts het echte scherm zonder dat menu (schermen/vernieuw.sh snijdt
+     het eraf). Klikken wisselt het scherm en de regel eronder; niets loopt vanzelf. */
+  .v3-portaal { display: grid; grid-template-columns: 232px minmax(0, 1fr); gap: 40px; margin-top: 48px; align-items: start; }
+  .v3-tabs { display: flex; flex-direction: column; gap: 2px; border-left: 1px solid var(--lijn); padding: 4px 0; position: sticky; top: 96px; }
+  .v3-tabs button { display: flex; align-items: center; gap: 12px; font-family: var(--lopend); font-size: 15px; font-weight: 500;
+                    color: var(--tekst); background: transparent; border: 0; border-radius: 0 10px 10px 0; padding: 12px 14px 12px 28px;
+                    cursor: pointer; text-align: left; position: relative; transition: background .2s, color .2s; }
+  .v3-tabs button::before { content: ""; position: absolute; left: -1px; top: 50%; width: 12px; height: 1px; background: var(--maatlijn);
+                            transform: translateY(-50%); transition: width .2s, background .2s; }
+  .v3-tabs button svg { flex: none; stroke: currentColor; }
+  .v3-tabs button:hover { color: var(--inkt); }
+  .v3-tabs button[aria-selected="true"] { background: var(--oranje-zacht); color: var(--inkt); }
+  .v3-tabs button[aria-selected="true"]::before { background: var(--oranje); width: 18px; }
+  .v3-tabs button[aria-selected="true"] svg { stroke: var(--oranje); }
+  .v3-schermrand { position: relative; aspect-ratio: 1400 / 1057; border: 1px solid var(--lijn); border-radius: 16px; overflow: hidden;
+                   background: var(--vlak); box-shadow: 0 24px 60px rgba(20, 22, 26, .08); }
+  .v3-schermrand img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top left;
+                       opacity: 0; transition: opacity .35s ease; }
+  .v3-schermrand img.v3-voor { opacity: 1; }
+  .v3-schermtekst { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px 32px; align-items: baseline;
+                    margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--lijn); }
+  .v3-schermtekst p { display: none; margin: 0; font-size: 15.5px; color: var(--tekst); line-height: 1.55; max-width: 74ch; }
+  .v3-schermtekst p.v3-voor { display: block; }
+  .v3-schermtekst p b { color: var(--inkt); font-weight: 600; }
+  .v3-schermtekst .v3-tekstlink { white-space: nowrap; justify-self: start; }
+  @media (prefers-reduced-motion: reduce) { .v3-schermrand img, .v3-tabs button, .v3-tabs button::before { transition: none; } }
+
+  /* Gebouwd op hoe jij werkt: twaalf regels in twee kolommen op de gedeelde puntenlijst (elke rij
+     een regel met een streepje, geen dozen). */
+  .v3-punten-twee { display: grid; grid-template-columns: 1fr 1fr; gap: 0 56px; margin-top: 0; }
+  .v3-punten-twee li { padding: 16px 0 16px 26px; font-size: 15px; }
+  .v3-punten-twee li:nth-last-child(2) { border-bottom: 1px solid var(--lijn); }
+
+  /* Ter vergelijking: twee kolommen, een lijn ertussen, het bedrag groot. */
+  .v3-vergelijk { display: grid; grid-template-columns: 1fr 1fr; margin-top: 44px; border-top: 1px solid var(--lijn); border-bottom: 1px solid var(--lijn); }
+  .v3-vergelijk > div { padding: 30px 40px 30px 0; }
+  .v3-vergelijk > div + div { border-left: 1px solid var(--lijn); padding: 30px 0 30px 40px; }
+  .v3-vergelijk-wie { display: block; font-family: var(--mono); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--label); }
+  .v3-vergelijk-prijs { display: block; font-family: var(--kop); font-weight: 600; font-size: clamp(30px, 3vw, 42px); letter-spacing: -.03em;
+                        color: var(--inkt); margin: 10px 0 8px; }
+  .v3-vergelijk-prijs small { font-family: var(--lopend); font-size: 15px; font-weight: 500; color: var(--label); letter-spacing: 0; margin-left: 8px; }
+  .v3-vergelijk .v3-eigen .v3-vergelijk-prijs { color: var(--oranje); }
+  .v3-vergelijk p { margin: 0; font-size: 15.5px; color: var(--tekst); line-height: 1.55; max-width: 44ch; }
+
+  @media (max-width: 900px) {
+    .v3-portaal { grid-template-columns: 1fr; gap: 16px; }
+    .v3-tabs { flex-direction: row; overflow-x: auto; border-left: 0; border-bottom: 1px solid var(--lijn); padding: 0 0 10px;
+               position: static; gap: 4px; scrollbar-width: none; }
+    .v3-tabs::-webkit-scrollbar { display: none; }
+    .v3-tabs button { padding: 9px 14px; border-radius: 999px; white-space: nowrap; }
+    .v3-tabs button::before { display: none; }
+    .v3-schermrand { border-radius: 12px; }
+    .v3-schermtekst { grid-template-columns: 1fr; }
+    .v3-punten-twee { grid-template-columns: 1fr; }
+    .v3-punten-twee li:nth-last-child(2) { border-bottom: 0; }
+    .v3-vergelijk { grid-template-columns: 1fr; }
+    .v3-vergelijk > div, .v3-vergelijk > div + div { padding: 24px 0; border-left: 0; }
+    .v3-vergelijk > div + div { border-top: 1px solid var(--lijn); }
+  }
+</style>
+</head>
+<body>
+
+<div class="meetlat"><div class="voortgang"></div></div>
+
+<header class="balk">
+  <div class="balk-binnen">
+    <a class="merk" href="../index.html">Framr<span class="een">.One</span></a>
+    <nav class="menu">
+      <a class="hier" href="index.html">Vloeren</a>
+      <a href="#marge">Je marge</a>
+      <a href="#werkwijze">Zo werkt het</a>
+      <a href="#portaal">Het portaal</a>
+      <a href="#materiaal">Je materiaal</a>
+      <a href="#vragen">Vragen</a>
+    </nav>
+    <a class="knop inkt" href="https://jellewinthaegen.github.io/framr-portaal/">Portaal proberen <span class="pijl">&rarr;</span></a>
+  </div>
+</header>
+
+<main>
+
+  <!-- 1. De kop: de banner van Jelle, het woordmerk, een korte boodschap en een knop. Ruim en rustig
+       (voorstel Jelle 14-09-2026, na de tweede beoordeling): de voorbeeldkaart is naar de calculator
+       verhuisd. De kale wand linksboven draagt de tekst; zonder lichte laag erachter (Jelle wilde
+       de witte gloed weg, 14-09-2026). -->
+  <section class="hero v3-banner" style="padding: 0;">
+    <div class="hero-duo v3-kopduo">
+      <div class="woord">
+        <p class="opschrift">Framr.One Vloeren</p>
+        <h1>Meer verdienen aan iedere vloerklus.</h1>
+        <p class="leidend">Lever ook de vloer die je legt. Koop tegen partnerprijzen, bepaal zelf je verkoopprijs,
+          en regel inmeten, offerte en bestelling in een omgeving. Het portaal is <em>gratis</em>.</p>
+        <div class="knoppen">
+          <a class="knop oranje groot" href="#marge">Bereken mijn materiaalmarge <span class="pijl">&rarr;</span></a>
+          <a class="v3-tekstlink" href="#toonbank">Of bekijk eerst het portaal</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 1a. Drie beeldvlakken onder de kop (Jelle, 15-09-2026): eerst de stalenboeken van JOKA (de twee
+       collectieboxen klein, als wegwijzer naar de vitrine onder Je materiaal), dan het magazijn van JOKA in
+       Kassel (beeld/magazijn-joka-kassel.jpg), dan de digitale brochure (de JOKA Designvloeren 2025 als boek,
+       brochure.js). De klusfoto (beeld/klus-visgraat-plint.jpg) stond hier eerder en blijft bewaard. -->
+  <section class="v3-beelden" aria-label="Drie beeldvlakken">
+    <div class="strook">
+      <a class="beeldslot v3-boekenvak" href="#stalenboeken" aria-label="De stalenboeken van JOKA, naar de uitleg verderop">
+        <span class="v3-mini-340"><img src="../beeld/stalenboek-joka-340.webp" width="550" height="864" alt="" loading="lazy"></span>
+        <span class="v3-mini-555"><span class="v3-boek3d"><span class="v3-doos-rug"></span><img src="../beeld/stalenboek-joka-555-wooden-styles.jpg" width="900" height="1157" alt="" loading="lazy"></span></span>
+        <span class="v3-vlak-tekst"><b>De stalenboeken van JOKA <span class="pijl">&rarr;</span></b>Design 340 en 555 Wooden Styles</span>
+      </a>
+      <a class="beeldslot v3-fotovak" href="#levering" aria-label="Het magazijn van JOKA, 2 tot 4 werkdagen levertijd, naar de uitleg over de levering">
+        <img src="../beeld/magazijn-joka-kassel.jpg" width="1600" height="908" style="object-position: 40% 50%;"
+             alt="" loading="lazy">
+        <span class="v3-vlak-tekst"><b>Het magazijn <span class="pijl">&rarr;</span></b>2 tot 4 werkdagen levertijd</span>
+      </a>
+      <button type="button" class="beeldslot v3-brochure-vak" id="v3-brochure-open" aria-haspopup="dialog" aria-controls="v3-brochure">
+        <span class="bk v3-boek" aria-hidden="true"></span>
+        <span class="v3-vlak-tekst"><b>Blader door de brochure <span class="pijl">&rarr;</span></b>JOKA Designvloeren 2025, 80 pagina's</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- 1b. Variant (15-09-2026 avond): drie kleine wegwijzers in een smalle rij, in plaats van de drie
+       blokken. Uit; het proefpaneel zet ze aan. De brochure opent via data-brochure-open (brochure.js). -->
+  <section class="v3-wegwijzers" aria-label="Drie wegwijzers">
+    <div class="binnen">
+      <div class="v3-wegwijzer-rij">
+        <a class="v3-wegwijzer" href="#stalenboeken"><img src="../beeld/stalenboek-joka-340.webp" width="550" height="864" alt="" loading="lazy">
+          <span><b>De stalenboeken van JOKA</b><i>Design 340 en 555 Wooden Styles</i></span><span class="pijl">&rarr;</span></a>
+        <a class="v3-wegwijzer" href="#levering"><img src="../beeld/magazijn-joka-kassel.jpg" width="1600" height="908" alt="" loading="lazy">
+          <span><b>Het magazijn</b><i>2 tot 4 werkdagen levertijd</i></span><span class="pijl">&rarr;</span></a>
+        <button type="button" class="v3-wegwijzer" data-brochure-open><img src="brochure/joka-designvloeren-2025/p01.webp" width="900" height="1273" alt="" loading="lazy">
+          <span><b>Blader door de brochure</b><i>JOKA Designvloeren 2025, 80 pagina's</i></span><span class="pijl">&rarr;</span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 1b. Zo verdien je ook aan je materialen: inkopen, verkopen, het verschil; voor de vloer en voor
+       alles wat je erbij levert. De bedragen komen uit kluscalculator.js (voorbeeldklus Woonkamer). -->
+  <section id="verdienmodel" class="lijn-boven">
+    <div class="binnen">
+      <div class="kopblok">
+        <p class="opschrift">Zo werkt het</p>
+        <h2>Zo verdien je ook aan je materialen.</h2>
+        <p class="leidend">Je koopt tegen partnerprijzen, bepaalt zelf je verkoopprijzen en houdt het verschil
+          over als brutomarge. Dat geldt voor de vloer en voor alles wat je erbij levert: lijm, egaline,
+          ondervloer, plinten.</p>
+      </div>
+      <div class="v3-drie">
+        <div class="v3-stap"><span class="nr">01</span><h3>Inkopen tegen partnerprijs</h3>
+          <span class="v3-stap-getal" id="vm-inkoop"></span><span class="v3-stap-bij">inkoop op brons, per m2 Airy Oak</span>
+          <p>Dezelfde JOKA-vloer als in de winkel, met jouw partnerprijs erachter.</p></div>
+        <div class="v3-stap"><span class="nr">02</span><h3>Verkopen tegen jouw prijs</h3>
+          <span class="v3-stap-getal" id="vm-verkoop"></span><span class="v3-stap-bij">in dit voorbeeld 15% onder de adviesprijs van <span id="vm-advies"></span></span>
+          <p>Jij bepaalt wat de klant betaalt.</p></div>
+        <div class="v3-stap oranje"><span class="nr">03</span><h3>Het verschil is jouw marge</h3>
+          <span class="v3-stap-getal" id="vm-marge"></span><span class="v3-stap-bij">brutomarge op materiaal, per m2</span>
+          <p>Bovenop je legwerk; daar pakken wij geen percentage van.</p></div>
+      </div>
+      <p class="v3-som-regel"><span class="v3-som-kop">Woonkamer en hal, 41,3 m2, alles erbij:</span>
+        <span>verkoop <b id="vm-som-verkoop"></b></span><b>&minus;</b><span>inkoop <b id="vm-som-inkoop"></b></span><b>=</b>
+        <span class="oranje">brutomarge <b id="vm-som-marge"></b></span></p>
+    </div>
+  </section>
+
+  <!-- 3. De kluscalculator: een complete klus met alle materialen (voorstel Jelle 14-09-2026). De
+       vloeren, de prijzen, de regels en de tabel komen uit kluscalculator.js. -->
+  <section id="marge" class="lijn-boven">
+    <div class="binnen">
+      <div class="kopblok kc-kopblok">
+        <p class="opschrift">Reken je klus door</p>
+        <h2>Wat verdien je aan je volgende klus?</h2>
+      </div>
+
+      <div class="kc-vloeren" id="kc-vloeren"></div>
+
+      <div class="kc">
+        <div class="kc-links">
+          <label class="kc-schuif"><span class="kc-rij"><span>Oppervlakte</span><b id="kc-m2-stand">60 m2</b></span>
+            <input type="range" id="kc-m2" min="10" max="150" step="1" value="60"></label>
+          <label class="kc-schuif"><span class="kc-rij"><span>Korting voor de klant op de adviesprijs</span><b id="kc-korting-stand">15%</b></span>
+            <input type="range" id="kc-korting" min="0" max="30" step="1" value="15"></label>
+          <label class="kc-schuif"><span class="kc-rij"><span>Klussen per maand</span><b id="kc-klussen-stand">1</b></span>
+            <input type="range" id="kc-klussen" min="1" max="12" step="1" value="1"></label>
+          <p class="kc-chips-kop">Erbij</p>
+          <div class="kc-chips" id="kc-chips"></div>
+        </div>
+        <div class="kc-uitkomst">
+          <p class="kc-gekozen" id="kc-gekozen"></p>
+          <div class="kc-groot">
+            <span class="kc-groot-wat">Brutomarge op materiaal</span>
+            <span class="kc-groot-bedrag" id="kc-uitkomst"></span>
+          </div>
+          <p class="kc-maand" id="kc-maand" hidden>Bij <b id="kc-maand-n"></b> klussen per maand: <b id="kc-maand-bedrag"></b></p>
+          <div class="kc-regels" id="kc-rijen"></div>
+          <p class="kc-som">Verkoop <b id="kc-tot-verkoop"></b> min inkoop op brons <b id="kc-tot-inkoop"></b></p>
+          <p class="kc-noot">Naast je legwerk, exclusief btw. Snijverlies, hele verpakkingen en de plint zijn meegerekend.</p>
+          <a class="knop inkt klein-knop" href="#toonbank">Zo maak je deze klus in het portaal <span class="pijl">&rarr;</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3b. Drie voorbeeldprojecten: kaarten uit dezelfde calculator, met een knop die de klus laadt. -->
+  <section id="voorbeelden" class="lijn-boven">
+    <div class="binnen">
+      <div class="kopblok">
+        <p class="opschrift">Drie voorbeelden</p>
+        <h2>Drie klussen, doorgerekend.</h2>
+        <p class="leidend">Dezelfde prijzen en dezelfde regels als de calculator. Druk op een klus en hij staat erin.</p>
+      </div>
+      <div class="kc-kaarten" id="kc-voorbeelden"></div>
+    </div>
+  </section>
+
+  <!-- 3c. De toonbank: het portaal, bewegend, na de marge (volgorde vastgezet door Jelle, 15-09-2026).
+       Op een iPad (Jelle, 14-09-2026). -->
+  <section id="toonbank" class="tb-scene" data-bron="http://localhost:4600" data-film="rondleiding">
+    <div class="tb-plakker">
+      <div class="tb-woord">
+        <p class="opschrift">Zo organiseer je het</p>
+        <h2>Van ingemeten ruimte naar een offerte met <em>jouw marge</em>.</h2>
+        <p class="tb-sub">Het echte portaal, dat zichzelf bedient. Met verzonnen gegevens: wat je het hier ziet
+          doen, doe jij straks met je eigen klus.</p>
+      </div>
+      <div class="tb-toneel">
+        <div class="tb-apparaat" data-toestel="tablet">
+          <div class="tb-deksel">
+            <div class="tb-rand">
+              <span class="tb-camera"></span>
+              <div class="tb-scherm">
+                <div class="tb-terugval">
+                  <span class="tb-merk">Framr<span>.One</span></span>
+                  <p>Hier speelt het portaal zichzelf af. Laadt het niet, dan kun je het altijd
+                    zelf openen via Portaal proberen.</p>
+                </div>
+                <iframe class="tb-doek-a" title="Het Framr.One Portaal" scrolling="no"></iframe>
+                <iframe class="tb-doek-b" title="" aria-hidden="true" scrolling="no"></iframe>
+                <span class="tb-glans"></span>
+              </div>
+            </div>
+          </div>
+          <div class="tb-bijschrift"><span class="tb-zin"></span><span class="tb-stippen"></span></div>
+          <div class="tb-onderstuk">
+            <div class="tb-scharnier"></div>
+            <div class="tb-blad"><span class="tb-groef"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. De werkwijze: een klus in vier stappen, elk met een schermdetail en een voordeel
+       (beoordeling 14-09-2026: zes losse verhalen werden een klus die erdoorheen beweegt). Dezelfde
+       voorbeeldklus als in de kop; de getallen komen uit het script onderaan. -->
+  <section id="werkwijze" class="lijn-boven">
+    <div class="binnen">
+      <div class="kopblok">
+        <p class="opschrift">Zo organiseer je het</p>
+        <h2>Van gemeten ruimte naar offerte en bestelling.</h2>
+        <p class="leidend">Een klus, een keer invoeren. Woonkamer en hal in Hoensbroek, 41,3 m2 Airy Oak: zo
+          reist hij door het portaal. Voorbeeldklus, met de echte bronsprijzen.</p>
+      </div>
+      <div class="v3-vier">
+        <div class="v3-stapkaart"><span class="nr">01</span><h3>Inmeten</h3>
+          <div class="v3-scherm"><span class="k">Inmeting, per ruimte</span>
+            <div><span>Woonkamer 5,20 x 4,00</span><span>20,80 m2</span></div>
+            <div><span>Hal 5,10 x 4,02</span><span>20,50 m2</span></div>
+            <div class="som"><span>Totaal, plint 28,4 m</span><span id="w-netto"></span></div></div>
+          <p>Ruimte voor ruimte, op je telefoon, bij de klant aan de keukentafel. Legpatroon, ondergrond, dorpels en foto's erbij.</p>
+          <p class="v3-voordeel">Geen bonnetje uit de bus dat je 's avonds moet uitwerken.</p></div>
+        <div class="v3-stapkaart"><span class="nr">02</span><h3>Calculatie</h3>
+          <div class="v3-scherm"><span class="k">Materiaal, uit de inmeting</span>
+            <div><span>+ 10% snijverlies, recht</span><span id="w-bruto"></span></div>
+            <div><span id="w-pakken-t">14 pakken van 3,37 m2</span><span id="w-besteld"></span></div>
+            <div><span>Egaline, primer, lijm, plint</span><span id="w-hulp"></span></div>
+            <div class="som"><span>Alles op brons</span><span id="w-inkoop"></span></div></div>
+          <p>Pakken en snijverlies rekenen zichzelf, naar legpatroon. Lijm, egaline, ondervloer en plinten staan erbij, met jouw uurtarief en jouw marge.</p>
+          <p class="v3-voordeel">Geen misrekening op snijverlies, geen vergeten hulpstoffen.</p></div>
+        <div class="v3-stapkaart"><span class="nr">03</span><h3>Offerte</h3>
+          <div class="v3-scherm"><span class="k">Offerte, op jouw briefpapier</span>
+            <div><span>Vloer Airy Oak, <span id="w-besteld-2"></span></span><span id="w-verkoop"></span></div>
+            <div><span>Egaline, primer, lijm, plint</span><span id="w-verkoop-rest"></span></div>
+            <div><span>Leggen 41,3 m2, jouw tarief</span><span>&hellip;</span></div>
+            <div class="som"><span>Marge op materiaal</span><span id="w-marge"></span></div></div>
+          <p>Eigen nummerreeks, eigen werkregels, btw per regel. Als nette PDF de deur uit; de klant zegt ja en de offerte wordt de klus.</p>
+          <p class="v3-voordeel">Niets overtypen uit een rekenblad.</p></div>
+        <div class="v3-stapkaart"><span class="nr">04</span><h3>Bestellen en factureren</h3>
+          <div class="v3-scherm"><span class="k">Bestelling naar Oaklyn</span>
+            <div><span>Airy Oak</span><span id="w-pakken"></span></div>
+            <div><span>Plint 12 x 70 wit</span><span id="w-plint"></span></div>
+            <div class="som"><span>Factuur uit de offerte</span><span>klaar</span></div></div>
+          <p>De materiaallijst gaat als bestelling naar Oaklyn, tegen de prijs uit je calculatie. De factuur komt uit de offerte die de klant al goedkeurde, met aanbetaling en termijn.</p>
+          <p class="v3-voordeel">Niets nabellen, niets twee keer intikken.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4a. Het portaal, scherm voor scherm (15-09-2026, het tweede deel van de pagina: het systeem
+       zelf verkopen). Acht echte schermen van het portaal met de nagebouwde motor en verzonnen
+       gegevens (schermen/vernieuw.sh), links de tabbladen zoals in het menu van het portaal. Klikken
+       wisselt; niets loopt vanzelf. Bestellingen staat er bewust niet bij: die knop werkt nog niet
+       (README, open punt 1c). -->
+  <section id="portaal" class="lijn-boven">
+    <div class="binnen">
+      <div class="duo smal-eerst">
+        <div>
+          <p class="opschrift">Het portaal</p>
+          <h2>Dit is het. Echt, geen tekening.</h2>
+        </div>
+        <div>
+          <p class="leidend">Acht tabbladen, en op elk staat dezelfde klus: woonkamer en hal in Hoensbroek. Het portaal
+            zoals het vandaag draait, met verzonnen gegevens. Kies een tabblad.</p>
+        </div>
+      </div>
+      <div class="v3-portaal">
+        <div class="v3-tabs" role="tablist" aria-label="De tabbladen van het portaal">
+          <button type="button" role="tab" aria-selected="true" data-scherm="overzicht"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1.5"/><rect x="13" y="3" width="8" height="8" rx="1.5"/><rect x="3" y="13" width="8" height="8" rx="1.5"/><rect x="13" y="13" width="8" height="8" rx="1.5"/></svg> Overzicht</button>
+          <button type="button" role="tab" aria-selected="false" data-scherm="klussen"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h6l2 2h10v10H3z"/></svg> Klussen</button>
+          <button type="button" role="tab" aria-selected="false" data-scherm="inmeten"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17l14-14 4 4-14 14H3z"/><path d="M8 12l2 2"/><path d="M11 9l2 2"/><path d="M14 6l2 2"/></svg> Inmeten</button>
+          <button type="button" role="tab" aria-selected="false" data-scherm="calculaties"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8"/><path d="M8 12h3"/><path d="M13 12h3"/><path d="M8 16h3"/><path d="M13 16h3"/></svg> Calculaties</button>
+          <button type="button" role="tab" aria-selected="false" data-scherm="offertes"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"/><path d="M9 12h6"/><path d="M9 16h6"/></svg> Offertes</button>
+          <button type="button" role="tab" aria-selected="false" data-scherm="facturen"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"/><path d="M9 8h6"/><path d="M9 12h6"/></svg> Facturen</button>
+          <button type="button" role="tab" aria-selected="false" data-scherm="klanten"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg> Klanten</button>
+          <button type="button" role="tab" aria-selected="false" data-scherm="bedrijf"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10l8-6 8 6v10H4z"/><path d="M10 20v-6h4v6"/></svg> Mijn bedrijf</button>
+        </div>
+        <div class="v3-schermvlak">
+          <div class="v3-schermrand">
+            <img class="v3-voor" data-scherm="overzicht" src="schermen/overzicht.webp" width="1400" height="1057" alt="Het overzicht: open offertes, wat er te bestellen staat, open facturen, wat er is ingemeten en de lopende klussen met hun stand">
+            <img data-scherm="klussen" src="schermen/klussen.webp" width="1400" height="1057" alt="De klus Rijtjeshuis Hoensbroek: klant, werkadres, stand, en de inmetingen, offertes en facturen die erbij horen" loading="lazy">
+            <img data-scherm="inmeten" src="schermen/inmeten.webp" width="1400" height="1057" alt="De inmeetkaart: woonkamer en hal, per ruimte lengte, breedte, aftrek en waar geen plint komt, met onderaan de som" loading="lazy">
+            <img data-scherm="calculaties" src="schermen/calculaties.webp" width="1400" height="1057" alt="De calculatie uit de inmeting: links waar de vloer vandaan komt en welke, rechts de bestelling met pakken, lijm, egaline en plint, en onderaan wat jij betaalt, wat je klant betaalt en jouw marge" loading="lazy">
+            <img data-scherm="offertes" src="schermen/offertes.webp" width="1400" height="1057" alt="Offerte OFF-2026-001: de regels voor materiaal en werk, het totaal, jouw marge in euro en in procenten, en de knop Factuur maken" loading="lazy">
+            <img data-scherm="facturen" src="schermen/facturen.webp" width="1400" height="1057" alt="De facturen: de lijst met bedrag, vervaldatum en stand, en daaronder het archief met elk vel dat de deur uitging" loading="lazy">
+            <img data-scherm="klanten" src="schermen/klanten.webp" width="1400" height="1057" alt="De klantenkaart van M. Peeters: contact en adres, en de klussen van deze klant eronder" loading="lazy">
+            <img data-scherm="bedrijf" src="schermen/bedrijf.webp" width="1400" height="1057" alt="Mijn bedrijf: de onderdelen die aan of uit staan, en de bedrijfsgegevens die op elk document komen" loading="lazy">
+          </div>
+          <div class="v3-schermtekst">
+            <p class="v3-voor" data-scherm="overzicht"><b>Alles van vandaag op een blad.</b> Open offertes, wat er te bestellen staat, open facturen en wat je hebt ingemeten. Daaronder de lopende klussen, elk met zijn stand.</p>
+            <p data-scherm="klussen"><b>Een dossier per klus.</b> Klant, werkadres, inmeting, calculatie, offerte en facturen bij elkaar. Wat je bij een klus niet gebruikt zet je uit.</p>
+            <p data-scherm="inmeten"><b>Ruimte voor ruimte, bij de klant aan tafel.</b> Lengte, breedte, aftrek en waar geen plint komt. Meer vloeren in een klus, verdiepingen, een ruimte die niet rechthoekig is of anders dan de rest: het zit erin, maar komt pas in beeld als je erop drukt.</p>
+            <p data-scherm="calculaties"><b>Van maat naar bestelling, met jouw marge ernaast.</b> Snijverlies, pakken, lijm, egaline en plint rekenen zichzelf. Per vloer kies je: via Framr.One, je eigen leverancier, of de klant levert. Rechts wat jij betaalt, wat je klant betaalt en wat je overhoudt.</p>
+            <p data-scherm="offertes"><b>Op jouw naam, in jouw reeks.</b> Materiaal en werk op een vel, met je marge ernaast. Als PDF de deur uit; zegt de klant ja, dan maak je er met een knop de factuur van.</p>
+            <p data-scherm="facturen"><b>Uit de offerte of helemaal los.</b> Aanbetaling vooraf en de rest na oplevering, btw per regel, en het archief met elk vel dat de deur uitging.</p>
+            <p data-scherm="klanten"><b>Een kaart per klant.</b> Contact en adres, en alles wat je voor die klant deed: klussen, inmetingen, offertes en facturen.</p>
+            <p data-scherm="bedrijf"><b>Jouw gegevens op elk document.</b> Bedrijfsnaam, KvK, btw-nummer, IBAN en logo, je nummerreeksen, en de onderdelen die je aan of uit zet.</p>
+            <a class="v3-tekstlink" href="https://jellewinthaegen.github.io/framr-portaal/">Zelf openen &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4b. Gebouwd op hoe jij werkt: twaalf dingen die het portaal vandaag kan en die een legger
+       herkent, als regels in twee kolommen. Alles hier is nagelopen tegen de stand in
+       framr-portaal/README.md (15-09-2026); wat er nog niet is staat er niet. -->
+  <section id="gebouwd" class="lijn-boven">
+    <div class="binnen">
+      <div class="kopblok">
+        <p class="opschrift">Onder de motorkap</p>
+        <h2>Gebouwd op hoe jij werkt.</h2>
+        <p class="leidend">Geen kantoorsoftware die toevallig ook vloeren kan. De uitzonderingen van een echte klus zitten erin,
+          zonder dat ze in de weg staan als je ze niet nodig hebt.</p>
+      </div>
+      <ul class="punten v3-punten-twee">
+        <li><b>Meer vloeren in een klus.</b> Laminaat op zolder en pvc beneden: elke vloer zijn eigen soort, patroon, snijverlies en toebehoren, en zijn naam op elke offerteregel.</li>
+        <li><b>Anders dan de rest.</b> Een ruimte of verdieping die afwijkt vul je apart in. Wat je niet aanraakt volgt de opname.</li>
+        <li><b>Niet rechthoekig.</b> Vlakken erbij, een trapgat eraf, of je vult het netto oppervlak in dat je zelf al weet.</li>
+        <li><b>Plint per wand.</b> Een deur, een keukenblok of een pui eraf; rondom blijft de standaard.</li>
+        <li><b>Eigen leverancier, of de klant levert.</b> Per vloer kies je waar het materiaal vandaan komt. Werk en voorbereiding worden altijd meegerekend.</li>
+        <li><b>Btw per regel.</b> 21 procent, 9 procent of verlegd bij onderaanneming, en de PDF vermeldt het.</li>
+        <li><b>Jouw nummerreeks.</b> Offertes en facturen tellen door waar je oude systeem ophield.</li>
+        <li><b>Jouw logo op elk vel.</b> Offerte en factuur als PDF, met een archief van wat er de deur uitging.</li>
+        <li><b>Het restant in beeld.</b> Aanbetaling vooraf, de rest na oplevering; wat open staat blijft staan tot het betaald is.</li>
+        <li><b>Adressen uit het Kadaster.</b> Tik een straat en kies; postcode en plaats komen mee.</li>
+        <li><b>Onderdelen aan of uit.</b> Gebruik je iets niet, dan verdwijnt het tabblad. Niets gaat weg.</li>
+        <li><b>Alleen jouw gegevens, overal.</b> Het portaal geeft uitsluitend jouw eigen klussen terug. Het draait in de browser, op je telefoon bij de klant en op je laptop; elk scherm heeft een eigen adres en de terugknop werkt.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 3b. De inmeetdemo: een ruimte inmeten, hier op de pagina. Uit het ontwerp Framr One Vloeren
+       van 21-08, met de rekenregels van het portaal: snijverlies 10 procent recht en 15 procent
+       visgraat of chevron, pakken naar boven afgerond, plinten uit de omtrek min 90 cm per deur. -->
+  <section id="inmeten" class="lijn-boven">
+    <div class="binnen">
+      <div class="kopblok">
+        <p class="opschrift">Probeer het zelf</p>
+        <h2>Meet een ruimte in, hier op deze pagina.</h2>
+        <p class="leidend">Stap 1 en 2 in het klein, met dezelfde rekenregels als het portaal. Vul de maten in,
+          kies het legpatroon en de vloer, en de materiaallijst staat er.</p>
+      </div>
+      <div class="v3-meet" id="v3-meet">
+        <div>
+          <div class="v3-velden">
+            <label class="v3-veld"><span class="v3-wat">Lengte (mm)</span><input type="number" id="m-lengte" min="500" max="30000" step="10" value="5240"></label>
+            <label class="v3-veld"><span class="v3-wat">Breedte (mm)</span><input type="number" id="m-breedte" min="500" max="30000" step="10" value="3810"></label>
+            <label class="v3-veld"><span class="v3-wat">Deuropeningen</span><input type="number" id="m-deuren" min="0" max="12" step="1" value="2"></label>
+            <label class="v3-veld"><span class="v3-wat">Legpatroon</span>
+              <select id="m-patroon">
+                <option value="recht" selected>Recht</option>
+                <option value="visgraat">Visgraat</option>
+                <option value="chevron">Chevron</option>
+              </select></label>
+            <label class="v3-veld breed"><span class="v3-wat">Vloer</span>
+              <select id="m-vloer">
+                <option value="pvc-dry" selected>JOKA LVT 340 Dryback, Airy Oak (pvc plak)</option>
+                <option value="pvc-click">JOKA LVT 340 HDF Click, Ambered Elegance (pvc klik)</option>
+                <option value="laminaat">JOKA Madison City 431, Oak Cashmir (laminaat)</option>
+              </select></label>
+            <label class="v3-veld vink breed"><input type="checkbox" id="m-plint" checked> Plinten meerekenen</label>
+          </div>
+          <p class="v3-noot" style="margin-top: 22px;">In het portaal doe je dit per ruimte, met foto's, ondergrond, dorpels en
+            hulpstoffen erbij, en gaat de lijst als bestelling door. Bronsprijs, alleen de vloer, exclusief btw.</p>
+        </div>
+        <div>
+          <p class="opschrift" style="margin-bottom: 14px;">Materiaallijst</p>
+          <div class="v3-lijst">
+            <div><span class="v3-l">Netto vloer</span><span class="v3-r" id="m-netto"></span><span class="v3-hoe" id="m-netto-hoe"></span></div>
+            <div><span class="v3-l">Snijverlies</span><span class="v3-r" id="m-verlies"></span><span class="v3-hoe" id="m-verlies-hoe"></span></div>
+            <div><span class="v3-l">Te bestellen</span><span class="v3-r" id="m-bruto"></span><span class="v3-hoe" id="m-bruto-hoe"></span></div>
+            <div><span class="v3-l">Pakken</span><span class="v3-r" id="m-pakken"></span><span class="v3-hoe" id="m-pakken-hoe"></span></div>
+            <div id="m-plint-regel"><span class="v3-l">Plint</span><span class="v3-r" id="m-plint-r"></span><span class="v3-hoe" id="m-plint-hoe"></span></div>
+            <div class="v3-som"><span class="v3-l">Vloer op brons</span><span class="v3-r" id="m-bedrag"></span><span class="v3-hoe">Exclusief btw. Plint, lijm, ondervloer en profielen komen uit de prijslijst zodra je bent aangesloten.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Materiaal: de vloer en alles wat je nodig hebt, met echte productbeelden uit de winkel
+       (openbare productfoto's van oaklyn.nl), JOKA als merk, Oaklyn als winkel, de niveaus. -->
+  <!-- 5b. De collectie: 555 Wooden Styles als etalage, in de sfeer van de JOKA-brochure (Jelle, 15-09-2026):
+       een groot kamerbeeld met de naam erop, de acht eiken als stalen eronder, plank of visgraat. De beelden
+       komen van de Oaklyn-CDN, het gedrag staat in collectie.js. -->
+  <section id="collectie" class="lijn-boven">
+    <div class="binnen">
+      <div class="duo smal-eerst">
+        <div>
+          <p class="opschrift">De collectie</p>
+          <h2>555 Wooden Styles. Acht eiken, plank of visgraat.</h2>
+        </div>
+        <div>
+          <p class="leidend">De lijn van de calculator en van de klusfoto: een toplaag van 0,55 mm, planken van 1524 bij
+            228 mm of visgraat van 762 bij 152, te plakken of te klikken. Kies een eik en zie hem in de kamer.</p>
+          <p class="v3-brochure-regel"><button type="button" class="v3-tekstlink" data-brochure-open>Of blader door de hele JOKA-brochure, 80 pagina's &rarr;</button></p>
+        </div>
+      </div>
+      <div class="v3-etalage">
+        <div class="v3-etalage-kamer">
+          <img class="v3-kamer-a" alt="Kamer met de gekozen vloer" width="1600" height="1000">
+          <img class="v3-kamer-b" alt="" width="1600" height="1000">
+          <div class="v3-etalage-naam"><span class="v3-etalage-nr">555 / 6705</span><b>Oak Natural</b><i>Visgraat, 762 x 152 mm</i></div>
+          <div class="v3-etalage-patroon" role="group" aria-label="Legpatroon">
+            <button type="button" data-patroon="plank" aria-pressed="false">Plank</button>
+            <button type="button" data-patroon="visgraat" aria-pressed="true">Visgraat</button>
+          </div>
+        </div>
+        <div class="v3-etalage-stalen" role="group" aria-label="De acht eiken"></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="materiaal" class="lijn-boven">
+    <div class="binnen">
+      <div class="duo smal-eerst">
+        <div>
+          <p class="opschrift">Je materiaal</p>
+          <h2>De vloer en alles wat je nodig hebt.</h2>
+        </div>
+        <div>
+          <p class="leidend">JOKA is het merk van de vloer. <a href="https://oaklyn.nl" target="_blank" rel="noopener">Oaklyn</a>
+            is onze eigen winkel, waar de particulier de vloer tegen winkelprijs koopt en jij als vakbedrijf tegen je
+            partnerprijs. Dezelfde vloeren, dezelfde hulpstoffen, dezelfde voorwaarden. Je hele lijst bij een partij.</p>
+          <p class="leidend">Met je partneraccount krijg je automatisch een account bij Oaklyn. Daar kijk je altijd rond:
+            alle vloeren, hulpstoffen, plinten en gereedschap, tegen jouw prijs. Bestel je in het portaal, dan komt
+            de bestelling bij Oaklyn terecht en regelen wij de rest met JOKA.</p>
+        </div>
+      </div>
+
+      <!-- De stalenboeken (Jelle, 15-09-2026): de echte collectieboxen van JOKA, mooi tentoongesteld, zodat
+           een legger meteen ziet wat hij meeneemt naar de klant. De beelden zijn de productfoto's uit de
+           JOKA-webshop (jordanshop.nl, artikelen 11217 en 11163); ze komen omhoog zodra het blok in beeld
+           komt (script onderaan). -->
+      <div class="v3-stalen" id="stalenboeken">
+        <div class="v3-vitrine" role="img" aria-label="De stalenboeken van JOKA: de box van Design 340 en het boek van 555 Wooden Styles">
+          <span class="v3-boekdoos v3-doos-340" style="--i: 0;"><img src="../beeld/stalenboek-joka-340.webp" width="550" height="864" alt="" loading="lazy"></span>
+          <span class="v3-boekdoos v3-doos-555" style="--i: 1;"><span class="v3-boek3d"><span class="v3-doos-rug"></span><img src="../beeld/stalenboek-joka-555-wooden-styles.jpg" width="900" height="1157" alt="" loading="lazy"></span></span>
+        </div>
+        <div class="v3-stalen-woord">
+          <p class="opschrift">De stalenboeken</p>
+          <h3>De klant kiest op de vloer zelf, niet op een scherm.</h3>
+          <p>Per collectie heeft JOKA een stalenboek: een box met daarin de stalen van alle decors en de brochure.
+            Je koopt ze bij Oaklyn, onze eigen winkel, per lijn die je voert; bestel ze mee met je eerste bestelling.
+            Je klapt ze bij de klant open op de grond, naast de plint en het kozijn, en de keuze is gemaakt voordat
+            je de deur uit bent.</p>
+          <ul class="v3-stalen-lijst">
+            <li><b>Design 340</b>plak en klik, het stalenboek van 2027</li>
+            <li><b>555 Wooden Styles</b>de plank en de visgraat, de lijn van de calculator</li>
+          </ul>
+        </div>
+      </div>
+      <!-- De levering (Jelle, 15-09-2026): het magazijnvlak onder de kop wijst hierheen. Het magazijn van JOKA in
+           Kassel, de levertijd van 2 tot 4 werkdagen die Jelle belooft, en waar de vloer naartoe gaat. -->
+      <div class="v3-levering" id="levering">
+        <div class="v3-levering-beeld">
+          <img src="../beeld/magazijn-joka-kassel.jpg" width="1600" height="908" alt="Het magazijn van JOKA in Kassel van boven, met zonnepanelen op het dak" loading="lazy">
+        </div>
+        <div class="v3-levering-woord">
+          <p class="opschrift">De levering</p>
+          <h3>Uit het magazijn van JOKA, in 2 tot 4 werkdagen.</h3>
+          <p>Je bestelt in het portaal. De bestelling komt bij Oaklyn terecht, onze eigen winkel, en gaat van daar
+            naar JOKA. De vloer komt uit hun magazijn in Kassel: drie hallen met het hele vloerenassortiment op
+            voorraad, van de vloer zelf tot de plint, de ondervloer en de lijm.</p>
+          <ul class="v3-levering-lijst">
+            <li><b>2 tot 4 werkdagen</b>voor vloeren en hulpstoffen uit voorraad, na je bestelling</li>
+            <li><b>Op het adres dat jij kiest</b>de klus, het adres van je klant of je eigen loods</li>
+            <li><b>Bevestigd in het portaal</b>met de leverdatum erbij, zodat je de klus kunt inplannen</li>
+          </ul>
+        </div>
+      </div>
+      <div class="v3-producten">
+        <div class="v3-product"><span class="v3-foto" role="img" aria-label="JOKA LVT 340 Dryback Airy Oak in een kamer" style="background-image: url('https://cdn.shopify.com/s/files/1/0955/8920/4233/files/md_DES_340_2811_Airy_Oak_V4_rau.jpg?v=1779292524&width=900');"></span>
+          <div class="v3-tekst"><span class="v3-soort">Vloer</span><h3>JOKA LVT 340 Dryback, Airy Oak</h3><p>Pvc plak, 3,37 m2 per pak. Brons <b id="p-brons"></b> per m2, advies <span id="p-advies"></span>.</p></div></div>
+        <div class="v3-product"><span class="v3-foto pas" role="img" aria-label="JOKA NL30 S dispersielijm" style="background-image: url('https://cdn.shopify.com/s/files/1/0955/8920/4233/files/jk26-lvt-lijm.jpg?v=1779910394&width=700');"></span>
+          <div class="v3-tekst"><span class="v3-soort">Lijm</span><h3>JOKA NL30 S dispersielijm</h3><p>Voor pvc en LVT, 14 kg. Het verbruik rekent de calculator uit de oppervlakte.</p></div></div>
+        <div class="v3-product"><span class="v3-foto pas" role="img" aria-label="JOKA JK10 egalisatie cement" style="background-image: url('https://cdn.shopify.com/s/files/1/0955/8920/4233/files/jk10-egalisatie-cement.jpg?v=1779910380&width=700');"></span>
+          <div class="v3-tekst"><span class="v3-soort">Egaline</span><h3>JOKA JK10 egalisatie cement</h3><p>25 kg. Laagdikte en verbruik uit de ondergrond die je bij het inmeten vastlegt.</p></div></div>
+        <div class="v3-product"><span class="v3-foto pas" role="img" aria-label="JOKA MDF plint wit" style="background-image: url('https://cdn.shopify.com/s/files/1/0955/8920/4233/files/joka-mdf-plint-12-70-mm-ral-9010-wit.png?v=1785845237&width=700');"></span>
+          <div class="v3-tekst"><span class="v3-soort">Plint</span><h3>JOKA MDF plint 12 x 70, wit</h3><p>Lengtes van 2,4 m. Het aantal komt uit de omtrek min de deuropeningen.</p></div></div>
+      </div>
+      <div class="v3-niveaus">
+        <div class="v3-niveau nu"><span class="v3-naam">Brons</span><span class="v3-tag">Bij de start</span>
+          <p>Voor iedere partner, vanaf de eerste klus. De prijzen op deze pagina.</p></div>
+        <div class="v3-niveau"><span class="v3-naam">Zilver</span>
+          <p>Voor wie regelmatig bestelt. Scherper op de vloer en op de hulpstoffen.</p></div>
+        <div class="v3-niveau"><span class="v3-naam">Goud</span>
+          <p>Voor wie zijn materiaal structureel via ons haalt. De scherpste inkoop die we hebben.</p></div>
+      </div>
+      <p class="los" style="margin-top: 26px;">Rechtstreeks bij de bron, zonder plaatselijke groothandel ertussen. Wat jij je klant rekent
+        blijft jouw zaak; wij zien het niet en bepalen het niet.</p>
+    </div>
+  </section>
+
+  <!-- 6. De software is inbegrepen, jij houdt de keuze: een donker blok voor het verdienmodel, de vijf
+       pakketten en de vrijheid (beoordeling 14-09-2026: gratis, vrijheid en verdienmodel stonden in
+       vier losse blokken). -->
+  <!-- 6b. De showrooms (Jelle, 15-09-2026): een partner stuurt zijn klant naar een showroom van JOKA, daar
+       kiest de klant, en de partner bestelt via het portaal. Alleen JOKA-showrooms (afspraak met JOKA,
+       25-08-2026). Vijf eigen vestigingen van Jordan Nederland, de adressen van de showroompagina's op
+       joka.nl. Daarna volgen de secties Service en direct contact en Extra leads. -->
+  <section id="showrooms" class="lijn-boven">
+    <div class="binnen">
+      <div class="duo smal-eerst">
+        <div>
+          <p class="opschrift">De showrooms</p>
+          <h2>Stuur je klant naar de showroom.</h2>
+        </div>
+        <div>
+          <p class="leidend">Wil je klant de vloer in het echt zien en voelen, stuur hem dan naar een showroom van JOKA.
+            Daar ligt de hele collectie, met de plinten en de trappen erbij. Je klant kiest, jij bestelt in het
+            portaal tegen je partnerprijs.</p>
+        </div>
+      </div>
+      <div class="v3-showrooms">
+        <a class="v3-showroom" href="https://www.joka.de/nl_nl/b2c/beratung/showroom-in-deiner-naehe/suchergebnis/showroom/jordan-nederland-bv-nederweert/" target="_blank" rel="noopener">
+          <span class="v3-showroom-stad">Nederweert</span>
+          <span class="v3-showroom-adres">Aluminiumstraat 3<br>6031 TT Nederweert</span>
+          <span class="v3-showroom-meer">Route en tijden <span class="pijl">&rarr;</span></span>
+        </a>
+        <a class="v3-showroom" href="https://www.joka.de/nl_nl/b2c/beratung/showroom-in-deiner-naehe/suchergebnis/showroom/joka-showroom-eindhoven/" target="_blank" rel="noopener">
+          <span class="v3-showroom-stad">Eindhoven</span>
+          <span class="v3-showroom-adres">Dillenburgstraat 17<br>5652 AM Eindhoven</span>
+          <span class="v3-showroom-meer">Route en tijden <span class="pijl">&rarr;</span></span>
+        </a>
+        <a class="v3-showroom" href="https://www.joka.de/nl_nl/b2c/beratung/showroom-in-deiner-naehe/suchergebnis/showroom/joka-showroom-rotterdam/" target="_blank" rel="noopener">
+          <span class="v3-showroom-stad">Rotterdam</span>
+          <span class="v3-showroom-adres">Dotterbloemstraat 40<br>3053 JV Rotterdam</span>
+          <span class="v3-showroom-meer">Route en tijden <span class="pijl">&rarr;</span></span>
+        </a>
+        <a class="v3-showroom" href="https://www.joka.de/nl_nl/b2c/beratung/showroom-in-deiner-naehe/suchergebnis/showroom/joka-showroom-hengelo/" target="_blank" rel="noopener">
+          <span class="v3-showroom-stad">Hengelo</span>
+          <span class="v3-showroom-adres">Platinastraat 110<br>7554 NB Hengelo</span>
+          <span class="v3-showroom-meer">Route en tijden <span class="pijl">&rarr;</span></span>
+        </a>
+        <a class="v3-showroom" href="https://www.joka.de/nl_nl/b2c/beratung/showroom-in-deiner-naehe/suchergebnis/showroom/joka-showroom-heerhugowaard/" target="_blank" rel="noopener">
+          <span class="v3-showroom-stad">Heerhugowaard</span>
+          <span class="v3-showroom-adres">Galileistraat 13<br>1704 SE Heerhugowaard</span>
+          <span class="v3-showroom-meer">Route en tijden <span class="pijl">&rarr;</span></span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6c. Service en direct contact (Jelle, 15-09-2026: een groter blok): een aanspreekpunt, geen wachtrij. -->
+  <section id="service" class="lijn-boven">
+    <div class="binnen">
+      <div class="duo smal-eerst">
+        <div>
+          <p class="opschrift">Service en direct contact</p>
+          <h2>Een aanspreekpunt, geen wachtrij.</h2>
+        </div>
+        <div>
+          <p class="leidend">Loopt er iets vast met een bestelling, een levering of het portaal, dan bel of app je ons en
+            regelen wij het met JOKA. Geen ticket, geen keuzemenu, geen wachtrij. Je spreekt met iemand die je klus kent.</p>
+        </div>
+      </div>
+      <div class="v3-punten">
+        <div class="v3-punt"><b>Bel of app, direct een mens</b><p>Een vast nummer, een vast aanspreekpunt. Je hoeft niets uit te leggen aan een formulier.</p></div>
+        <div class="v3-punt"><b>Wij regelen het met JOKA</b><p>Een tekort, een beschadigd pak, een verkeerde plint: jij belt ons, wij bellen JOKA. Jij gaat door met leggen.</p></div>
+        <div class="v3-punt"><b>Samen door je eerste klus</b><p>Wil je eerst zien hoe het werkt, dan lopen we een klus van jou samen door, in het echte portaal.</p></div>
+      </div>
+      <div class="knoppen v3-service-knoppen">
+        <button type="button" class="knop oranje groot" data-demo>Plan een demo <span class="pijl">&rarr;</span></button>
+        <a class="knop open groot" href="https://jellewinthaegen.github.io/framr-portaal/">Portaal proberen</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6d. Extra leads (Jelle, 15-09-2026): de legservice op de Oaklyn-site, net gestart, dus bescheiden gebracht. -->
+  <section id="leads" class="lijn-boven">
+    <div class="binnen">
+      <div class="duo smal-eerst">
+        <div>
+          <p class="opschrift">Extra leads</p>
+          <h2>Klussen uit je regio, als je wilt.</h2>
+        </div>
+        <div>
+          <p class="leidend">Particulieren die bij Oaklyn een vloer kopen, kunnen hem laten leggen. Wil je daaraan meedoen,
+            dan zetten we je als legger bij de legservice op de Oaklyn-site, en komen die klussen uit jouw regio bij
+            jou terecht. Gratis, zonder verplichting.</p>
+          <p class="v3-fijn">De legservice is net gestart, dus reken er nog niet op als vaste stroom. Zie het als extra werk
+            dat erbij komt naarmate de winkel groeit. Zeg het bij je aanmelding of daarna.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6a. Ter vergelijking (15-09-2026): wat vakmansoftware elders kost, zonder namen. De bedragen
+       komen uit de twee inspiratiebronnen van Jelle, nagekeken op 14-09-2026 (zie het brein onder
+       framr-one: Plancraft en Bouwportaal); de voetregel zegt wanneer. -->
+  <section id="vergelijk" class="lijn-boven">
+    <div class="binnen">
+      <div class="duo smal-eerst">
+        <div>
+          <p class="opschrift">Ter vergelijking</p>
+          <h2>Wat vakmansoftware elders kost.</h2>
+        </div>
+        <div>
+          <p class="leidend">Offertes, facturen en inmeten in een abonnement is niets nieuws. Nieuw is dat het niets kost, en dat
+            proberen geen proef is.</p>
+        </div>
+      </div>
+      <div class="v3-vergelijk">
+        <div>
+          <span class="v3-vergelijk-wie">Vergelijkbare pakketten</span>
+          <span class="v3-vergelijk-prijs">45 tot 60 euro <small>per maand</small></span>
+          <p>Na een proefperiode van een of twee weken begint het abonnement. Meer gebruikers of meer onderdelen
+            kosten meer.</p>
+        </div>
+        <div class="v3-eigen">
+          <span class="v3-vergelijk-wie">Het portaal van Framr.One</span>
+          <span class="v3-vergelijk-prijs">0 euro <small>per maand</small></span>
+          <p>Dezelfde vijf pakketten, zonder abonnement en zonder proefperiode. Portaal proberen is geen proef:
+            het is meteen van jou.</p>
+        </div>
+      </div>
+      <p class="v3-fijn">Prijzen van vergelijkbare pakketten, nagekeken in september 2026.</p>
+    </div>
+  </section>
+
+  <section id="inbegrepen" class="donker">
+    <div class="binnen">
+      <p class="opschrift">Waarom kost de software niets</p>
+      <h2 class="wijd">De software is inbegrepen. Jij houdt de keuze.</h2>
+      <div class="v3-inbegrepen">
+        <div>
+          <span class="v3-groot-woord">&euro; <em>0</em> per maand</span>
+          <h3>Vijf pakketten, allemaal inbegrepen</h3>
+          <p>Ook na een maand, ook na een jaar. Er is geen betaalde versie en geen module die je later moet bijkopen.</p>
+          <ul>
+            <li><b>Inmeetpakket</b> ruimte voor ruimte, met foto's</li>
+            <li><b>Projectpakket</b> een dossier per klus</li>
+            <li><b>Calculatiepakket</b> pakken, snijverlies, hulpstoffen, jouw marge</li>
+            <li><b>Offertepakket</b> op jouw briefpapier, eigen nummerreeks</li>
+            <li><b>Factuurpakket</b> uit de offerte, met aanbetaling en termijn</li>
+          </ul>
+        </div>
+        <div>
+          <span class="v3-groot-woord"><em>0%</em> van je legwerk</span>
+          <h3>Zo verdienen wij</h3>
+          <p>Framr.One is ook je groothandel. Wij verdienen op het materiaal dat via ons de deur uitgaat, niet aan een maandbedrag en niet aan een percentage van jouw werk. Twee verdienmodellen naast elkaar, en ze zitten elkaar niet in de weg.</p>
+        </div>
+        <div>
+          <span class="v3-groot-woord">Iedere <em>vloer</em></span>
+          <h3>Nooit verplicht om via ons te bestellen</h3>
+          <p>De klant heeft de vloer al gekocht, wil een ander merk, of je werkt uit eigen voorraad. Je voert merk, pakinhoud, prijs en snijverlies zelf in, en meten, calculeren en offreren werken gewoon door. Wij verdienen die keer niets, en dat is onze zorg.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. Begin met je volgende vloerklus: een hoofdactie, een tweede, en de vragen. Wat volgt en
+       kozijnen staan hier als antwoord, eerlijk en kort (beloftes in twee stapels, besluit 14-09-2026). -->
+  <section id="aanmelden" class="slot lijn-boven">
+    <div class="binnen">
+      <p class="opschrift" style="justify-content: center;">Beginnen</p>
+      <h2>Begin met je volgende vloerklus.</h2>
+      <p class="leidend">Je vult je bedrijfsgegevens een keer in. Daarna staan de vijf pakketten open en heb je je
+        bronsprijzen. Geen abonnement, geen proefperiode, geen inkoopverplichting.</p>
+      <div class="knoppen">
+        <a class="knop oranje groot" href="https://jellewinthaegen.github.io/framr-portaal/">Portaal proberen <span class="pijl">&rarr;</span></a>
+        <button type="button" class="knop open groot" data-demo>Liever samen bekijken? Plan een demo</button>
+      </div>
+      <div class="v3-vragen" id="vragen">
+        <details><summary>Hoe meld ik me aan?</summary>
+          <p>Met Portaal proberen maak je een account: bedrijfsnaam, KvK, btw-nummer, adres, e-mail en een wachtwoord. Je rolt meteen het portaal in, en je bent meteen bronsklant bij Oaklyn.</p></details>
+        <details><summary>Wat kost het?</summary>
+          <p>Niets. Geen abonnement, geen betaalde versie, geen module die je later moet bijkopen. Wij verdienen als jij je materiaal via ons bestelt, en dat hoeft niet.</p></details>
+        <details><summary>Welke prijzen zie ik?</summary>
+          <p>Bij de start je bronsprijzen, dezelfde als op deze pagina. Wie regelmatig bestelt gaat naar zilver, wie zijn materiaal structureel via ons haalt naar goud. De adviesprijs staat er altijd naast, zodat je ziet wat de klant in de winkel zou betalen.</p></details>
+        <details><summary>Hoe zit het met levering?</summary>
+          <p>Vloeren en hulpstoffen uit voorraad leveren we in 2 tot 4 werkdagen, op het adres dat jij kiest. Je bestelling gaat naar Oaklyn en wordt bevestigd met de leverdatum erbij; staat een vloer niet op voorraad, dan hoor je dat vooraf. Zie <a href="#levering">de levering</a>.</p></details>
+        <details><summary>Past dit bij mijn bestaande administratie?</summary>
+          <p>Je houdt je eigen nummerreeks voor offertes en facturen, je eigen briefpapier, je eigen betaalvoorwaarden en je eigen uurtarief en marge; een keer ingesteld, daarna rekent alles ermee. Je boekhoudprogramma verandert niet. Een koppeling daarmee komt later; tot die tijd exporteer je facturen als PDF.</p></details>
+        <details><summary>Moet ik bij jullie bestellen?</summary>
+          <p>Nee. Werkt met iedere vloer en iedere leverancier. Bestel je ergens anders, dan blijven calculatie, offerte, klus en factuur gewoon werken.</p></details>
+        <details data-pf-nieuw><summary>Werkt het op mijn telefoon?</summary>
+          <p>Ja. Het portaal draait in de browser, dus op je telefoon bij de klant en op je laptop op kantoor; er is niets te installeren. Elk scherm heeft een eigen adres en de terugknop van je browser werkt gewoon.</p></details>
+        <details data-pf-nieuw><summary>Wie ziet mijn gegevens?</summary>
+          <p>Jij. Het portaal geeft uitsluitend jouw eigen klussen, klanten en documenten terug; een andere partner ziet niets van jou.</p></details>
+        <details><summary>Wat komt er nog?</summary>
+          <p>Waar we aan werken, en dus nog niet beloven: een boekhoudkoppeling en hulp bij het verkoopgesprek (vloer kiezen met de klant, een klantlink). En kozijnen, in hetzelfde platform, met dezelfde werkwijze.</p></details>
+      </div>
+      <p class="fijn" style="margin-top: 26px; color: var(--label);">Voor vloerenleggers en vloerenbedrijven in Nederland</p>
+    </div>
+  </section>
+
+</main>
+
+<!-- Plan een demo. Waar dit naartoe gaat is nog niet besloten, want Framr.One heeft nog
+     geen mailbox (de omgeving van framr.one staat als taak in het brein). Het paneel staat
+     er en verzendt nog niets; de bevestiging zegt dat eerlijk, zodat de pagina niets belooft
+     wat vandaag niet waar is. Aansluiten voordat de pagina publiek gaat. -->
+<dialog class="v3-demo" id="v3-demo">
+  <div class="v3-demo-binnen">
+    <form id="v3-demo-form">
+      <h3>Plan een demo van twintig minuten.</h3>
+      <p>We lopen samen door een klus van jou heen, in het echte portaal.</p>
+      <label for="d-naam">Naam</label><input id="d-naam" type="text" autocomplete="name" required>
+      <label for="d-tel">Telefoon</label><input id="d-tel" type="tel" autocomplete="tel" required>
+      <label for="d-wanneer">Wanneer schikt het</label>
+      <select id="d-wanneer"><option>Deze week, overdag</option><option>Deze week, na vijven</option><option>Volgende week</option></select>
+      <div class="knoppen">
+        <button type="submit" class="knop oranje">Plan de demo <span class="pijl">&rarr;</span></button>
+        <button type="button" class="knop open" data-demo-dicht>Sluiten</button>
+      </div>
+    </form>
+    <div class="v3-klaar">
+      <h3>Dank je.</h3>
+      <p>Het plannen via deze pagina staat nog niet aan. Wil je nu al kijken, open dan het portaal via
+        Portaal proberen; het is meteen van jou.</p>
+      <div class="knoppen"><button type="button" class="knop open" data-demo-dicht>Sluiten</button></div>
+    </div>
+  </div>
+</dialog>
+
+<!-- De digitale brochure: de JOKA Designvloeren 2025, pagina voor pagina. -->
+<dialog class="v3-brochure" id="v3-brochure" aria-label="JOKA Designvloeren 2025, de brochure">
+  <div class="v3-brochure-kop">
+    <span class="v3-brochure-titel">JOKA Designvloeren 2025</span>
+    <span class="v3-brochure-stand" id="v3-brochure-stand"></span>
+    <button type="button" class="v3-brochure-dicht" data-brochure-dicht aria-label="Sluiten">&times;</button>
+  </div>
+  <div class="v3-brochure-blad">
+    <button type="button" class="v3-brochure-pijl" data-brochure-vorige aria-label="Vorige pagina">&larr;</button>
+    <div class="v3-brochure-boek"><div class="bk v3-boek"></div></div>
+    <button type="button" class="v3-brochure-pijl" data-brochure-volgende aria-label="Volgende pagina">&rarr;</button>
+  </div>
+</dialog>
+
+<footer>
+  <div class="binnen voet">
+    <div class="kolom">
+      <a class="merk" href="../index.html">Framr<span class="een">.One</span></a>
+      <span class="fijn" style="margin-top: 8px;">Van maat tot factuur</span>
+    </div>
+    <div class="kolom">
+      <span class="kop">Vakgebieden</span>
+      <a href="index.html">Framr.One Vloeren</a>
+      <a href="../index.html#kozijnen">Framr.One Kozijnen</a>
+    </div>
+    <div class="kolom">
+      <span class="kop">Deze pagina</span>
+      <a href="#marge">Je marge</a>
+      <a href="#werkwijze">Zo werkt het</a>
+      <a href="#materiaal">Je materiaal</a>
+    </div>
+    <div class="kolom">
+      <span class="kop">Materiaal</span>
+      <a href="#materiaal">JOKA via Oaklyn</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* De vloeren: echte bronsprijzen van JOKA uit de prijslaag van het portaal, per m2 exclusief btw,
+   en de pakinhoud, stand 14-09-2026. De inkoopprijs staat hier bewust niet; alleen advies en het
+   bronsniveau, dat iedere partner bij de start ziet. Een keer, voor de voorbeeldklus in de kop, het
+   verdienmodel, de calculator en de inmeetdemo, zodat ze nooit uit elkaar lopen. */
+var V3_VLOEREN = {
+  'pvc-dry':   { advies: 24.38, brons: 15.68, pak: 3.37, staal: 'eik-licht' },
+  'pvc-click': { advies: 41.24, brons: 30.82, pak: 1.70, staal: 'eik-amber' },
+  'laminaat':  { advies: 16.45, brons: 12.41, pak: 2.49, staal: 'eik-grijs' },
+};
+var v3eur = function (g) { return '€ ' + g.toLocaleString('nl-NL', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); };
+
+/* De inmeetdemo. Dezelfde regels als de calculator van het portaal (calculator.js en inmeting.ts):
+   snijverlies 10 procent bij recht leggen en 15 procent bij visgraat of chevron, pakken naar boven
+   afgerond op de pakinhoud van de vloer, de omtrek min 90 centimeter per deuropening voor de plint,
+   plintlengtes van 2,4 meter. Pakinhoud en bronsprijs uit V3_VLOEREN hierboven. */
+(function () {
+  var VLOEREN = V3_VLOEREN;
+  var DEUR_M = 0.9;
+  var PLINT_M = 2.4;
+  var el = function (id) { return document.getElementById(id); };
+  if (!el('m-lengte')) return;
+  var m2 = function (g) { return g.toLocaleString('nl-NL', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' m2'; };
+  var eur = function (g) { return '€ ' + g.toLocaleString('nl-NL', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); };
+
+  function reken() {
+    var L = Math.max(0, Number(el('m-lengte').value)) / 1000;
+    var B = Math.max(0, Number(el('m-breedte').value)) / 1000;
+    var deuren = Math.max(0, Math.round(Number(el('m-deuren').value)));
+    var patroon = el('m-patroon').value;
+    var v = VLOEREN[el('m-vloer').value];
+    var netto = L * B;
+    var verlies = patroon === 'recht' ? 0.10 : 0.15;
+    var bruto = netto * (1 + verlies);
+    var pakken = v.pak > 0 ? Math.ceil(bruto / v.pak - 1e-9) : 0;
+    var besteld = pakken * v.pak;
+    var omtrek = Math.max(0, 2 * (L + B) - deuren * DEUR_M);
+    var lengtes = Math.ceil(omtrek / PLINT_M - 1e-9);
+
+    el('m-netto').textContent = m2(netto);
+    el('m-netto-hoe').textContent = L.toLocaleString('nl-NL') + ' bij ' + B.toLocaleString('nl-NL') + ' meter';
+    el('m-verlies').textContent = Math.round(verlies * 100) + '%';
+    el('m-verlies-hoe').textContent = patroon === 'recht' ? 'Recht leggen. Visgraat en chevron rekenen 15 procent.' : 'Visgraat of chevron kost meer snijwerk dan recht leggen (10 procent).';
+    el('m-bruto').textContent = m2(bruto);
+    el('m-bruto-hoe').textContent = 'Netto plus het snijverlies.';
+    el('m-pakken').textContent = pakken + ' pakken';
+    el('m-pakken-hoe').textContent = m2(bruto) + ' gedeeld door ' + v.pak.toLocaleString('nl-NL') + ' m2 per pak, naar boven afgerond, is ' + m2(besteld) + '.';
+    var plintAan = el('m-plint').checked;
+    el('m-plint-regel').style.display = plintAan ? '' : 'none';
+    if (plintAan) {
+      el('m-plint-r').textContent = omtrek.toLocaleString('nl-NL', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' m';
+      el('m-plint-hoe').textContent = 'De omtrek min 90 centimeter per deuropening: ' + lengtes + ' lengtes van 2,4 meter.';
+    }
+    el('m-bedrag').textContent = eur(besteld * v.brons);
+  }
+  ['m-lengte', 'm-breedte', 'm-deuren', 'm-patroon', 'm-vloer', 'm-plint'].forEach(function (id) {
+    el(id).addEventListener('input', reken);
+    el(id).addEventListener('change', reken);
+  });
+  reken();
+})();
+
+/* De projectflow: de maatlijn tekent zichzelf en de stations lichten op. */
+(function () {
+  var lat = document.getElementById('v3-lat');
+  if (!lat) return;
+  var stations = lat.querySelectorAll('.v3-station');
+  function meet() {
+    var r = lat.getBoundingClientRect();
+    var h = window.innerHeight;
+    var q = Math.max(0, Math.min(1, (h * 0.8 - r.top) / r.height));
+    lat.style.setProperty('--q', q.toFixed(4));
+    lat.style.setProperty('--lat-h', (lat.clientHeight - 12) + 'px');
+    stations.forEach(function (st, i) { st.classList.toggle('v3-aan', q >= (i + 0.35) / stations.length); });
+  }
+  window.addEventListener('scroll', meet, { passive: true });
+  window.addEventListener('resize', meet);
+  meet();
+})();
+
+/* Plan een demo: het paneel openen en sluiten. Verzenden is nog niet aangesloten. */
+(function () {
+  var paneel = document.getElementById('v3-demo');
+  var form = document.getElementById('v3-demo-form');
+  if (!paneel) return;
+  document.querySelectorAll('[data-demo]').forEach(function (k) {
+    k.addEventListener('click', function () { paneel.classList.remove('v3-verstuurd'); if (form) form.reset(); paneel.showModal(); });
+  });
+  document.querySelectorAll('[data-demo-dicht]').forEach(function (k) {
+    k.addEventListener('click', function () { paneel.close(); });
+  });
+  if (form) form.addEventListener('submit', function (e) { e.preventDefault(); paneel.classList.add('v3-verstuurd'); });
+})();
+
+/* De getallen van het verdienmodel tellen op zodra het blok in beeld komt, een keer (speelser, Jelle
+   15-09-2026 avond). Leest het bedrag uit de tekst zoals die er staat en telt er in ruim een seconde
+   naartoe, met dezelfde opmaak; aan het eind staat de oorspronkelijke tekst er letterlijk weer. */
+(function () {
+  var blok = document.querySelector('#verdienmodel .v3-drie');
+  if (!blok || !('IntersectionObserver' in window)) return;
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var ids = ['vm-inkoop', 'vm-verkoop', 'vm-marge', 'vm-som-verkoop', 'vm-som-inkoop', 'vm-som-marge'];
+  function tel(el) {
+    var tekst = el.textContent;
+    var m = tekst.match(/\d[\d.]*,\d+|\d+/);
+    if (!m) return;
+    var doel = parseFloat(m[0].replace(/\./g, '').replace(',', '.'));
+    if (!isFinite(doel)) return;
+    var dec = (m[0].split(',')[1] || '').length;
+    var voor = tekst.slice(0, m.index), na = tekst.slice(m.index + m[0].length);
+    var t0 = null, duur = 1100;
+    function stap(t) {
+      if (!t0) t0 = t;
+      var p = Math.min(1, (t - t0) / duur);
+      var e = 1 - Math.pow(1 - p, 3);
+      el.textContent = voor + (doel * e).toLocaleString('nl-NL', { minimumFractionDigits: dec, maximumFractionDigits: dec }) + na;
+      if (p < 1) requestAnimationFrame(stap); else el.textContent = tekst;
+    }
+    requestAnimationFrame(stap);
+  }
+  var kijker = new IntersectionObserver(function (es) {
+    es.forEach(function (e) {
+      if (!e.isIntersecting) return;
+      kijker.disconnect();
+      if (document.documentElement.getAttribute('data-pf-animatie') === 'minder') return;
+      ids.forEach(function (id) { var el = document.getElementById(id); if (el) tel(el); });
+    });
+  }, { threshold: 0.3 });
+  kijker.observe(blok);
+})();
+
+/* De drie vlakken onder de kop komen omhoog zodra ze voor een vijfde in beeld staan, een keer. */
+(function () {
+  var blok = document.querySelector('.v3-beelden');
+  if (!blok) return;
+  if (!('IntersectionObserver' in window)) { blok.classList.add('v3-in'); return; }
+  var kijker = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { blok.classList.add('v3-in'); kijker.disconnect(); } });
+  }, { threshold: 0.2 });
+  kijker.observe(blok);
+})();
+
+/* De stalenboeken komen omhoog zodra de vitrine voor de helft in beeld staat, een keer. */
+(function () {
+  var vitrine = document.querySelector('.v3-vitrine');
+  if (!vitrine) return;
+  if (!('IntersectionObserver' in window)) { vitrine.classList.add('open'); return; }
+  var kijker = new IntersectionObserver(function (es) {
+    es.forEach(function (e) { if (e.isIntersecting) { vitrine.classList.add('open'); kijker.disconnect(); } });
+  }, { threshold: 0.5 });
+  kijker.observe(vitrine);
+})();
+
+/* Het portaal, scherm voor scherm: een tabblad kiezen wisselt het scherm en de regel eronder. */
+(function () {
+  var blok = document.querySelector('.v3-portaal');
+  if (!blok) return;
+  var knoppen = blok.querySelectorAll('.v3-tabs button');
+  var beelden = blok.querySelectorAll('.v3-schermrand img');
+  var teksten = blok.querySelectorAll('.v3-schermtekst p');
+  function kies(naam) {
+    knoppen.forEach(function (k) { k.setAttribute('aria-selected', k.dataset.scherm === naam ? 'true' : 'false'); });
+    beelden.forEach(function (b) { b.classList.toggle('v3-voor', b.dataset.scherm === naam); });
+    teksten.forEach(function (t) { t.classList.toggle('v3-voor', t.dataset.scherm === naam); });
+  }
+  knoppen.forEach(function (k) { k.addEventListener('click', function () { kies(k.dataset.scherm); }); });
+})();
+</script>
+<script src="kluscalculator.js?v=2026-09-15"></script>
+<script src="brochure.js?v=2026-09-15b"></script>
+<script src="collectie.js?v=2026-09-15"></script>
+<script src="../site.js"></script>
+<script src="../toonbank.js"></script>
+<!-- Tijdelijk: het proefpaneel. Zie proef.js. -->
+<script src="proef.js?v=2026-09-15c"></script>
+</body>
+</html>

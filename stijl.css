@@ -1,0 +1,258 @@
+/* Framr.One site: de gedeelde stijllaag van de publieke paginas.
+   Ontwerpsysteem van Jelle (besluit 21-08-2026): oranje EA5B10 als enige accent,
+   inkt op off-white, IBM Plex Mono voor maten en bedragen, de maatlijn als
+   visuele taal. Voor de koppen staat hier Poppins in plaats van de Familjen
+   Grotesk van het portaal, omdat het merkbeeld ronder is dan die letter; dat is
+   het open besluit "typografie site tegenover portaal" uit het masterplan en
+   wacht op akkoord van Jelle. */
+
+:root {
+  --inkt: #14161A;
+  --tekst: #3F464C;
+  --label: #5F676E;
+  --grond: #F7F7F5;
+  --vlak: #FFFFFF;
+  --lijn: #DCDCD6;
+  --maatlijn: #C2C2BA;
+  --oranje: #EA5B10;
+  --oranje-donker: #CE4A08;
+  --oranje-zacht: #FDEBE0;
+  --kop: 'Poppins', 'Familjen Grotesk', 'Helvetica Neue', Arial, sans-serif;
+  /* De letter van het woordmerk staat los van de koppen, zodat de keuze uit
+     merk-keuze.html hier op een plek landt. */
+  /* Gekozen door Jelle op 12-09-2026: Questrial, hoofdletter F, de rest
+     klein, en ".one" samen in oranje. Questrial heeft maar een gewicht. */
+  --merk: 'Questrial', 'Century Gothic', 'Helvetica Neue', Arial, sans-serif;
+  --merk-gewicht: 400;
+  /* Jelle wil het woordmerk in de balk lekker groot. */
+  --merk-balk: 30px;
+  /* Questrial heeft maar een gewicht en leest daardoor dun, vooral klein. De
+     dikte komt van een lijn op de letter, wat de vorm van Questrial houdt en
+     precies is wat er straks in de getekende SVG gebeurt. */
+  --merk-dikte: 0.028em;
+  --merk-dikte-groot: 0.018em;
+  --lopend: 'Public Sans', 'Helvetica Neue', Arial, sans-serif;
+  --mono: 'IBM Plex Mono', 'SFMono-Regular', Consolas, monospace;
+  --breed: 1240px;
+  --rand: 32px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--grond);
+  color: var(--inkt);
+  font-family: var(--lopend);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 { font-family: var(--kop); line-height: 1.1; margin: 0; letter-spacing: -0.02em; font-weight: 600; }
+p { margin: 0; }
+img { max-width: 100%; }
+a { color: inherit; }
+
+/* De maatlijn: bovenaan een dunne lat die met het scrollen oranje volloopt. */
+.meetlat { position: fixed; top: 0; left: 0; right: 0; height: 2px; background: transparent; z-index: 90; }
+.meetlat .voortgang { height: 2px; width: 0; background: var(--oranje); transition: width .08s linear; }
+
+/* Balk met het merk, de navigatie en de knop. Ligt over de hero en wordt
+   dekkend zodra je voorbij de hero scrolt. */
+.balk { position: fixed; top: 0; left: 0; right: 0; z-index: 80; transition: background .25s, border-color .25s, box-shadow .25s; border-bottom: 1px solid transparent; }
+.balk.vast, .balk.altijd-vast { background: rgba(247, 247, 245, .92); backdrop-filter: blur(10px); border-bottom-color: var(--lijn); }
+.balk-binnen { padding: 16px max(22px, 5.75vw); display: flex; align-items: center; gap: 28px; }
+
+.merk { font-family: var(--merk); font-weight: var(--merk-gewicht); font-size: var(--merk-balk); letter-spacing: -0.01em; -webkit-text-stroke: var(--merk-dikte) currentColor; paint-order: stroke fill; text-decoration: none; color: var(--inkt); white-space: nowrap; }
+.merk .een, .merk .punt { color: var(--oranje); }
+/* Op de beginpagina draagt de foto het woordmerk al. Twee woordmerken boven
+   elkaar is rommelig, dus het merk in de balk komt pas op als je voorbij de
+   hero bent. Werkt alleen waar de balk merk-wacht heeft. */
+.balk.merk-wacht .merk { opacity: 0; pointer-events: none; transition: opacity .35s ease; }
+.balk.merk-wacht.voorbij-hero .merk { opacity: 1; pointer-events: auto; }
+/* De punt mag groter dan een leesteken; de schaal staat op een plek. */
+.merk .stip, .woordmerk .stip { font-size: var(--stip, 1em); line-height: 0; }
+
+.menu { display: flex; align-items: center; gap: 26px; margin: 0 auto; }
+.menu a { font-size: 14.5px; text-decoration: none; color: var(--tekst); white-space: nowrap; padding: 6px 0; border-bottom: 1px solid transparent; }
+.menu a:hover { color: var(--inkt); border-bottom-color: var(--oranje); }
+.menu a.hier { color: var(--inkt); border-bottom-color: var(--oranje); }
+
+/* Knoppen. De donkere pil is de hoofdknop in de balk, oranje is het accent
+   binnen de pagina. */
+.knop { display: inline-flex; align-items: center; gap: 10px; font-family: var(--kop); font-weight: 500; font-size: 14.5px; text-decoration: none; padding: 12px 22px; border-radius: 999px; border: 1px solid transparent; transition: background .15s, color .15s, border-color .15s, transform .15s; }
+.knop .pijl { transition: transform .15s; }
+.knop:hover .pijl { transform: translateX(3px); }
+.knop.inkt { background: var(--inkt); color: #fff; }
+.knop.inkt:hover { background: #000; }
+.knop.oranje { background: var(--oranje); color: #fff; }
+.knop.oranje:hover { background: var(--oranje-donker); }
+.knop.open { background: transparent; color: var(--inkt); border-color: var(--lijn); }
+.knop.open:hover { border-color: var(--inkt); }
+.knop.licht { background: rgba(255, 255, 255, .12); color: #fff; border-color: rgba(255, 255, 255, .32); }
+.knop.licht:hover { background: rgba(255, 255, 255, .2); }
+.knop.groot { font-size: 15.5px; padding: 15px 28px; }
+
+/* Inhoud */
+.binnen { max-width: var(--breed); margin: 0 auto; padding: 0 var(--rand); }
+section { padding: 132px 0; }
+section.lijn-boven { border-top: 1px solid var(--lijn); }
+.donker { background: var(--inkt); color: #fff; }
+.donker h2, .donker h3 { color: #fff; }
+.donker .leidend, .donker .los { color: rgba(255, 255, 255, .72); }
+
+/* Het opschrift boven een sectie, met een maatstreepje ervoor. */
+.opschrift { font-family: var(--mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--oranje); display: flex; align-items: center; gap: 12px; margin-bottom: 18px; }
+.opschrift::before { content: ""; width: 28px; height: 1px; background: var(--oranje); flex: none; }
+
+h2 { font-size: clamp(30px, 4.1vw, 52px); max-width: 22ch; letter-spacing: -0.028em; }
+h2.wijd { max-width: 30ch; }
+.leidend { font-size: 20px; color: var(--tekst); max-width: 54ch; margin-top: 24px; line-height: 1.55; }
+.los { font-size: 16.5px; color: var(--tekst); max-width: 62ch; line-height: 1.6; }
+
+/* De vijf pakketten en andere rasters */
+.raster { display: grid; gap: 40px; margin-top: 64px; }
+.raster.vijf { grid-template-columns: repeat(5, 1fr); gap: 26px; }
+.raster.drie { grid-template-columns: repeat(3, 1fr); }
+.raster.twee { grid-template-columns: repeat(2, 1fr); }
+.vak { padding: 24px 0 0; position: relative; display: flex; flex-direction: column; border-top: 1px solid var(--lijn); }
+.vak .nr { font-family: var(--mono); font-size: 10px; letter-spacing: .16em; color: var(--maatlijn); }
+.vak h3 { font-family: var(--mono); font-weight: 500; font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase; margin: 14px 0 12px; }
+.vak p { font-size: 15px; color: var(--tekst); line-height: 1.6; }
+.vak .gratis { font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--oranje); margin-top: auto; padding-top: 16px; display: block; }
+.vak::before { content: ""; position: absolute; left: 0; right: 0; top: -1px; height: 2px; background: var(--oranje); transform: scaleX(0); transform-origin: left; transition: transform .5s ease; }
+.vak.getekend::before { transform: scaleX(1); }
+
+/* Beeldvlak waar een foto van Jelle in komt */
+.beeldslot { position: relative; background: var(--vlak); border: 1px solid var(--lijn); border-radius: 18px; overflow: hidden; display: flex; align-items: center; justify-content: center; text-align: center; padding: 28px; min-height: 280px; background-image: repeating-linear-gradient(135deg, transparent 0 14px, rgba(194, 194, 186, .13) 14px 15px); }
+.beeldslot .wat { font-family: var(--mono); font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--label); max-width: 26ch; line-height: 1.7; }
+.beeldslot .wat b { display: block; color: var(--oranje); margin-bottom: 8px; letter-spacing: .18em; }
+.beeldslot.vulling { min-height: 320px; }
+
+/* Twee kolommen: tekst naast beeld */
+.duo { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center; }
+.kopblok { max-width: 900px; margin-bottom: 64px; }
+.kopblok .leidend { max-width: 60ch; }
+.duo.smal-eerst { grid-template-columns: .9fr 1.1fr; align-items: start; }
+
+/* Lijst met streepjes in de maatlijn-taal */
+.punten { list-style: none; margin: 28px 0 0; padding: 0; }
+.punten li { position: relative; padding: 14px 0 14px 26px; border-top: 1px solid var(--lijn); font-size: 15.5px; color: var(--tekst); }
+.punten li:last-child { border-bottom: 1px solid var(--lijn); }
+.punten li::before { content: ""; position: absolute; left: 0; top: 23px; width: 12px; height: 1px; background: var(--oranje); }
+.punten li b { color: var(--inkt); font-weight: 600; }
+.donker .punten li { border-color: rgba(255, 255, 255, .16); color: rgba(255, 255, 255, .76); }
+.donker .punten li b { color: #fff; }
+
+/* Kaart voor een vakgebied of een merk */
+.kaart { background: var(--vlak); border: 1px solid var(--lijn); border-radius: 22px; padding: 44px 40px 40px; display: flex; flex-direction: column; }
+.kaart.stil { background: transparent; }
+.kaart .stand { font-family: var(--mono); font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; }
+.kaart .stand.nu { color: var(--oranje); }
+.kaart .stand.later { color: var(--label); }
+.kaart h3 { font-size: 31px; margin: 16px 0 14px; letter-spacing: -0.02em; }
+.kaart p { font-size: 16px; color: var(--tekst); margin-bottom: 30px; line-height: 1.6; }
+.kaart .onderaan { margin-top: auto; }
+.kaart .onderaan .gratis { margin-top: 0; padding-top: 0; }
+
+/* De slotoproep */
+.slot { text-align: center; padding: 152px 0; }
+.slot h2 { margin: 0 auto; max-width: 24ch; }
+.slot .leidend { margin: 26px auto 42px; text-align: center; }
+.slot .knoppen { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+footer { border-top: 1px solid var(--lijn); padding: 44px 0 56px; }
+.voet { display: flex; justify-content: space-between; gap: 32px; flex-wrap: wrap; align-items: flex-start; }
+.voet .kolom { display: flex; flex-direction: column; gap: 9px; }
+.voet .kop { font-family: var(--mono); font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--label); margin-bottom: 4px; }
+.voet a { font-size: 14.5px; color: var(--tekst); text-decoration: none; }
+.voet a:hover { color: var(--oranje); }
+.voet .fijn { font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em; color: var(--label); text-transform: uppercase; }
+
+@media (max-width: 1060px) {
+  .raster.vijf { grid-template-columns: repeat(2, 1fr); }
+  .duo, .duo.smal-eerst { grid-template-columns: 1fr; gap: 36px; }
+}
+@media (max-width: 860px) {
+  :root { --rand: 22px; }
+  .menu { display: none; }
+  .balk .knop { margin-left: auto; }
+  .raster.drie { grid-template-columns: 1fr; }
+  :root { --merk-balk: 25px; }
+  .belofte .leidend { font-size: 19px; }
+  .kopblok { margin-bottom: 40px; }
+  section { padding: 84px 0; }
+}
+@media (max-width: 620px) {
+  .raster.vijf, .raster.twee { grid-template-columns: 1fr; }
+  .slot { padding: 76px 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .vak::before { transition: none; transform: scaleX(1); }
+  .meetlat .voortgang { transition: none; }
+}
+
+/* De hero: het merkbeeld op bannerbreedte, met de belofte eronder in het beeld.
+   Het vlak houdt exact de verhouding van de foto (2400 bij 1350), zodat de tekst
+   op elke schermbreedte netjes onder het woordmerk in het beeld blijft hangen. */
+.hero { position: relative; }
+/* Hero zonder beeld. Zodra het nieuwe herobeeld er is wordt dit vlak de
+   fotolaag en blijft het tekstblok er ongewijzigd op staan. */
+.hero.leeg { padding: 168px 0 116px; }
+.hero.leeg .hero-woord { position: static; left: auto; right: auto; top: auto; max-width: 900px; padding: 0 max(22px, 5.75vw); }
+.hero.leeg .opschrift { margin: 0 0 16px; }
+.hero-beeld { position: relative; width: 100%; aspect-ratio: 2400 / 1350; overflow: hidden; background: var(--grond); }
+.hero-beeld > img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.hero-woord { position: absolute; left: max(22px, 5.75vw); top: 55.5%; right: max(22px, 5.75vw); max-width: 560px; }
+.hero-woord h1 { font-size: clamp(26px, 3.1vw, 44px); max-width: 20ch; letter-spacing: -0.025em; }
+.hero-woord h1 .stil { color: var(--label); font-weight: 500; }
+.hero-woord .leidend { font-size: clamp(16px, 1.35vw, 19px); margin-top: 22px; max-width: 56ch; }
+.hero-woord .knoppen { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 34px; }
+.hero.donker-beeld .hero-woord h1, .hero.donker-beeld .hero-woord .leidend { color: #fff; }
+.hero.donker-beeld .hero-woord h1 .stil { color: rgba(255, 255, 255, .6); }
+
+/* De strook met drie beelden direct onder de hero, van rand tot rand. */
+.strook { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 12px; }
+.strook .beeldslot { min-height: 400px; border-radius: 14px; }
+
+/* Een hero met de tekst naast het beeld, voor de vloerenpagina. */
+.hero-duo { display: grid; grid-template-columns: 1fr 1fr; min-height: 620px; align-items: stretch; }
+.hero-duo .woord { padding: 150px max(22px, 5.75vw) 80px; display: flex; flex-direction: column; justify-content: center; }
+.hero-duo .woord h1 { font-size: clamp(30px, 3.9vw, 50px); max-width: 18ch; }
+.hero-duo .woord .leidend { margin-top: 22px; }
+.hero-duo .woord .knoppen { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 32px; }
+.hero-duo .beeld { position: relative; overflow: hidden; background-color: var(--inkt); background-repeat: no-repeat; background-size: 300% auto; background-position: 74% 100%; }
+.hero-duo .beeld .maat { position: absolute; left: 22px; bottom: 20px; font-family: var(--mono); font-size: 10.5px; letter-spacing: .16em; color: rgba(255, 255, 255, .66); text-transform: uppercase; }
+
+@media (max-width: 1060px) {
+  .strook { grid-template-columns: 1fr; }
+  .strook .beeldslot { min-height: 220px; }
+  .hero-duo { grid-template-columns: 1fr; min-height: 0; }
+  .hero-duo .woord { padding: 130px max(22px, 5.75vw) 56px; }
+  .hero-duo .beeld { aspect-ratio: 16 / 10; }
+}
+@media (max-width: 900px) {
+  /* Gestapeld: het beeld als band bovenaan, de belofte eronder. Het beeldvlak
+     mag dan niet meer klemmen op de verhouding van de foto, anders valt de
+     tekst eronder buiten het vlak weg. */
+  .hero-beeld { aspect-ratio: auto; overflow: visible; }
+  .hero-beeld > img { height: auto; aspect-ratio: 3 / 2; object-position: 20% center; }
+  .hero-woord { position: static; left: auto; right: auto; top: auto; max-width: none; padding: 40px max(22px, 5.75vw) 0; }
+  .hero-woord h1 { font-size: clamp(28px, 7vw, 38px); max-width: 24ch; }
+  .hero-woord .leidend { font-size: 16px; }
+}
+
+/* De belofteband direct onder de hero: het opschrift links, de belofte rechts. */
+.belofte { padding: 64px 0 56px; }
+.belofte .duo { gap: 40px; align-items: start; }
+.belofte .opschrift { margin: 6px 0 0; }
+.belofte .leidend { margin-top: 0; font-size: 22px; color: var(--inkt); max-width: 60ch; line-height: 1.5; letter-spacing: -0.01em; }
+
+/* Het woordmerk als tekst in de hero. Staat klaar voor een foto zonder
+   woordmerk erin gebakken; zodra die er is gaat dit blok aan in index.html en
+   kan het woordmerk in de foto weg. Op kleine maat (de balk) wil het merk een
+   zwaardere letter dan op herogrootte, vandaar het eigen gewicht. */
+.hero-woord .woordmerk { display: block; font-family: var(--merk); font-weight: var(--merk-gewicht); font-size: clamp(44px, 6.8vw, 98px); line-height: 1; letter-spacing: -0.015em; color: var(--inkt); margin-bottom: 30px; -webkit-text-stroke: var(--merk-dikte-groot) currentColor; paint-order: stroke fill; }
+.hero-woord .woordmerk .een { color: var(--oranje); }
+.hero.donker-beeld .hero-woord .woordmerk { color: #fff; }
