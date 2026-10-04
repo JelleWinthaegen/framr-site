@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Framr.One, de film: slot</title>
+<meta name="robots" content="noindex, nofollow">
+<!-- Het slot van de film (25-09-2026): vier seconden, het woordmerk op de donkere grond en de
+     ene zin die overblijft. Wordt opgenomen door opnemen.mjs. Geen lange streepjes en geen emoji. -->
+<link href="https://fonts.googleapis.com/css2?family=Questrial&family=Poppins:wght@400;500;600&family=Public+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root { --inkt: #14161A; --oranje: #EA5B10; --grond: #F7F7F5; }
+  html, body { margin: 0; height: 100%; background: var(--inkt); overflow: hidden; color: #fff; }
+  .in { position: fixed; inset: 0; background: var(--grond); animation: weg .8s ease both; pointer-events: none; }
+  @keyframes weg { to { opacity: 0; } }
+  .midden { position: fixed; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+  .merk { font-family: 'Questrial', sans-serif; font-size: clamp(64px, 9vw, 140px); letter-spacing: -.015em; line-height: 1;
+          -webkit-text-stroke: .018em currentColor; paint-order: stroke fill; animation: op 1s cubic-bezier(.2, .7, .2, 1) .5s both; }
+  .merk span { color: var(--oranje); }
+  p { font-family: 'Poppins', sans-serif; font-weight: 500; font-size: clamp(20px, 2vw, 30px); letter-spacing: -.01em; margin: 30px 0 0;
+      color: rgba(255, 255, 255, .88); animation: op .9s ease 1.2s both; }
+  .adres { font-family: 'IBM Plex Mono', monospace; font-size: 16px; letter-spacing: .2em; text-transform: uppercase; color: var(--oranje);
+           margin-top: 34px; animation: op .9s ease 1.8s both; }
+  @keyframes op { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
+</style>
+</head>
+<body>
+<div class="midden">
+  <div class="merk">Framr<span>.One</span></div>
+  <p>Het portaal is gratis. Jij verdient aan de vloer.</p>
+  <div class="adres">framr.one/vloeren</div>
+</div>
+<div class="in"></div>
+</body>
+</html>
