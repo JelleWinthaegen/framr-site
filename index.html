@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#1B150F">
+<!-- Het icoontje in het tabblad (Jelle, 17-10-2026), uit framr-site/beeldmerk/maak-beeldmerk.mjs. -->
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="icon" href="icoon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<title>Framr.One, het werksysteem voor vakbedrijven in de bouw</title>
+<meta name="description" content="Framr.One is het werksysteem voor vakbedrijven in de bouw: inmeten, calculeren, offreren en factureren in een omgeving. Je betaalt niet voor de software; wij verdienen aan materiaal. Nu voor vloeren.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Questrial&family=Poppins:wght@400;500;600&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="beeld/v4/raam.jpg">
+<link rel="stylesheet" href="stijl.css">
+<link rel="stylesheet" href="beginpagina.css">
+</head>
+<body class="v4">
+<!-- De beginpagina van Framr.One, sinds 17-10-2026. Gegroeid uit voorstel 4 en in een ronde met
+     Jelle afgemaakt ("yes dit is echt super goed"): de molen in de opening, waar Framr.One voor
+     staat, het werksysteem in een laptop, een basis met een module per vak, wat het kost, Vloeren en
+     het slot. De vorige beginpagina staat in de git-historie. Bekijken zonder te publiceren:
+     node ontwerpen/bundel.mjs maakt er een los bestand van, met alles erin. De beelden zijn renders
+     (sfeerbeeld), geen klus van een klant. -->
+
+<header class="v4-balk" id="v4-balk">
+  <div class="v4-balk-binnen">
+    <a class="merk" href="index.html">Framr<span class="een">.One</span></a>
+    <nav class="v4-menu">
+      <a href="vloeren/index.html">Vloeren</a>
+      <a href="https://app.framr.one/">Inloggen</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <!-- 1. De opening. Een foto van binnen naar buiten: zwarte kozijnen, een eiken visgraatvloer en
+       een avondlucht in het oranje van Framr.One. Het grote woordmerk komt mee als je scrolt en
+       landt op zijn plek in de balk; niets staat vast, de opening scrolt gewoon weg. -->
+  <section class="v4-opening" id="opening" aria-labelledby="v4-titel">
+    <div class="v4-beeld" id="v4-beeld">
+      <picture>
+        <source media="(max-width: 700px)" srcset="beeld/v4/raam-smal.jpg">
+        <img src="beeld/v4/raam.jpg" width="2688" height="1520" alt="">
+      </picture>
+    </div>
+    <p class="v4-groot-merk" id="v4-groot-merk" aria-hidden="true">Framr<span>.One</span></p>
+    <div class="v4-opening-tekst">
+      <h1 id="v4-titel">Alles rondom het vakwerk.</h1>
+      <p class="v4-onder">Het werksysteem voor vakbedrijven in de bouw. Nu voor vloeren.</p>
+      <div class="v4-acties">
+        <a class="knop wit groot" href="vloeren/index.html">Bekijk Vloeren</a>
+        <a class="v4-link" href="https://app.framr.one/?aanmelden">Maak een account <span aria-hidden="true">&rarr;</span></a>
+      </div>
+    </div>
+    <p class="v4-sfeer">Sfeerbeeld</p>
+  </section>
+
+  <!-- Waar Framr.One naartoe gaat (de noordster van Jelle, 30-08-2026): de belofte in een zin en de
+       hele werkcyclus, met eerlijk erbij wat er vandaag in het portaal staat en waar we naartoe
+       werken. Geen losse modules met naam; de richting, geen bouwlijst. -->
+  <section class="v4-visie" id="visie" aria-labelledby="v4-visie-titel">
+    <div class="v4-visie-binnen">
+      <p class="v4-label licht v4-op">Waar Framr.One voor staat</p>
+      <h2 id="v4-visie-titel" class="v4-op">Jij doet het vakwerk.<br><span>Wij regelen alles eromheen.</span></h2>
+      <p class="v4-visie-zin v4-op">Vloeren leggen, kozijnen plaatsen, schilderen: dat werk doe jij. Alles ervoor, eromheen en erna wil Framr.One voor je regelen, van de eerste aanvraag tot de betaling. Zodat jij meer tijd overhoudt voor het werk waar je je geld mee verdient.</p>
+      <ol class="v4-cyclus" id="v4-cyclus" aria-label="De werkcyclus van een klus">
+        <li><i></i>Aanvraag</li>
+        <li class="er"><i></i>Inmeting</li>
+        <li class="er"><i></i>Calculatie</li>
+        <li class="er"><i></i>Offerte</li>
+        <li class="er"><i></i>Materiaal</li>
+        <li><i></i>Planning</li>
+        <li><i></i>Urenregistratie</li>
+        <li class="er"><i></i>Factuur</li>
+        <li><i></i>Boekhouding</li>
+        <li><i></i>Nazorg</li>
+      </ol>
+      <p class="v4-legenda"><span><i class="vol"></i>Vandaag in het portaal</span><span><i></i>Waar we naartoe werken</span></p>
+    </div>
+  </section>
+
+  <!-- 2. Het werksysteem. Het echte portaal in een laptop, recht van voren. De laptop komt groot in
+       beeld als je erheen scrolt; het scherm gaat aan en wisselt rustig tussen vier echte
+       schermen. Onder de laptop kies je zelf een scherm. -->
+  <section class="v4-systeem" id="systeem" aria-labelledby="v4-systeem-titel">
+    <div class="v4-kop v4-op">
+      <h2 id="v4-systeem-titel">Vandaag: het werksysteem.</h2>
+      <p>Klanten, klussen, inmetingen, calculaties, offertes en facturen in een omgeving. Wat je een keer invoert, neemt de volgende stap over.</p>
+      <a class="v4-link" href="https://app.framr.one/?proberen">Kijk rond zonder account <span aria-hidden="true">&rarr;</span></a>
+    </div>
+    <figure class="v4-laptop" id="v4-laptop">
+      <div class="v4-laptop-toestel">
+      <img class="v4-laptop-romp" src="beeld/v4/laptop.jpg" width="1648" height="990" alt="" loading="lazy">
+      <div class="v4-laptop-scherm">
+        <img class="aan" src="beeld/portaal/opening/basis.webp" width="2880" height="1800" alt="Het overzicht in het portaal: open offertes, wat er te bestellen is, open facturen en de lopende klussen" loading="lazy">
+        <img src="beeld/portaal/scherm-calculatie-marge.webp" width="2880" height="1800" alt="De calculatie in het portaal: links de vierkante meters en wat er nodig is, rechts de materialen die het portaal uitrekent, wat jij betaalt, wat je klant betaalt en jouw marge" loading="lazy">
+        <img src="beeld/portaal/scherm-offerte.webp" width="2880" height="1800" alt="Een offerte in het portaal, met de regels uit de calculatie" loading="lazy">
+        <img src="beeld/portaal/scherm-facturen.webp" width="2880" height="1800" alt="De facturen in het portaal" loading="lazy">
+      </div>
+      </div>
+      <figcaption>
+        <span class="v4-tabs" role="tablist" aria-label="Schermen in het portaal">
+          <button type="button" role="tab" aria-selected="true">Overzicht</button>
+          <button type="button" role="tab" aria-selected="false">Calculatie</button>
+          <button type="button" role="tab" aria-selected="false">Offerte</button>
+          <button type="button" role="tab" aria-selected="false">Facturen</button>
+        </span>
+        <span class="v4-onderschrift">Het echte portaal, met voorbeeldgegevens. De laptop is een sfeerbeeld.</span>
+      </figcaption>
+    </figure>
+  </section>
+
+  <!-- Een basis met een module per vak (de noordster: de kern is voor ieder bouwbedrijf gelijk,
+       alleen opname, calculatie en materiaalbestelling verschillen per vak). Latere vakken worden
+       niet bij naam genoemd. -->
+  <section class="v4-modules" id="modules" aria-labelledby="v4-modules-titel">
+    <div class="v4-modules-binnen">
+      <div class="v4-modules-kop v4-op">
+        <h2 id="v4-modules-titel">Begonnen met vloeren.<br><span>Gebouwd voor elk vak.</span></h2>
+        <p>De basis is voor ieder vakbedrijf gelijk: je klanten, je klussen, je offertes en je facturen. Wat per vak verschilt, is hoe je inmeet, rekent en bestelt. Dat doet een module, op dezelfde basis.</p>
+      </div>
+      <ul class="v4-vakken v4-op">
+        <li><b>Vloeren</b><span class="v4-stand"><i class="aan"></i>Beschikbaar</span></li>
+        <li id="kozijnen"><b>Kozijnen</b><span class="v4-stand"><i></i>In ontwikkeling</span></li>
+        <li class="stil"><b>Meer vakken</b><span class="v4-stand"><i></i>Volgen, op dezelfde basis</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- 3. Wat het kost. Jelle (17-10-2026): "Gratis. Ook later." klonk te goedkoop en was te groot; hij
+       wil het subtieler, met een betere uitleg over de kosten. Daarom het verdienmodel in een kop en
+       de drie posten op een rij. -->
+  <section class="v4-gratis" id="gratis" aria-labelledby="v4-gratis-titel">
+    <div class="v4-gratis-binnen">
+      <div class="v4-gratis-kop v4-op">
+        <p class="v4-label">Wat het kost</p>
+        <h2 id="v4-gratis-titel">Je betaalt niet voor de software.<br><span>Wij verdienen aan materiaal.</span></h2>
+        <p>Framr.One heeft geen abonnement en geen proefperiode die afloopt. Ons verdienmodel zit in het materiaal: Framr.One werkt samen met groothandels, en je bestelt via onze webshop Oaklyn. Daarom willen wij hetzelfde als jij: een kloppende offerte, zo snel mogelijk de deur uit.</p>
+      </div>
+      <dl class="v4-kosten v4-op">
+        <div><dt>Het werksysteem</dt><dd><b>Geen kosten</b>De basis en elke module, ook de modules die nog komen.</dd></div>
+        <div><dt>Materiaal</dt><dd><b>Op je partnerprijs</b>Je bestelt via Oaklyn. Op dat materiaal verdienen wij, en jij met je eigen marge.</dd></div>
+        <div><dt>Bestellen</dt><dd><b>Nooit verplicht</b>Het werksysteem werkt ook met materiaal van elders, of dat je klant zelf aanlevert.</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- 4. Vloeren. Een sfeerbeeld van een gelegde vloer, schermvullend, dat met het scrollen
+       rustig meeschuift; de tekst staat op de stille muur rechts. -->
+  <section class="v4-vloeren" id="vloeren" aria-labelledby="v4-vloeren-titel">
+    <div class="v4-vloeren-beeld" id="v4-vloeren-beeld">
+      <picture>
+        <source media="(max-width: 700px)" srcset="beeld/v4/kamer-smal.jpg">
+        <img src="beeld/v4/kamer.jpg" width="2688" height="1520" alt="" loading="lazy">
+      </picture>
+    </div>
+    <div class="v4-vloeren-tekst v4-op">
+      <p class="v4-label">Framr.One Vloeren</p>
+      <h2 id="v4-vloeren-titel">Verdien ook aan het materiaal.</h2>
+      <p>Aan je legwerk verdien je al. Met Framr.One Vloeren verdien je ook aan de vloer en aan alles wat je erbij levert.</p>
+      <!-- Jelle (17-10-2026): partnerprijs en jouw prijs uit elkaar halen, en laten zien dat wij hen
+           helpen verdienen aan marge. De balk is een tekening, geen bedrag. -->
+      <figure class="v4-prijs">
+        <div class="v4-prijs-balk" aria-hidden="true"><span class="in">Partnerprijs</span><span class="marge">Jouw marge</span></div>
+        <div class="v4-prijs-totaal" aria-hidden="true"><span>Jouw prijs</span></div>
+        <dl>
+          <div><dt><i class="in"></i>Partnerprijs</dt><dd>Wat jij betaalt bij Oaklyn.</dd></div>
+          <div><dt><i class="uit"></i>Jouw prijs</dt><dd>Wat je klant betaalt, en die bepaal jij. Ons advies: 15 procent onder de adviesprijs, zodat ook je klant goedkoper uit is.</dd></div>
+          <div><dt><i class="marge"></i>Jouw marge</dt><dd>Het verschil, voor jou. Bovenop je legwerk.</dd></div>
+        </dl>
+      </figure>
+      <ul class="v4-feiten op-licht">
+        <li>Brons, Zilver en Goud</li>
+        <li>Uit het magazijn van JOKA in 2 tot 4 werkdagen</li>
+      </ul>
+      <a class="knop inkt groot" href="vloeren/index.html">Bekijk Vloeren</a>
+    </div>
+    <p class="v4-sfeer op-licht">Sfeerbeeld</p>
+  </section>
+
+  <!-- 5. Het slot. Het beeldmerk als echt object, rechts; links de uitnodiging en een mens om te
+       bellen. -->
+  <section class="v4-slot" id="beginnen" aria-labelledby="v4-slot-titel">
+    <div class="v4-slot-beeld" id="v4-slot-beeld">
+      <picture>
+        <source media="(max-width: 700px)" srcset="beeld/v4/slot-smal.jpg">
+        <img src="beeld/v4/slot.jpg" width="2688" height="1520" alt="Het beeldmerk van Framr.One als object: een gefreesde metalen F met een oranje stip" loading="lazy">
+      </picture>
+    </div>
+    <div class="v4-slot-tekst v4-op">
+      <h2 id="v4-slot-titel">Begin met je eerste klus.</h2>
+      <p>Een account is je e-mailadres en een wachtwoord. Of kijk eerst rond in het portaal, zonder account.</p>
+      <div class="v4-acties links">
+        <a class="knop wit groot" href="https://app.framr.one/?aanmelden">Maak een account</a>
+        <a class="v4-link" href="https://app.framr.one/?proberen">Kijk rond zonder account <span aria-hidden="true">&rarr;</span></a>
+      </div>
+      <p class="v4-contact">Liever eerst even praten? <a href="tel:+31611472385">06 11 47 23 85</a> <a href="mailto:info@framr.one">info@framr.one</a></p>
+    </div>
+  </section>
+
+</main>
+
+<!-- De voet. De wettelijke regel (bedrijfsnaam, KvK-nummer, btw-id) en de voorwaarden en de
+     privacyverklaring ontbreken nog; die levert Jelle aan. Ze komen dan in een p.v4-wettelijk
+     onderaan de voet, de stijl staat al klaar. -->
+<footer class="v4-voet">
+  <div class="v4-voet-binnen">
+    <div class="v4-voet-merk">
+      <span class="merk">Framr<span class="een">.One</span></span>
+      <p>Het werksysteem voor vakbedrijven in de bouw.</p>
+    </div>
+    <nav class="v4-voet-kolom" aria-label="Framr.One">
+      <b>Framr.One</b>
+      <a href="#visie">Waar we voor staan</a>
+      <a href="#systeem">Het werksysteem</a>
+      <a href="#gratis">Wat het kost</a>
+    </nav>
+    <nav class="v4-voet-kolom" aria-label="Vakken">
+      <b>Vakken</b>
+      <a href="vloeren/index.html">Vloeren</a>
+      <span>Kozijnen, in ontwikkeling</span>
+    </nav>
+    <div class="v4-voet-kolom">
+      <b>Contact</b>
+      <a href="tel:+31611472385">06 11 47 23 85</a>
+      <a href="mailto:info@framr.one">info@framr.one</a>
+      <a href="https://app.framr.one/">Inloggen</a>
+    </div>
+  </div>
+</footer>
+
+<script src="beginpagina.js"></script>
+</body>
+</html>

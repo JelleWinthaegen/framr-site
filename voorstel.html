@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Framr.One, het systeem achter het bouwbedrijf</title>
+<meta name="description" content="Framr.One is het systeem achter het bouwbedrijf: inmeten, calculeren, offreren, bestellen en factureren in een doorlopende keten, met de groothandel erin gebouwd. Vloeren nu, kozijnen in ontwikkeling.">
+<!-- Voorstel van 16-10-2026, naast index.html en nog niet gekozen. Blijft uit de
+     zoekmachines tot Jelle het tot beginpagina maakt. -->
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Questrial&family=Poppins:wght@400;500;600&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="stijl.css">
+<style>
+  /* Het voorstel voor de beginpagina (16-10-2026). Zelfde ontwerpsysteem als
+     index.html, andere volgorde: eerst het platform, dan het product, de vakken en
+     de inkoop, en pas daarna dat het gratis is. De keuzes per onderdeel en waar ze
+     vandaan komen staan op ontwerpen/referenties/. Drie bewegende momenten: de
+     tekening in de opening, het portaal dat doorloopt en de lijn van klus naar
+     bestelling. Eigen voorvoegsel hp- op alle nieuwe klassen, zodat niets botst met
+     stijl.css. */
+
+  .hp-stil { color: var(--label); font-weight: 500; }
+
+  /* De balk: rechts inloggen naast de hoofdknop. */
+  .hp-rechts { display: flex; align-items: center; gap: 20px; }
+  .hp-inloggen { font-size: 14.5px; color: var(--tekst); text-decoration: none; white-space: nowrap; }
+  .hp-inloggen:hover { color: var(--inkt); }
+  .hp-rechts .knop { white-space: nowrap; }
+
+  /* 01 De opening: het hele eerste scherm. Links het woordmerk en de belofte,
+     rechts de tekening die van ruimte naar offerte gaat. */
+  .hp-opening { min-height: 100vh; min-height: 100svh; display: flex; align-items: center; padding: 120px 0 72px; }
+  .hp-opening-binnen { width: 100%; max-width: 1520px; margin: 0 auto; padding: 0 max(22px, 5.75vw); display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(36px, 4.5vw, 88px); align-items: center; }
+  .hp-woordmerk { display: block; font-family: var(--merk); font-weight: var(--merk-gewicht); font-size: clamp(52px, 7.4vw, 124px); line-height: 1; letter-spacing: -0.015em; color: var(--inkt); -webkit-text-stroke: var(--merk-dikte-groot) currentColor; paint-order: stroke fill; margin-bottom: clamp(26px, 3vw, 40px); }
+  .hp-woordmerk .een { color: var(--oranje); }
+  .hp-opening h1 { font-size: clamp(30px, 3.5vw, 54px); max-width: 17ch; letter-spacing: -0.03em; }
+  .hp-opening .leidend { font-size: clamp(17px, 1.35vw, 20px); max-width: 48ch; margin-top: 24px; }
+  .hp-opening .knoppen { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 36px; }
+  .hp-vakregel { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin-top: 48px; font-family: var(--mono); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--label); }
+  .hp-vakregel b { font-weight: 500; color: var(--inkt); }
+  .hp-vakregel .nu { color: var(--oranje); }
+  .hp-vakregel .pijl { color: var(--maatlijn); letter-spacing: 0; }
+
+  /* De tekening. Lagen die na elkaar opkomen; de labels rechts lichten met dezelfde
+     vertraging op, zodat je ziet welke laag er getekend wordt. */
+  .hp-tekenvlak { position: relative; background: var(--vlak); border: 1px solid var(--lijn); border-radius: 26px; padding: clamp(18px, 2vw, 30px); display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 18px; align-items: stretch; }
+  .hp-tekenvlak svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .hp-lagen { list-style: none; margin: 0; padding: 6px 4px 6px 18px; border-left: 1px solid var(--lijn); display: flex; flex-direction: column; justify-content: space-between; }
+  .hp-lagen li { font-family: var(--mono); font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--maatlijn); display: flex; gap: 10px; align-items: center; white-space: nowrap; }
+  .hp-lagen li span { color: inherit; }
+  .hp-lagen li::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--lijn); flex: none; }
+
+  .hp-t-wand { fill: none; stroke: var(--inkt); stroke-width: 3; stroke-linejoin: round; }
+  .hp-t-deur { fill: none; stroke: var(--inkt); stroke-width: 1.2; }
+  .hp-t-maat { stroke: var(--oranje); stroke-width: 1.2; fill: none; }
+  .hp-t-maattekst { font-family: var(--mono); font-size: 13px; fill: var(--oranje); letter-spacing: .06em; }
+  .hp-t-plank { stroke: #E6CDB8; stroke-width: 1; }
+  .hp-t-vlak { fill: #FBF3EC; }
+  .hp-t-groot { font-family: var(--mono); font-size: 30px; fill: var(--inkt); font-weight: 500; letter-spacing: -.01em; }
+  .hp-t-klein { font-family: var(--mono); font-size: 11.5px; fill: var(--label); letter-spacing: .12em; }
+  .hp-t-kaart { fill: var(--vlak); stroke: var(--lijn); stroke-width: 1; }
+  .hp-t-kaartkop { font-family: var(--mono); font-size: 10.5px; fill: var(--oranje); letter-spacing: .16em; }
+  .hp-t-kaarttekst { font-family: 'Public Sans', sans-serif; font-size: 13px; fill: var(--inkt); }
+  .hp-t-kaartmono { font-family: var(--mono); font-size: 12px; fill: var(--tekst); }
+  .hp-t-regel { stroke: var(--lijn); stroke-width: 1; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .hp-teken .hp-t-wand { stroke-dasharray: 1600; stroke-dashoffset: 1600; animation: hp-trek 1.5s cubic-bezier(.6, 0, .2, 1) .2s forwards; }
+    .hp-teken .hp-laag { opacity: 0; animation: hp-op .7s ease forwards; }
+    .hp-teken .hp-laag.l2 { animation-delay: 1.35s; }
+    .hp-teken .hp-laag.l3 { animation-delay: 2.1s; }
+    .hp-teken .hp-laag.l4 { animation-delay: 2.85s; }
+    .hp-teken .hp-laag.l5 { animation-delay: 3.6s; }
+    .hp-teken .hp-laag.l5 { transform: translateY(14px); animation-name: hp-op-schuif; }
+  }
+  /* Een laag die getekend wordt licht oranje op; is hij klaar, dan wordt hij inkt. */
+  .hp-lagen li.aan { color: var(--oranje); }
+  .hp-lagen li.aan::before { background: var(--oranje); }
+  .hp-lagen li.klaar { color: var(--inkt); }
+  .hp-lagen li.klaar::before { background: var(--inkt); }
+  @keyframes hp-trek { to { stroke-dashoffset: 0; } }
+  @keyframes hp-op { to { opacity: 1; } }
+  @keyframes hp-op-schuif { to { opacity: 1; transform: none; } }
+
+  /* 02 Het platform: het echte portaal groot in beeld, de vijf stappen als tabs
+     die vanzelf doorlopen. De oranje lijn boven de actieve tab loopt vol zolang
+     die stap in beeld is. */
+  .hp-platform { display: grid; grid-template-columns: minmax(230px, 290px) minmax(0, 1fr); gap: clamp(28px, 3.4vw, 52px); margin-top: 60px; align-items: start; }
+  .hp-scherm { background: var(--vlak); border: 1px solid var(--lijn); border-radius: 22px; overflow: hidden; box-shadow: 0 30px 80px -40px rgba(20, 22, 26, .28); }
+  .hp-scherm-balk { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 12px 18px; border-bottom: 1px solid var(--lijn); font-family: var(--mono); font-size: 11px; letter-spacing: .12em; color: var(--label); }
+  .hp-scherm-balk .adres { display: inline-flex; align-items: center; gap: 8px; }
+  .hp-scherm-balk .adres::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--oranje); }
+  .hp-scherm-vak { position: relative; aspect-ratio: 1400 / 1057; background: var(--vlak); }
+  .hp-scherm-vak img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top left; opacity: 0; transform: translateY(10px); transition: opacity .5s ease, transform .6s ease; }
+  .hp-scherm-vak img.aan { opacity: 1; transform: none; }
+  .hp-stappen { display: flex; flex-direction: column; }
+  .hp-stap { position: relative; text-align: left; background: none; border: 0; border-left: 1px solid var(--lijn); padding: 16px 0 16px 22px; font: inherit; color: inherit; cursor: pointer; }
+  .hp-stap::before { content: ""; position: absolute; left: -1px; top: 0; bottom: 0; width: 2px; background: var(--oranje); transform: scaleY(0); transform-origin: top; }
+  .hp-stap.aan::before { transform: scaleY(var(--vol, 1)); }
+  .hp-stap .nr { font-family: var(--mono); font-size: 10.5px; letter-spacing: .16em; color: var(--maatlijn); }
+  .hp-stap .naam { display: block; font-family: var(--mono); font-weight: 500; font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase; margin: 8px 0 6px; color: var(--label); transition: color .2s; }
+  .hp-stap p { font-size: 14.5px; color: var(--label); line-height: 1.55; transition: color .2s; }
+  .hp-stap.aan .naam, .hp-stap:hover .naam { color: var(--inkt); }
+  .hp-stap.aan p { color: var(--tekst); }
+  .hp-stap.aan .nr { color: var(--oranje); }
+  .hp-stap:focus-visible { outline: 2px solid var(--oranje); outline-offset: 4px; }
+
+  /* 03 De vakken: drie grote tegels. */
+  .hp-vakken { display: grid; grid-template-columns: 1.25fr 1fr 1fr; gap: 20px; margin-top: 64px; }
+  .hp-vak { background: var(--vlak); border: 1px solid var(--lijn); border-radius: 22px; overflow: hidden; display: flex; flex-direction: column; min-height: 520px; }
+  .hp-vak.stil { background: transparent; }
+  .hp-vak-beeld { position: relative; height: 260px; background: var(--grond); border-bottom: 1px solid var(--lijn); overflow: hidden; }
+  .hp-vak-beeld img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .hp-vak-beeld svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .hp-vak-beeld .maat { position: absolute; left: 18px; bottom: 14px; font-family: var(--mono); font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: rgba(255, 255, 255, .78); }
+  .hp-vak-tekst { padding: 30px 30px 32px; display: flex; flex-direction: column; flex: 1; }
+  .hp-vak .stand { font-family: var(--mono); font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--label); display: flex; align-items: center; gap: 8px; }
+  .hp-vak .stand::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: transparent; box-shadow: inset 0 0 0 1px var(--label); }
+  .hp-vak .stand.nu { color: var(--oranje); }
+  .hp-vak .stand.nu::before { background: var(--oranje); box-shadow: 0 0 0 4px rgba(234, 91, 16, .14); }
+  .hp-vak h3 { font-size: clamp(26px, 2.3vw, 34px); margin: 16px 0 12px; }
+  .hp-vak p { font-size: 15.5px; color: var(--tekst); line-height: 1.6; }
+  .hp-vak .onderaan { margin-top: auto; padding-top: 26px; }
+  .hp-vak .fijn { font-family: var(--mono); font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--label); }
+
+  /* 04 De inkoop: een lijn van klus naar bestelling, met een stip die erlangs
+     loopt als het blok in beeld komt. */
+  .hp-keten { position: relative; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; margin-top: 72px; }
+  .hp-keten-lijn { position: absolute; left: 0; right: 0; top: 7px; height: 1px; background: var(--lijn); }
+  .hp-keten-lijn i { position: absolute; left: 0; top: 0; height: 1px; width: 100%; background: var(--oranje); transform: scaleX(0); transform-origin: left; }
+  .hp-keten-lijn b { position: absolute; top: -4px; left: 0; width: 9px; height: 9px; border-radius: 50%; background: var(--oranje); box-shadow: 0 0 0 5px rgba(234, 91, 16, .16); opacity: 0; }
+  .hp-schakel { position: relative; padding-top: 34px; }
+  .hp-schakel::before { content: ""; position: absolute; left: 0; top: 2px; width: 11px; height: 11px; border-radius: 50%; background: var(--grond); border: 1px solid var(--maatlijn); transition: border-color .3s, background .3s; }
+  .hp-schakel .wat { font-family: var(--mono); font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--label); }
+  .hp-schakel .waarde { display: block; font-family: var(--kop); font-weight: 500; font-size: clamp(17px, 1.45vw, 21px); letter-spacing: -0.01em; margin-top: 10px; color: var(--inkt); }
+  .hp-schakel .uitleg { font-family: var(--mono); font-size: 12px; color: var(--label); margin-top: 6px; display: block; }
+  .hp-schakel.bereikt::before { border-color: var(--oranje); background: var(--oranje); }
+  .hp-keten.loopt .hp-keten-lijn i { transform: scaleX(1); transition: transform 3.2s cubic-bezier(.45, 0, .2, 1); }
+  .hp-keten.loopt .hp-keten-lijn b { opacity: 1; left: 100%; transition: left 3.2s cubic-bezier(.45, 0, .2, 1), opacity .3s; }
+  .hp-inkoop-punten { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 40px; margin-top: 88px; }
+  .hp-inkoop-punten div { border-top: 1px solid var(--lijn); padding-top: 22px; }
+  .hp-inkoop-punten h3 { font-size: 19px; margin-bottom: 10px; }
+  .hp-inkoop-punten p { font-size: 15.5px; color: var(--tekst); line-height: 1.6; }
+
+  /* 05 Wat het kost: het getal groot. */
+  .hp-nul { display: flex; align-items: baseline; gap: 18px; font-family: var(--kop); font-weight: 600; letter-spacing: -0.04em; line-height: .9; }
+  .hp-nul .getal { font-size: clamp(96px, 13vw, 200px); color: #fff; }
+  .hp-nul .per { font-family: var(--mono); font-weight: 400; font-size: 13px; letter-spacing: .18em; text-transform: uppercase; color: rgba(255, 255, 255, .6); }
+  .hp-kosten h2 { margin-top: 34px; }
+
+  /* 06 Groeien: een meetlat die rechts uit beeld loopt. */
+  .hp-groei { padding-bottom: 96px; }
+  .hp-lat { margin-top: 64px; position: relative; height: 92px; overflow: hidden; -webkit-mask-image: linear-gradient(90deg, #000 55%, transparent); mask-image: linear-gradient(90deg, #000 55%, transparent); }
+  .hp-lat svg { display: block; width: 100%; height: 100%; }
+
+  @media (max-width: 1100px) {
+    .hp-opening-binnen { grid-template-columns: 1fr; }
+    .hp-opening { min-height: 0; padding-top: 140px; }
+    .hp-vakken { grid-template-columns: 1fr 1fr; }
+    .hp-vakken .hp-vak:first-child { grid-column: 1 / -1; }
+  }
+  @media (max-width: 860px) {
+    .hp-rechts { margin-left: auto; }
+    .hp-rechts .hp-inloggen { display: none; }
+    .hp-platform { grid-template-columns: 1fr; }
+    .hp-stappen { order: 2; display: grid; grid-auto-flow: column; grid-auto-columns: 72%; overflow-x: auto; scroll-snap-type: x mandatory; border-top: 1px solid var(--lijn); }
+    .hp-stap { scroll-snap-align: start; border-left: 0; padding: 18px 18px 6px 0; }
+    .hp-stap::before { left: 0; right: 18px; top: -1px; bottom: auto; width: auto; height: 2px; transform: scaleX(0); transform-origin: left; }
+    .hp-stap.aan::before { transform: scaleX(var(--vol, 1)); }
+    .hp-keten { grid-template-columns: 1fr; gap: 26px; padding-left: 30px; }
+    .hp-keten-lijn { left: 5px; right: auto; top: 0; bottom: 0; width: 1px; height: auto; }
+    .hp-keten-lijn i { width: 1px; height: 100%; transform: scaleY(0); transform-origin: top; }
+    .hp-keten.loopt .hp-keten-lijn i { transform: scaleY(1); }
+    .hp-keten-lijn b { display: none; }
+    .hp-schakel { padding-top: 0; }
+    .hp-schakel::before { left: -30px; top: 4px; }
+    .hp-inkoop-punten { grid-template-columns: 1fr; gap: 28px; margin-top: 64px; }
+    .hp-tekenvlak { grid-template-columns: 1fr; }
+    .hp-lagen { flex-direction: row; flex-wrap: wrap; gap: 10px 16px; border-left: 0; border-top: 1px solid var(--lijn); padding: 14px 0 0; }
+  }
+  @media (max-width: 680px) {
+    .hp-vakken { grid-template-columns: 1fr; }
+    .hp-vak { min-height: 0; }
+    .hp-vak-beeld { height: 200px; }
+  }
+
+  /* Op een ultrawide groeit alleen de opening mee; de rest houdt de leesbreedte
+     van de site (1240). */
+  @media (min-width: 2200px) {
+    .hp-opening-binnen { max-width: 2080px; }
+    .hp-woordmerk { font-size: 156px; }
+    .hp-opening h1 { font-size: 70px; }
+    .hp-opening .leidend { font-size: 23px; }
+    .hp-vakregel { font-size: 12.5px; }
+  }
+
+  /* Alleen op de eigen machine: een kaartje dat zegt dat dit het voorstel is. */
+  .hp-proef { position: fixed; left: 16px; bottom: 16px; z-index: 95; display: none; gap: 12px; align-items: center; background: var(--inkt); color: #fff; border-radius: 999px; padding: 9px 16px; font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; }
+  .hp-proef a { color: #FFB98F; text-decoration: none; }
+  .hp-proef.zichtbaar { display: flex; }
+</style>
+</head>
+<body>
+
+<div class="meetlat"><div class="voortgang"></div></div>
+
+<header class="balk merk-wacht">
+  <div class="balk-binnen">
+    <a class="merk" href="voorstel.html">Framr<span class="een">.One</span></a>
+    <nav class="menu">
+      <a href="#platform">Platform</a>
+      <a href="#vakgebieden">Vakgebieden</a>
+      <a href="#inkoop">Inkoop</a>
+      <a href="#kosten">Wat het kost</a>
+    </nav>
+    <div class="hp-rechts">
+      <a class="hp-inloggen" href="https://app.framr.one/">Inloggen</a>
+      <a class="knop inkt" href="#beginnen">Gratis beginnen <span class="pijl">&rarr;</span></a>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- 01 De opening. Het hele eerste scherm, een zin, en rechts de tekening: een
+       ruimte die laag voor laag een offerte wordt. De getallen kloppen met de
+       rekenregel van het portaal: 5,20 bij 4,00 is 20,80 m2, met 10 procent
+       snijverlies 22,88 m2, bij 3,34 m2 per pak 7 pakken. -->
+  <section class="hero hp-opening">
+    <div class="hp-opening-binnen">
+      <div>
+        <span class="hp-woordmerk">Framr<span class="een">.One</span></span>
+        <h1>Het systeem achter het bouwbedrijf. <span class="hp-stil">Van eerste maat tot betaalde factuur.</span></h1>
+        <p class="leidend">Inmeten, calculeren, offreren, bestellen en factureren in een doorlopende keten, met de groothandel erin gebouwd.</p>
+        <div class="knoppen">
+          <a class="knop inkt groot" href="#platform">Ontdek Framr.One <span class="pijl">&rarr;</span></a>
+          <a class="knop open groot" href="vloeren/index.html">Framr.One Vloeren <span class="pijl">&rarr;</span></a>
+        </div>
+        <p class="hp-vakregel"><b class="nu">Vloeren</b><span>live</span><span class="pijl">&rarr;</span><b>Kozijnen</b><span>in ontwikkeling</span><span class="pijl">&rarr;</span><b>Volgende</b></p>
+      </div>
+
+      <div class="hp-tekenvlak hp-teken" aria-hidden="true">
+        <svg viewBox="0 0 560 500" role="img">
+          <defs>
+            <clipPath id="hp-ruimte"><rect x="88" y="78" width="364" height="280"/></clipPath>
+          </defs>
+          <!-- Laag 3: de vloer, planken in visgraatrichting -->
+          <g class="hp-laag l3">
+            <rect class="hp-t-vlak" x="88" y="78" width="364" height="280"/>
+            <g clip-path="url(#hp-ruimte)" id="hp-planken"></g>
+          </g>
+          <!-- Laag 1: de ruimte, met een deur in de onderwand -->
+          <path class="hp-t-wand" d="M200 358 H88 V78 H452 V358 H262"/>
+          <g class="hp-laag l2">
+            <path class="hp-t-deur" d="M200 358 V300 M200 300 A58 58 0 0 1 258 358"/>
+          </g>
+          <!-- Laag 2: de maten -->
+          <g class="hp-laag l2">
+            <path class="hp-t-maat" d="M88 46 H452 M88 38 V54 M452 38 V54"/>
+            <text class="hp-t-maattekst" x="270" y="36" text-anchor="middle">5200</text>
+            <path class="hp-t-maat" d="M56 78 V358 M48 78 H64 M48 358 H64"/>
+            <text class="hp-t-maattekst" x="44" y="222" text-anchor="end">4000</text>
+          </g>
+          <!-- Laag 3: het oppervlak -->
+          <g class="hp-laag l3">
+            <rect x="178" y="178" width="184" height="80" rx="10" fill="#FFFFFF" stroke="#DCDCD6"/>
+            <text class="hp-t-groot" x="270" y="222" text-anchor="middle">20,80 m²</text>
+            <text class="hp-t-klein" x="270" y="244" text-anchor="middle">WOONKAMER</text>
+          </g>
+          <!-- Laag 4: het materiaal -->
+          <g class="hp-laag l4">
+            <rect class="hp-t-kaart" x="8" y="384" width="236" height="104" rx="12"/>
+            <text class="hp-t-kaartkop" x="26" y="410">MATERIAAL</text>
+            <text class="hp-t-kaarttekst" x="26" y="434">Vloer, 7 pakken</text>
+            <text class="hp-t-kaartmono" x="26" y="454">+10% snijverlies</text>
+            <text class="hp-t-kaartmono" x="26" y="473">lijm, egaline, plint</text>
+          </g>
+          <!-- Laag 5: de offerte -->
+          <g class="hp-laag l5">
+            <rect class="hp-t-kaart" x="296" y="300" width="256" height="188" rx="12"/>
+            <text class="hp-t-kaartkop" x="316" y="327">OFFERTE</text>
+            <text class="hp-t-kaarttekst" x="316" y="352" font-weight="600">OFF-2026-001</text>
+            <text class="hp-t-kaartmono" x="316" y="372">Woonkamer · concept</text>
+            <line class="hp-t-regel" x1="316" y1="388" x2="532" y2="388"/>
+            <text class="hp-t-kaarttekst" x="316" y="410">Vloer, 7 pakken</text>
+            <text class="hp-t-kaarttekst" x="316" y="432">Vloer leggen</text>
+            <line class="hp-t-regel" x1="316" y1="448" x2="532" y2="448"/>
+            <rect x="316" y="458" width="112" height="22" rx="11" fill="#EA5B10"/>
+            <text x="372" y="473" text-anchor="middle" font-family="Poppins, sans-serif" font-size="11.5" font-weight="500" fill="#fff">Versturen</text>
+          </g>
+        </svg>
+        <ol class="hp-lagen">
+          <li><span>01 Ruimte</span></li>
+          <li><span>02 Maat</span></li>
+          <li><span>03 Vloer</span></li>
+          <li><span>04 Materiaal</span></li>
+          <li><span>05 Offerte</span></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 Het platform: het echte portaal, de vijf stappen als tabs. De schermen
+       zijn die van de vloerenpagina (vloeren/schermen, ververst met vernieuw.sh),
+       dus ze lopen gelijk met wat het portaal vandaag laat zien. -->
+  <section id="platform" class="lijn-boven">
+    <div class="binnen">
+      <p class="opschrift">Het platform</p>
+      <h2 class="wijd">Een doorlopende keten. <span class="hp-stil">Je tikt niets twee keer in.</span></h2>
+      <p class="leidend">Wat je op locatie inmeet, reist mee naar de calculatie, de offerte en de factuur. Elke stap werkt ook los.</p>
+
+      <div class="hp-platform">
+      <div class="hp-stappen" role="tablist" aria-label="De stappen van het portaal">
+        <button class="hp-stap aan" role="tab" aria-selected="true"><span class="nr">01</span><span class="naam">Inmeten</span><p>Per ruimte op locatie, op je telefoon. Maten, plint en ondergrond staan meteen in de klus.</p></button>
+        <button class="hp-stap" role="tab" aria-selected="false"><span class="nr">02</span><span class="naam">De klus</span><p>Klant, adres, inmeting, materiaal, offerte en facturen bij elkaar in een dossier.</p></button>
+        <button class="hp-stap" role="tab" aria-selected="false"><span class="nr">03</span><span class="naam">Calculatie</span><p>Van maat naar materiaallijst: snijverlies, lijm, egaline en plinten, met jouw marge erop.</p></button>
+        <button class="hp-stap" role="tab" aria-selected="false"><span class="nr">04</span><span class="naam">Offerte</span><p>Op je eigen briefpapier en in je eigen nummerreeks, als nette PDF de deur uit.</p></button>
+        <button class="hp-stap" role="tab" aria-selected="false"><span class="nr">05</span><span class="naam">Factuur</span><p>Uit de offerte of helemaal los, met bewaking van wat er nog open staat.</p></button>
+      </div>
+      <div class="hp-scherm">
+        <div class="hp-scherm-balk"><span class="adres">app.framr.one</span><span id="hp-schermnaam">Inmeten</span></div>
+        <div class="hp-scherm-vak">
+          <img class="aan" src="vloeren/schermen/inmeten.webp" width="1400" height="1057" alt="Het inmeten van een ruimte in het portaal">
+          <img src="vloeren/schermen/klussen.webp" width="1400" height="1057" alt="De klus met alles bij elkaar" loading="lazy">
+          <img src="vloeren/schermen/calculaties.webp" width="1400" height="1057" alt="De calculatie met de materiaallijst" loading="lazy">
+          <img src="vloeren/schermen/offertes.webp" width="1400" height="1057" alt="De offerte" loading="lazy">
+          <img src="vloeren/schermen/facturen.webp" width="1400" height="1057" alt="De facturen" loading="lazy">
+        </div>
+      </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 Een kern, meerdere vakken. Laat zien dat het groter wordt zonder de
+       routekaart te geven. -->
+  <section id="vakgebieden" class="lijn-boven">
+    <div class="binnen">
+      <p class="opschrift">Vakgebieden</p>
+      <h2 class="wijd">Een kern. <span class="hp-stil">Meerdere vakken.</span></h2>
+      <p class="leidend">Alleen het inmeten, het rekenen en het bestellen verschillen per vak. Daarom komt er per vak een module bij, op dezelfde kern en in hetzelfde account.</p>
+
+      <div class="hp-vakken">
+        <article class="hp-vak">
+          <div class="hp-vak-beeld"><img src="beeld/vloer-visgraat-licht.jpg" alt="Een gelegde visgraatvloer" loading="lazy"><span class="maat">Framr.One Vloeren</span></div>
+          <div class="hp-vak-tekst">
+            <span class="stand nu">Live</span>
+            <h3>Vloeren</h3>
+            <p>Voor de vloerenlegger en het vloerenbedrijf. Inmeten per ruimte, rekenen met legpatroon en snijverlies, en het materiaal rechtstreeks via Oaklyn.</p>
+            <div class="onderaan"><a class="knop oranje" href="vloeren/index.html">Bekijk Framr.One Vloeren <span class="pijl">&rarr;</span></a></div>
+          </div>
+        </article>
+        <article class="hp-vak">
+          <div class="hp-vak-beeld" aria-hidden="true">
+            <svg viewBox="0 0 400 260" preserveAspectRatio="xMidYMid meet">
+              <rect x="130" y="34" width="140" height="196" fill="none" stroke="#14161A" stroke-width="2.5"/>
+              <rect x="144" y="48" width="112" height="168" fill="none" stroke="#14161A" stroke-width="1.2"/>
+              <line x1="200" y1="48" x2="200" y2="216" stroke="#14161A" stroke-width="1.2"/>
+              <path d="M144 48 L200 132 L144 216" fill="none" stroke="#C2C2BA" stroke-width="1" stroke-dasharray="4 4"/>
+              <path d="M130 20 H270 M130 13 V27 M270 13 V27" stroke="#EA5B10" stroke-width="1.2" fill="none"/>
+              <text x="200" y="12" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="#EA5B10">1400</text>
+              <path d="M290 34 V230 M283 34 H297 M283 230 H297" stroke="#EA5B10" stroke-width="1.2" fill="none"/>
+              <text x="304" y="136" font-family="IBM Plex Mono, monospace" font-size="11" fill="#EA5B10">1960</text>
+            </svg>
+          </div>
+          <div class="hp-vak-tekst">
+            <span class="stand">In ontwikkeling</span>
+            <h3>Kozijnen</h3>
+            <p>Voor de aannemer die kozijnen plaatst. In hetzelfde account, met dezelfde stappen, en het kozijn rechtstreeks van de fabriek.</p>
+            <div class="onderaan"><span class="fijn">Nog niet open voor aanmelding</span></div>
+          </div>
+        </article>
+        <article class="hp-vak stil">
+          <div class="hp-vak-beeld" aria-hidden="true" style="background-image: repeating-linear-gradient(135deg, transparent 0 14px, rgba(194, 194, 186, .16) 14px 15px);">
+            <svg viewBox="0 0 400 260" preserveAspectRatio="xMidYMid meet">
+              <path d="M200 96 V164 M166 130 H234" stroke="#C2C2BA" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <div class="hp-vak-tekst">
+            <span class="stand">Volgt</span>
+            <h3>Het volgende vak</h3>
+            <p>Dezelfde kern draagt het volgende vak, zonder nieuw systeem en in hetzelfde account.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 Software met inkoop erin. Het onderscheid: de software zit vast aan het
+       materiaal. Wat de keten toont doet het portaal vandaag: de calculatie kent de
+       pakken, en Bestellen bij Oaklyn vult de winkelwagen (live sinds 15-10-2026). -->
+  <section id="inkoop" class="lijn-boven">
+    <div class="binnen">
+      <p class="opschrift">Inkoop</p>
+      <h2 class="wijd">Software die aan je inkoop vastzit.</h2>
+      <p class="leidend">Softwarebedrijven verkopen software, groothandels verkopen materiaal. Framr.One koppelt de twee: wat je inmeet, wordt een bestelling.</p>
+
+      <div class="hp-keten" id="hp-keten">
+        <div class="hp-keten-lijn"><i></i><b></b></div>
+        <div class="hp-schakel"><span class="wat">Klus</span><span class="waarde">Woonkamer en hal</span><span class="uitleg">ingemeten op locatie</span></div>
+        <div class="hp-schakel"><span class="wat">Calculatie</span><span class="waarde">41,30 m² vloer</span><span class="uitleg">met snijverlies erbij</span></div>
+        <div class="hp-schakel"><span class="wat">Materiaal</span><span class="waarde">14 pakken en toebehoren</span><span class="uitleg">lijm, egaline, plint</span></div>
+        <div class="hp-schakel"><span class="wat">Leverancier</span><span class="waarde">Oaklyn</span><span class="uitleg">op jouw partnerprijs</span></div>
+        <div class="hp-schakel"><span class="wat">Bestelling</span><span class="waarde">In je winkelwagen</span><span class="uitleg">met een klik</span></div>
+      </div>
+
+      <div class="hp-inkoop-punten">
+        <div><h3>Je materiaal staat al berekend</h3><p>Pakken, snijverlies per legpatroon, lijm, egaline en plinten komen uit je inmeting, niet uit je hoofd.</p></div>
+        <div><h3>Rechtstreeks bij de bron</h3><p>Je koopt scherper in dan bij de plaatselijke groothandel, omdat je rechtstreeks bij de bron zit.</p></div>
+        <div><h3>Jouw prijs blijft van jou</h3><p>Wat je klant betaalt bepaal jij. Wat jij op je werk verdient is jouw zaak, niet de onze.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 Wat het kost. Pas hier, na het platform. De belofte "er komt geen moment
+       waarop het geld gaat kosten" van index.html staat hier bewust niet: het
+       operating manual zegt dat latere modules per abonnement kunnen gaan. -->
+  <section id="kosten" class="donker hp-kosten">
+    <div class="binnen">
+      <div class="duo smal-eerst">
+        <div>
+          <p class="opschrift">Wat het kost</p>
+          <div class="hp-nul"><span class="getal">€0</span><span class="per">per maand</span></div>
+          <h2>Software zonder softwarerekening.</h2>
+        </div>
+        <div>
+          <p class="leidend">Framr.One verdient aan het materiaal dat via het platform loopt, niet aan de software. Daarom is het in ons belang dat jouw offerte zo snel mogelijk de deur uit is: hoe minder tijd je aan rekenwerk kwijt bent, hoe meer werk je aanneemt.</p>
+          <ul class="punten">
+            <li><b>Geen abonnement en geen staffel.</b> De vijf pakketten zijn gratis, ook als je ze los gebruikt.</li>
+            <li><b>Geen proefperiode die afloopt.</b> Je begint niet aan een teller.</li>
+            <li><b>Geen inkoopverplichting.</b> Je mag het systeem gebruiken met materiaal dat je elders koopt of dat je klant zelf aanlevert.</li>
+            <li><b>Geen bemoeienis met je prijs.</b> Wat je klant betaalt bepaal jij.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 Groeien. Ambitie zonder routekaart: geen namen van wat er komt. -->
+  <section class="hp-groei">
+    <div class="binnen">
+      <p class="opschrift">Fundament</p>
+      <h2 class="wijd">Gebouwd om te blijven groeien.</h2>
+      <p class="leidend">Nieuwe werkstromen, vakken en koppelingen komen op hetzelfde fundament, in hetzelfde account.</p>
+    </div>
+    <div class="hp-lat" aria-hidden="true"><svg id="hp-lat" preserveAspectRatio="none"></svg></div>
+  </section>
+
+  <section id="beginnen" class="slot lijn-boven">
+    <div class="binnen">
+      <p class="opschrift" style="justify-content: center;">Beginnen</p>
+      <h2>Begin met je eerste klus.</h2>
+      <p class="leidend">Je meldt je aan, vult je bedrijfsgegevens een keer in en meet meteen je eerste klus in. Vloeren rolt nu uit; kozijnen komt in hetzelfde account.</p>
+      <div class="knoppen">
+        <a class="knop oranje groot" href="vloeren/index.html">Aanmelden voor Vloeren <span class="pijl">&rarr;</span></a>
+        <a class="knop open groot" href="https://app.framr.one/">Inloggen</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Nog toe te voegen voor publicatie, net als op index.html: de wettelijke
+     voetregel met bedrijfsnaam, KvK-nummer en btw-id, plus algemene voorwaarden en
+     privacyverklaring. -->
+<footer>
+  <div class="binnen voet">
+    <div class="kolom">
+      <a class="merk" href="voorstel.html">Framr<span class="een">.One</span></a>
+      <span class="fijn" style="margin-top: 8px;">Het systeem achter het bouwbedrijf</span>
+    </div>
+    <div class="kolom">
+      <span class="kop">Platform</span>
+      <a href="#platform">De keten</a>
+      <a href="#inkoop">Inkoop</a>
+      <a href="#kosten">Wat het kost</a>
+    </div>
+    <div class="kolom">
+      <span class="kop">Vakgebieden</span>
+      <a href="vloeren/index.html">Framr.One Vloeren</a>
+      <a href="#vakgebieden">Framr.One Kozijnen</a>
+    </div>
+    <div class="kolom">
+      <span class="kop">Account</span>
+      <a href="https://app.framr.one/">Inloggen</a>
+      <a href="vloeren/index.html">Aanmelden</a>
+    </div>
+  </div>
+</footer>
+
+<div class="hp-proef" id="hp-proef">Voorstel 16-10 <a href="index.html">Huidige pagina</a> <a href="ontwerpen/referenties/">Referenties</a></div>
+
+<script src="site.js"></script>
+<script>
+/* Het gedrag van het voorstel: de planken in de tekening, de labels die meelichten,
+   het portaal dat doorloopt en de keten die zich tekent. Zonder beweging (de
+   instelling van het apparaat) staat alles meteen in zijn eindstand. */
+(function () {
+  var stil = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (/^(localhost|127\.0\.0\.1)$/.test(location.hostname) || /[?&]proef/.test(location.search)) {
+    document.getElementById('hp-proef').classList.add('zichtbaar');
+  }
+
+  /* Planken in visgraatrichting, als lijnen onder 45 graden binnen de ruimte. */
+  var planken = document.getElementById('hp-planken');
+  if (planken) {
+    var ns = 'http://www.w3.org/2000/svg', d = '';
+    for (var x = -300; x < 460; x += 18) d += 'M' + x + ' 358 L' + (x + 280) + ' 78 ';
+    var pad = document.createElementNS(ns, 'path');
+    pad.setAttribute('d', d);
+    pad.setAttribute('class', 'hp-t-plank');
+    planken.appendChild(pad);
+  }
+
+  /* De labels naast de tekening: oranje terwijl hun laag getekend wordt, daarna inkt. */
+  var lagen = document.querySelectorAll('.hp-lagen li');
+  var start = [0.2, 1.35, 2.1, 2.85, 3.6], duur = 0.75;
+  lagen.forEach(function (li, i) {
+    if (stil) { li.classList.add('klaar'); return; }
+    setTimeout(function () { li.classList.add('aan'); }, start[i] * 1000);
+    setTimeout(function () { li.classList.remove('aan'); li.classList.add('klaar'); }, (start[i] + duur + (i === 0 ? 0.9 : 0)) * 1000);
+  });
+
+  /* Het portaal: vijf stappen, elke stap een paar seconden, en de oranje lijn
+     boven de tab loopt vol. Aanwijzen houdt hem stil, klikken kiest een stap. */
+  var stappen = document.querySelectorAll('.hp-stap');
+  var schermen = document.querySelectorAll('.hp-scherm-vak img');
+  var naam = document.getElementById('hp-schermnaam');
+  var STAP = 5200, nu = 0, verstreken = 0, laatst = null, gepauzeerd = false, inBeeld = false;
+
+  function kies(i) {
+    nu = i; verstreken = 0;
+    stappen.forEach(function (s, j) {
+      s.classList.toggle('aan', j === i);
+      s.setAttribute('aria-selected', j === i ? 'true' : 'false');
+      s.style.setProperty('--vol', j === i ? (stil ? 1 : 0) : 0);
+    });
+    schermen.forEach(function (img, j) { img.classList.toggle('aan', j === i); });
+    if (naam) naam.textContent = stappen[i].querySelector('.naam').textContent;
+  }
+  function tik(t) {
+    if (laatst !== null && !gepauzeerd && inBeeld) {
+      verstreken += t - laatst;
+      stappen[nu].style.setProperty('--vol', Math.min(1, verstreken / STAP));
+      if (verstreken >= STAP) kies((nu + 1) % stappen.length);
+    }
+    laatst = t;
+    requestAnimationFrame(tik);
+  }
+  stappen.forEach(function (s, i) {
+    s.addEventListener('click', function () { kies(i); });
+  });
+  var platform = document.querySelector('.hp-scherm');
+  var stapRij = document.querySelector('.hp-stappen');
+  [platform, stapRij].forEach(function (el) {
+    if (!el) return;
+    el.addEventListener('mouseenter', function () { gepauzeerd = true; });
+    el.addEventListener('mouseleave', function () { gepauzeerd = false; });
+  });
+  kies(0);
+
+  /* De keten: tekent zich een keer als hij in beeld komt; de schakels worden
+     oranje op het moment dat de stip ze passeert. */
+  var keten = document.getElementById('hp-keten');
+  var schakels = keten ? keten.querySelectorAll('.hp-schakel') : [];
+  function loop() {
+    keten.classList.add('loopt');
+    schakels.forEach(function (s, i) {
+      setTimeout(function () { s.classList.add('bereikt'); }, stil ? 0 : 3200 * (i / (schakels.length - 1)) * 0.92);
+    });
+  }
+
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (regels) {
+      regels.forEach(function (r) { inBeeld = r.isIntersecting; });
+    }, { threshold: 0.3 }).observe(platform);
+    if (!stil) requestAnimationFrame(tik);
+    var kijk = new IntersectionObserver(function (regels) {
+      if (regels[0].isIntersecting) { loop(); kijk.disconnect(); }
+    }, { threshold: 0.45 });
+    kijk.observe(keten);
+  } else {
+    inBeeld = true;
+    if (!stil) requestAnimationFrame(tik);
+    loop();
+  }
+
+  /* De meetlat van het fundament: streepjes over de volle breedte, met de vakken
+     die er al zijn als eerste maten; rechts loopt hij uit beeld. */
+  var lat = document.getElementById('hp-lat');
+  function tekenLat() {
+    if (!lat) return;
+    var b = lat.clientWidth || 1200, h = 92, ns = 'http://www.w3.org/2000/svg', s = '';
+    lat.setAttribute('viewBox', '0 0 ' + b + ' ' + h);
+    /* De eerste maat staat recht onder het begin van de kop erboven. */
+    var binnen = lat.closest('section').querySelector('.binnen');
+    var stap = 12, rand = binnen.getBoundingClientRect().left + parseFloat(getComputedStyle(binnen).paddingLeft);
+    s += '<line x1="0" y1="30" x2="' + b + '" y2="30" stroke="#14161A" stroke-width="1"/>';
+    for (var x = rand, n = 0; x < b; x += stap, n++) {
+      var lang = n % 10 === 0 ? 22 : (n % 5 === 0 ? 14 : 8);
+      s += '<line x1="' + x + '" y1="30" x2="' + x + '" y2="' + (30 + lang) + '" stroke="' + (n % 10 === 0 ? '#14161A' : '#C2C2BA') + '" stroke-width="1"/>';
+    }
+    var labels = [['VLOEREN', 0, '#EA5B10'], ['KOZIJNEN', 20, '#14161A']];
+    labels.forEach(function (l) {
+      var lx = rand + l[1] * stap;
+      s += '<circle cx="' + lx + '" cy="30" r="4" fill="' + l[2] + '"/>';
+      s += '<text x="' + (lx + 8) + '" y="76" font-family="IBM Plex Mono, monospace" font-size="11" letter-spacing="1.8" fill="' + l[2] + '">' + l[0] + '</text>';
+    });
+    lat.innerHTML = s;
+  }
+  tekenLat();
+  window.addEventListener('resize', tekenLat);
+})();
+</script>
+</body>
+</html>

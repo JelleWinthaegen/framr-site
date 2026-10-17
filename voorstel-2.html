@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Framr.One, het werksysteem voor de moderne bouw</title>
+<meta name="description" content="Framr.One is het werksysteem voor de moderne bouw: van inmeting en calculatie tot offerte, materiaal en factuur, alles rondom je project in een omgeving. Zonder maandabonnement. Vloeren beschikbaar, kozijnen in ontwikkeling.">
+<!-- Tweede voorstel voor de beginpagina (16-10-2026), naast index.html en voorstel.html.
+     De brief en de keuzes staan in ontwerpen/beginpagina-brief.md, de referenties in
+     ontwerpen/referenties/. Uit de zoekmachines tot Jelle kiest. -->
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Questrial&family=Poppins:wght@400;500;600&family=Public+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="stijl.css">
+<link rel="stylesheet" href="voorstel-2.css">
+</head>
+<body class="v2">
+
+<div class="meetlat"><div class="voortgang"></div></div>
+
+<header class="balk">
+  <div class="balk-binnen">
+    <a class="merk" href="voorstel-2.html">Framr<span class="een">.One</span></a>
+    <nav class="menu v2-menu" aria-label="Hoofdmenu">
+      <a href="#platform">Platform</a>
+      <div class="v2-groep">
+        <button type="button" class="v2-groep-knop" aria-expanded="false" aria-controls="v2-modulemenu">Modules <span class="v2-pijltje" aria-hidden="true"></span></button>
+        <div class="v2-uitklap" id="v2-modulemenu">
+          <a href="vloeren/index.html"><b>Vloeren</b><span class="nu">Beschikbaar</span></a>
+          <a href="#vakken"><b>Kozijnen</b><span>Binnenkort</span></a>
+        </div>
+      </div>
+      <a href="#eerlijk">Over Framr.One</a>
+    </nav>
+    <div class="v2-rechts">
+      <a class="v2-inloggen" href="https://app.framr.one/">Inloggen</a>
+      <a class="knop inkt" href="https://app.framr.one/">Start gratis <span class="pijl">&rarr;</span></a>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- 1. De opening. De echte schermen liggen als explosietekening uit elkaar, met
+       maatlijnen ertussen die aftellen terwijl het systeem in elkaar schuift. -->
+  <section class="v2-hero" data-akt="hero" aria-labelledby="v2-titel">
+    <div class="v2-plak">
+      <div class="v2-raster" aria-hidden="true"></div>
+      <div class="v2-gloed" aria-hidden="true"></div>
+      <div class="v2-hero-tekst">
+        <h1 id="v2-titel">Het werksysteem voor de moderne bouw.</h1>
+        <p class="v2-lead">Van inmeting en calculatie tot offerte, materiaal en factuur. Alles rondom je project in een omgeving.</p>
+        <div class="v2-knoppen">
+          <a class="knop inkt groot" href="https://app.framr.one/">Start gratis <span class="pijl">&rarr;</span></a>
+          <a class="knop open groot" href="#software">Bekijk de software</a>
+        </div>
+      </div>
+      <!-- Het echte overzicht van het portaal, in zijn eigen onderdelen. Elk onderdeel is een
+           uitsnede van hetzelfde scherm en landt precies op zijn eigen plek; als alles
+           geland is staat het scherm plat en op ware scherpte. -->
+      <div class="v2-scene" aria-hidden="true">
+        <div class="v2-stapel">
+          <div class="v2-basis">
+            <img class="leeg" src="beeld/portaal/opening/basis-leeg.webp" alt="" width="2880" height="1800">
+            <img class="vol" src="beeld/portaal/opening/basis.webp" alt="" width="2880" height="1800">
+          </div>
+          <div class="v2-deel" data-naam="Klussen" data-z="3" style="left: 20.5556%; top: 27.3333%; width: 76.1111%; height: 45.1111%;"><img src="beeld/portaal/opening/klussen.webp" alt="" width="2192" height="812"><i class="v2-anker"></i></div>
+          <div class="v2-deel" data-naam="Inmetingen" data-z="2" style="left: 58.8889%; top: 73.5556%; width: 37.7778%; height: 26.4444%;"><img src="beeld/portaal/opening/inmetingen.webp" alt="" width="1088" height="476"><i class="v2-anker"></i></div>
+          <div class="v2-deel" data-naam="Offertes" data-z="2" style="left: 20.5556%; top: 73.5556%; width: 37.6389%; height: 26.4444%;"><img src="beeld/portaal/opening/offertes.webp" alt="" width="1084" height="476"><i class="v2-anker"></i></div>
+          <div class="v2-deel" data-naam="Wat open staat" data-z="4" style="left: 20.5556%; top: 14.2222%; width: 76.1111%; height: 12%;"><img src="beeld/portaal/opening/cijfers.webp" alt="" width="2192" height="216"><i class="v2-anker"></i></div>
+        </div>
+      </div>
+      <svg class="v2-maten" aria-hidden="true"></svg>
+      <p class="v2-onderschrift">Het echte portaal, met een voorbeeldklus</p>
+    </div>
+  </section>
+
+  <!-- 2. Het project komt tot leven. De piek van de pagina. Een voorbeeldklus in de
+       Vloeren-module loopt in drie hoofdstukken van klant tot factuur. Per stap staat een
+       echt scherm plat en scherp in beeld; bij de overgang reist wat er al stond als label van
+       het veld in het ene scherm naar het veld in het volgende, waar het oranje omlijnd wordt.
+       Alle schermen zijn van dezelfde klus uit de dev-server met de nagebouwde motor: de
+       offerte OFF-2026-004 is uit deze calculatie gemaakt, de factuur uit die offerte. -->
+  <section id="platform" class="v2-keten" data-akt="keten" aria-labelledby="v2-keten-titel">
+    <div class="v2-plak">
+      <div class="v2-keten-binnen">
+        <div class="v2-keten-tekst">
+          <h2 id="v2-keten-titel">Alles rondom een project. <span class="v2-stil">Op een plek.</span></h2>
+          <p class="v2-lead">Een keer invoeren. Je projectgegevens gaan mee van de eerste inmeting tot de factuur.</p>
+          <ol class="v2-hoofdstukken">
+            <li data-hoofdstuk="0"><span class="kop">Project opzetten</span>
+              <ol>
+              <li><button type="button" class="v2-stap" data-stap="0"><span class="nr">01</span><b>Klant</b><span class="uitleg">M. Peeters, een keer ingevoerd.</span></button></li>
+              <li><button type="button" class="v2-stap" data-stap="1"><span class="nr">02</span><b>Project</b><span class="uitleg">De klus neemt de klant over.</span></button></li>
+              </ol>
+            </li>
+            <li data-hoofdstuk="1"><span class="kop">Werk voorbereiden</span>
+              <ol>
+              <li><button type="button" class="v2-stap" data-stap="2"><span class="nr">03</span><b>Inmeten</b><span class="uitleg">De inmeting hoort meteen bij de klus.</span></button></li>
+              <li><button type="button" class="v2-stap" data-stap="3"><span class="nr">04</span><b>Calculeren</b><span class="uitleg">41,3 m² wordt 14 pakken, lijm, egaline en plint.</span></button></li>
+              <li><button type="button" class="v2-stap" data-stap="4"><span class="nr">05</span><b>Offerte</b><span class="uitleg">Dezelfde regels op de offerte, met jouw werk erbij.</span></button></li>
+              </ol>
+            </li>
+            <li data-hoofdstuk="2"><span class="kop">Werk afhandelen</span>
+              <ol>
+              <li><button type="button" class="v2-stap" data-stap="5"><span class="nr">06</span><b>Materiaal</b><span class="uitleg">Die materiaallijst in de winkelwagen bij Oaklyn.</span></button></li>
+              <li><button type="button" class="v2-stap" data-stap="6"><span class="nr">07</span><b>Factuur</b><span class="uitleg">De factuur uit de offerte, in je eigen reeks.</span></button></li>
+              </ol>
+            </li>
+          </ol>
+        </div>
+        <div class="v2-dek">
+          <figure class="v2-kaart"><div class="v2-kaart-vel"><img src="beeld/portaal/klus/klant.webp" alt="De klantkaart van M. Peeters" width="2240" height="884"><span class="v2-ring" style="left: 1.786%; top: 47.964%; width: 47.589%; height: 9.955%;"><em>Een keer ingevoerd</em></span><i class="v2-uitpunt" style="left: 1.786%; top: 47.964%; width: 47.589%; height: 9.955%;"></i></div></figure>
+          <figure class="v2-kaart" data-mee="M. Peeters"><div class="v2-kaart-vel"><img src="beeld/portaal/klus/klus.webp" alt="De klus Rijtjeshuis Hoensbroek" width="2240" height="824" loading="lazy"><span class="v2-ring" style="left: 66.875%; top: 45.146%; width: 31.339%; height: 10.68%;"><em>Uit 01 Klant</em></span><i class="v2-uitpunt" style="left: 1.786%; top: 45.146%; width: 31.339%; height: 10.68%;"></i></div></figure>
+          <figure class="v2-kaart" data-mee="Rijtjeshuis Hoensbroek"><div class="v2-kaart-vel"><img src="beeld/portaal/klus/inmeten.webp" alt="De inmeting van woonkamer en hal" width="2240" height="1754" loading="lazy"><span class="v2-ring" style="left: 50.625%; top: 24.173%; width: 47.589%; height: 5.017%;"><em>Uit 02 Project</em></span><i class="v2-uitpunt" style="left: 1.429%; top: 93.273%; width: 26.786%; height: 5.701%;"></i></div></figure>
+          <figure class="v2-kaart" data-mee="41,3 m² vloer"><div class="v2-kaart-vel"><img src="beeld/portaal/klus/calculatie.webp" alt="De calculatie met de materiaallijst" width="1208" height="1076" loading="lazy"><span class="v2-ring" style="left: 9.106%; top: 21.933%; width: 83.113%; height: 6.691%;"><em>Uit 03 Inmeten</em></span><i class="v2-uitpunt" style="left: 9.106%; top: 30.855%; width: 83.113%; height: 10.781%;"></i></div></figure>
+          <figure class="v2-kaart" data-mee="14 pakken en toebehoren"><div class="v2-kaart-vel"><img src="beeld/portaal/klus/offerte.webp" alt="Offerte OFF-2026-004 met dezelfde regels" width="2240" height="2064" loading="lazy"><span class="v2-ring" style="left: 1.786%; top: 53.682%; width: 96.429%; height: 6.589%;"><em>Uit 04 Calculeren</em></span><i class="v2-uitpunt" style="left: 1.786%; top: 53.682%; width: 96.429%; height: 32.946%;"></i></div></figure>
+          <figure class="v2-kaart" data-mee="De materiaallijst"><div class="v2-kaart-vel"><img src="beeld/portaal/klus/bestellen.webp" alt="Bestellen bij Oaklyn vanuit de calculatie" width="1144" height="364" loading="lazy"><span class="v2-ring" style="left: 65.385%; top: 6.593%; width: 29.895%; height: 24.176%;"><em>Dezelfde materiaallijst</em></span></div></figure>
+          <figure class="v2-kaart" data-mee="OFF-2026-004" data-van="4"><div class="v2-kaart-vel"><img src="beeld/portaal/klus/afronden.webp" alt="De factuur uit offerte OFF-2026-004" width="2240" height="1344" loading="lazy"><span class="v2-ring" style="left: 1.786%; top: 7.738%; width: 50.0%; height: 7.44%;"><em>Uit 05 Offerte</em></span></div></figure>
+        </div>
+      </div>
+      <svg class="v2-ketenlijn" aria-hidden="true"><path d=""/></svg>
+      <span class="v2-pakket" aria-hidden="true"><i></i><b></b></span>
+      <p class="v2-onderschrift">Voorbeeld: een project met de Vloeren-module, verzonnen gegevens</p>
+    </div>
+  </section>
+
+  <!-- 3. Basis en modules. Wat in het brein staat (framr-noordster, framr-masterplan): de kern
+       is voor ieder bouwbedrijf gelijk, alleen het inmeten, het rekenen en het bestellen
+       verschillen per vak. De basis staat onderin; de modules komen er een voor een op: Vloeren
+       klikt vast, Kozijnen zakt tot boven zijn plek en blijft daar, en de volgende plek is leeg.
+       Hier staat ook wat eerder de sectie over uitbreiden was. Alles is tekst, dus altijd scherp. -->
+  <section id="over" class="v2-modules" data-akt="modules" aria-labelledby="v2-modules-titel">
+    <div class="v2-plak">
+      <div class="v2-modules-binnen">
+        <div class="v2-modules-tekst">
+          <h2 id="v2-modules-titel">Een basis voor je bedrijf. <span class="v2-stil">Een module voor je vak.</span></h2>
+          <p class="v2-lead">De basis regelt wat ieder bouwbedrijf nodig heeft. Een module voegt toe hoe jouw vak inmeet, rekent en bestelt, op dezelfde klanten en klussen.</p>
+          <p class="v2-lead v2-zacht">Nieuwe modules bouwen voort op dezelfde basis. Geen tweede account en geen tweede systeem.</p>
+        </div>
+        <div class="v2-bouwwerk">
+          <div class="v2-sleuven">
+            <article class="v2-mod vloeren">
+              <span class="stand nu">Beschikbaar</span>
+              <h3>Vloeren</h3>
+              <ul><li>Inmeten per ruimte</li><li>Rekenen met legpatroon en snijverlies</li><li>Bestellen bij Oaklyn</li></ul>
+              <i class="v2-nok links"></i><i class="v2-nok rechts"></i>
+            </article>
+            <article class="v2-mod kozijnen">
+              <span class="stand">In ontwikkeling</span>
+              <h3>Kozijnen</h3>
+              <ul><li>Inmeten per kozijn</li><li>Configureren</li><li>Calculeren</li></ul>
+            </article>
+            <article class="v2-mod volgende">
+              <span class="stand">Volgt</span>
+              <h3>Volgende module</h3>
+              <p>Bouwt voort op dezelfde basis.</p>
+            </article>
+          </div>
+          <div class="v2-basisplaat">
+            <span class="stand">Basis, voor ieder bouwbedrijf</span>
+            <h3>Framr.One</h3>
+            <ul><li>Klanten</li><li>Klussen</li><li>Offertes</li><li>Facturen</li><li>Documenten</li></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. Gratis. Pas hier, na het product. Harde overgang naar donker; 0 euro wordt
+       opgemeten. Geen verzonnen "normale" prijs ernaast. Wat er gratis is, is besluit van
+       Jelle (16-10-2026): alles, de basis en elke module, ook de modules die nog komen. Het
+       waarom in een zin: het verdienmodel is het materiaal (framr-overzicht). -->
+  <section id="kosten" class="v2-kosten v2-donker" data-akt="kosten" aria-labelledby="v2-kosten-titel">
+    <div class="v2-plak">
+      <div class="v2-kosten-binnen">
+        <h2 id="v2-kosten-titel">Goede software hoeft geen maandelijkse kostenpost te zijn.</h2>
+        <div class="v2-nul-vak">
+          <svg class="v2-nul-maat" aria-hidden="true" preserveAspectRatio="none">
+            <g class="lat"><line x1="0" y1="13" x2="100%" y2="13"/></g>
+            <line x1="0" y1="4" x2="0" y2="22"/>
+            <line class="eind" x1="100%" y1="4" x2="100%" y2="22"/>
+            <text x="50%" y="0" dy="-2" text-anchor="middle">€ 0,00</text>
+          </svg>
+          <p class="v2-nul"><span class="v2-nul-getal">€0</span><span class="v2-nul-per">per maand</span></p>
+        </div>
+        <div class="v2-kosten-onder">
+          <p class="v2-lead">Framr.One is gratis: de basis en elke module, ook de modules die nog komen. Wij verdienen aan het materiaal dat je via het platform bestelt, niet aan de software.</p>
+          <ul class="v2-feiten">
+            <li>Geen abonnement, ook niet per module</li>
+            <li>Geen proefperiode</li>
+            <li>Geen inkoopverplichting</li>
+            <li>Alleen een e-mailadres en een wachtwoord</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Vloeren, en wat een module meer kan dan software. Wat eerder een eigen sectie was
+       (verder dan software) staat hier, concreet en alleen voor Vloeren: daar komen
+       calculatie, bestelling en partnerprijzen samen. Kozijnen klein zolang het niet live is. -->
+  <section id="vakken" class="v2-vakken" data-akt="vakken">
+    <div class="v2-binnen">
+      <div class="v2-vakken-kop">
+        <h2>Software die verder gaat <span class="v2-stil">dan administratie.</span></h2>
+        <p class="v2-lead">Binnen Vloeren komen calculatie, materiaalbestelling en partnerprijzen samen. Daarmee verdien je extra marge op je materiaal.</p>
+      </div>
+      <article class="v2-vloeren">
+        <div class="v2-vloeren-beeld">
+          <img src="beeld/vloer-visgraat-licht.jpg" alt="Een gelegde visgraatvloer in een lichte woonkamer" width="1774" height="887" loading="lazy">
+          <div class="v2-zweef"><img src="beeld/portaal/bestelling.webp" alt="De materiaallijst uit de calculatie van Framr.One Vloeren" width="1170" height="1126" loading="lazy"></div>
+        </div>
+        <div class="v2-vloeren-tekst">
+          <span class="v2-stand nu">Beschikbaar</span>
+          <h3>Framr.One Vloeren</h3>
+          <p class="v2-lead">Van inmeting tot materiaalbestelling.</p>
+          <ul class="v2-voordelen">
+            <li><b>Materialen berekenen vanuit de inmeting</b><span>Pakken, lijm, egaline en plinten, met snijverlies per legpatroon.</span></li>
+            <li><b>Offreren en bestellen in hetzelfde project</b><span>Dezelfde regels op de offerte en in de winkelwagen bij Oaklyn.</span></li>
+            <li class="marge"><b>Partnerprijzen en extra marge op materiaal</b><span>Je koopt in op je partnerprijs en bepaalt zelf je verkoopprijs.</span></li>
+          </ul>
+          <a class="knop oranje groot" href="vloeren/index.html">Bekijk hoe dit werkt bij Vloeren <span class="pijl">&rarr;</span></a>
+        </div>
+      </article>
+      <article class="v2-kozijnen">
+        <div>
+          <span class="v2-stand">In ontwikkeling</span>
+          <h3>Framr.One Kozijnen</h3>
+          <p>Inmeten, configureren en calculeren vanuit dezelfde projectomgeving.</p>
+          <p class="v2-klein" style="margin-top: 14px;">Nog niet open voor aanmelding</p>
+        </div>
+        <svg viewBox="0 0 300 200" aria-hidden="true">
+          <rect class="teken" pathLength="1" x="80" y="20" width="140" height="170" fill="none" stroke="#14161A" stroke-width="2.5"/>
+          <rect class="teken" pathLength="1" x="93" y="33" width="114" height="144" fill="none" stroke="#14161A" stroke-width="1.2"/>
+          <line class="teken" pathLength="1" x1="150" y1="33" x2="150" y2="177" stroke="#14161A" stroke-width="1.2"/>
+          <path class="teken" pathLength="1" d="M93 33 L150 105 L93 177" fill="none" stroke="#C2C2BA" stroke-width="1" stroke-dasharray="4 4"/>
+          <path class="teken" pathLength="1" d="M80 8 H220 M80 2 V14 M220 2 V14" stroke="#EA5B10" stroke-width="1.2" fill="none"/>
+          <path class="teken" pathLength="1" d="M236 20 V190 M230 20 H242 M230 190 H242" stroke="#EA5B10" stroke-width="1.2" fill="none"/>
+          <text x="150" y="-2" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="11" fill="#EA5B10">1400</text>
+          <text x="248" y="109" font-family="IBM Plex Mono, monospace" font-size="11" fill="#EA5B10">1700</text>
+        </svg>
+      </article>
+    </div>
+  </section>
+
+  <!-- 6. De showcase: zelf door de schermen, per tab het sterkste stuk van het echte portaal.
+       Het scherm komt rechtop als het in beeld komt en staat daarna stil en scherp. -->
+  <section id="software" class="v2-show" data-akt="show" aria-labelledby="v2-show-titel">
+    <div class="v2-binnen">
+      <div class="v2-show-kop">
+        <h2 id="v2-show-titel">Minder administratie. <span class="v2-stil">Meer overzicht.</span></h2>
+        <div class="v2-tabs" role="tablist" aria-label="Schermen van het portaal">
+          <button class="v2-tab" role="tab" aria-selected="true" data-zin="Elke klus met zijn inmetingen, calculaties, offertes en facturen bij elkaar, met de stand erbij.">Projecten</button>
+          <button class="v2-tab" role="tab" aria-selected="false" data-zin="Van maat naar materiaallijst, met snijverlies, lijm, egaline en plinten.">Calculaties</button>
+          <button class="v2-tab" role="tab" aria-selected="false" data-zin="Het document dat naar je klant gaat, op je eigen briefpapier.">Offertes</button>
+          <button class="v2-tab" role="tab" aria-selected="false" data-zin="Wat openstaat en wat betaald is, in je eigen reeks.">Facturen</button>
+        </div>
+      </div>
+      <p class="v2-show-zin" aria-live="polite">Elke klus met zijn inmetingen, calculaties, offertes en facturen bij elkaar, met de stand erbij.</p>
+      <div class="v2-podium">
+        <div class="v2-scherm">
+          <img class="aan" src="beeld/portaal/scherm-project.webp" alt="Het portaal: de klus Rijtjeshuis Hoensbroek met zijn inmetingen, calculaties en offertes" width="2880" height="1800" loading="lazy">
+          <img src="beeld/portaal/scherm-calculatie.webp" alt="Het portaal: de calculatie met de materiaallijst" width="2880" height="1800" loading="lazy">
+          <img src="beeld/portaal/scherm-offerte.webp" alt="Het portaal: de offerte zoals de klant hem krijgt" width="2880" height="1800" loading="lazy">
+          <img src="beeld/portaal/scherm-facturen.webp" alt="Het portaal: de facturen, open en betaald" width="2880" height="1800" loading="lazy">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 7. Van scherm naar bouwplaats. Het scherm en de maten staan er meteen, dan wordt de
+       vloer gelegd. De tekst zegt alleen wat Framr.One doet: inmeten, rekenen en bestellen;
+       het leggen is vakwerk. -->
+  <section class="v2-bouw" data-akt="bouw" aria-labelledby="v2-bouw-titel">
+    <div class="v2-plak">
+      <div class="v2-bouwvlak">
+        <img class="v2-voor" src="beeld/vloer-visgraat-leggen.jpg" alt="Een visgraatvloer die gelegd wordt" width="1667" height="944" loading="lazy">
+        <img class="v2-na" src="beeld/vloer-visgraat-licht.jpg" alt="" width="1774" height="887" loading="lazy">
+        <i class="v2-veegrand" aria-hidden="true"></i>
+        <svg class="v2-vloermaten" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <path class="lijn" pathLength="1" d="M210 820 L1390 820"/>
+          <path class="lijn" pathLength="1" d="M210 806 V834 M1390 806 V834"/>
+          <path class="lijn" pathLength="1" d="M1420 800 L1150 560"/>
+          <text x="800" y="800" text-anchor="middle">5,20 m</text>
+          <text x="1318" y="660">4,00 m</text>
+        </svg>
+        <div class="v2-bouw-scrim" aria-hidden="true"></div>
+        <div class="v2-bouw-tekst">
+          <h2 id="v2-bouw-titel">Van scherm naar bouwplaats.</h2>
+          <p>Je meet in op locatie, Framr.One rekent het materiaal uit en zet de bestelling klaar. Het leggen blijft jouw vakwerk.</p>
+        </div>
+        <div class="v2-bouwchip"><img src="beeld/portaal/ruimte.webp" alt="" width="1600" height="335" loading="lazy"></div>
+        <p class="v2-bouwlabel" aria-hidden="true"><span>Ingemeten</span><span>Gelegd</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 8. Kort en eerlijk: de vertrouwenslaag. Alleen echte informatie, elk antwoord met zijn
+       bron: voor wie (besluit 05-10-2026 en de positionering van 12-09-2026), wat beschikbaar is
+       (de basis en Vloeren; Kozijnen in ontwikkeling), wat gratis is (besluit Jelle 16-10-2026),
+       en waar je hulp krijgt (het nummer en het mailadres die Jelle op 16-10-2026 opgaf, plus de
+       proefstand en de demofilm, die allebei live staan). Stilstaand: hier beweegt niets. -->
+  <section id="eerlijk" class="v2-eerlijk" aria-labelledby="v2-eerlijk-titel">
+    <div class="v2-binnen">
+      <h2 id="v2-eerlijk-titel">Kort en eerlijk. <span class="v2-stil">Wat je vandaag hebt.</span></h2>
+      <div class="v2-vragen">
+        <section class="v2-vraag">
+          <h3><span class="nr">01</span>Voor wie is het?</h3>
+          <p>Voor vakbedrijven in de bouw. Vandaag vooral voor de zelfstandige vloerenlegger en de kleine ploeg.</p>
+          <p class="klein">Het portaal werkt met iedere vloer, ook als je je materiaal elders koopt.</p>
+        </section>
+        <section class="v2-vraag">
+          <h3><span class="nr">02</span>Wat kan ik vandaag gebruiken?</h3>
+          <p>De basis: klanten, klussen, offertes, facturen en je documenten. En de module Vloeren: inmeten, calculeren en bestellen bij Oaklyn.</p>
+          <p class="klein">Kozijnen is in ontwikkeling. Het portaal draait in de browser, op je telefoon en op kantoor.</p>
+        </section>
+        <section class="v2-vraag">
+          <h3><span class="nr">03</span>Wat is er gratis?</h3>
+          <p>Alles: de basis en elke module, ook de modules die nog komen.</p>
+          <p class="klein">Geen abonnement, geen proefperiode, geen inkoopverplichting. Je account is een e-mailadres en een wachtwoord.</p>
+        </section>
+        <section class="v2-vraag">
+          <h3><span class="nr">04</span>Waar krijg ik hulp?</h3>
+          <p>Bel of mail ons, dan krijg je een mens aan de lijn.</p>
+          <p class="v2-contact"><a href="tel:+31611472385">06 11 47 23 85</a><a href="mailto:info@framr.one">info@framr.one</a></p>
+          <p class="klein">Liever eerst zelf kijken? Het portaal werkt zonder account, en de film laat het stap voor stap zien.</p>
+          <p class="v2-vraag-links"><a href="https://app.framr.one/?proberen">Probeer het portaal <span class="pijl">&rarr;</span></a><a href="vloeren/index.html#portaal">Bekijk de film <span class="pijl">&rarr;</span></a></p>
+        </section>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. Het slot. De constructielijnen tekenen het beeldmerk; daarna een actie. -->
+  <section class="v2-slotplaat v2-donker" data-akt="slot" aria-labelledby="v2-slot-titel">
+    <div class="v2-binnen">
+      <div class="v2-slot-raster">
+        <svg class="v2-merkteken" viewBox="-40 -40 480 521" aria-hidden="true">
+          <g class="hulp">
+            <line x1="-40" y1="0" x2="440" y2="0"/><line x1="-40" y1="100" x2="440" y2="100"/>
+            <line x1="-40" y1="170" x2="440" y2="170"/><line x1="-40" y1="260" x2="440" y2="260"/>
+            <line x1="0" y1="-40" x2="0" y2="481"/><line x1="100" y1="-40" x2="100" y2="481"/>
+            <line x1="344" y1="-40" x2="344" y2="481"/><line x1="400" y1="-40" x2="400" y2="481"/>
+          </g>
+          <path class="omtrek" pathLength="1" d="M 145 0 H 382 A 18 18 0 0 1 400 18 V 82 A 18 18 0 0 1 382 100 H 158 A 58 58 0 0 0 100 158 V 382 A 53 53 0 0 1 47 435 H 16 A 16 16 0 0 1 0 419 V 145 A 145 145 0 0 1 145 0 Z"/>
+          <rect class="omtrek" pathLength="1" x="128" y="170" width="216" height="90" rx="16"/>
+          <path class="vul" d="M 145 0 H 382 A 18 18 0 0 1 400 18 V 82 A 18 18 0 0 1 382 100 H 158 A 58 58 0 0 0 100 158 V 382 A 53 53 0 0 1 47 435 H 16 A 16 16 0 0 1 0 419 V 145 A 145 145 0 0 1 145 0 Z"/>
+          <rect class="vul" x="128" y="170" width="216" height="90" rx="16"/>
+          <circle class="stip" cx="319" cy="360" r="81"/>
+        </svg>
+        <div>
+          <h2 id="v2-slot-titel">Alles rondom je werk. <span class="v2-stil">Een systeem.</span></h2>
+          <p class="v2-lead">Maak je eerste project aan. Of kijk eerst rond in het portaal, zonder account.</p>
+          <div class="v2-knoppen">
+            <a class="knop oranje groot" href="https://app.framr.one/">Start gratis <span class="pijl">&rarr;</span></a>
+            <a class="knop open groot" href="https://app.framr.one/?proberen">Probeer zonder account</a>
+          </div>
+        </div>
+      </div>
+      <!-- Nog toe te voegen voor publicatie: de wettelijke voetregel met bedrijfsnaam,
+           KvK-nummer en btw-id, plus algemene voorwaarden en privacyverklaring. -->
+      <footer class="v2-voet">
+        <a class="merk" href="voorstel-2.html">Framr<span class="een">.One</span></a>
+        <nav aria-label="Onderaan">
+          <a href="#platform">Platform</a>
+          <a href="vloeren/index.html">Vloeren</a>
+          <a href="#vakken">Kozijnen</a>
+          <a href="#eerlijk">Over Framr.One</a>
+          <a href="https://app.framr.one/">Inloggen</a>
+        </nav>
+      </footer>
+    </div>
+  </section>
+
+</main>
+
+<div class="v2-proef" id="v2-proef">Voorstel 2, 16-10 <a href="voorstel.html">Voorstel 1</a> <a href="index.html">Huidige pagina</a> <a href="ontwerpen/referenties/">Referenties</a></div>
+
+<script src="site.js"></script>
+<script src="voorstel-2-maat.js"></script>
+<script src="voorstel-2.js"></script>
+</body>
+</html>

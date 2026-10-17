@@ -1,0 +1,172 @@
+/* Framr.One, derde voorstel voor de beginpagina (17-10-2026): richting Productpagina.
+   Bouwt op stijl.css (de tokens, de balk, de knoppen, het opschrift). Alles hier draagt het
+   voorvoegsel v3-. De regels: het echte portaal recht, scherp en nooit groter dan de bron
+   (de schermen zijn op dubbele schaal vastgelegd, dus hooguit de helft van hun pixels); een
+   dunne lijn in plaats van een schaduw; tekst in rijen en kolommen, geen dozen; lopende tekst
+   minstens 18 pixels op een laptop en 17 op een telefoon. */
+
+.v3 { font-size: 18px; }
+.v3-binnen { max-width: 1360px; margin: 0 auto; padding: 0 max(24px, 4vw); }
+
+/* De balk: inloggen als gewone link naast de knop. */
+.v3-inloggen { font-size: 14.5px; color: var(--tekst); text-decoration: none; white-space: nowrap; padding: 6px 0; border-bottom: 1px solid transparent; }
+.v3-inloggen:hover { color: var(--inkt); border-bottom-color: var(--oranje); }
+
+/* 1. De opening */
+.v3-hero { padding: 140px 0 96px; }
+.v3-hero h1 { font-size: clamp(40px, 4.6vw, 74px); line-height: 1.02; letter-spacing: -0.036em; max-width: 22ch; text-wrap: balance; }
+.v3-hero-zij { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 24px 64px; align-items: end; margin-top: 28px; }
+.v3-lead { font-size: 20px; line-height: 1.55; color: var(--tekst); max-width: 44ch; }
+.v3-knoppen { display: flex; flex-wrap: wrap; gap: 12px; justify-content: flex-end; }
+.v3-stand { grid-column: 1 / -1; list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: 14.5px; color: var(--tekst); }
+.v3-stand li { display: flex; align-items: center; gap: 9px; }
+
+/* Een stip met een woord: vol oranje is beschikbaar, een open ring is in ontwikkeling. */
+.v3-stand i, .v3-stip i, .v3-mee i { width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid var(--label); flex: none; }
+.v3-stand i.aan, .v3-stip i.aan { background: var(--oranje); border-color: var(--oranje); }
+.v3-stip i.vol { background: var(--inkt); border-color: var(--inkt); }
+
+.v3-product { margin: 64px auto 0; max-width: 1440px; }
+.v3-product img { display: block; width: 100%; height: auto; border: 1px solid var(--lijn); border-radius: 14px; background: #FCFCFD; }
+.v3-product figcaption { margin-top: 14px; font-size: 14px; color: var(--label); }
+
+/* De koppen van de secties */
+section.v3-werkwijze, section.v3-modules { padding: 120px 0; border-top: 1px solid var(--lijn); }
+.v3-sectiekop { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); column-gap: 64px; align-items: end; }
+.v3-sectiekop .opschrift { grid-column: 1 / -1; }
+.v3-sectiekop h2 { max-width: 18ch; }
+.v3-intro { font-size: 18px; line-height: 1.6; color: var(--tekst); max-width: 46ch; }
+
+/* 2. De stappen: links de tekst, rechts het echte scherm. */
+.v3-stappen { list-style: none; margin: 72px 0 0; padding: 0; }
+.v3-stap { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 9fr); gap: 56px; padding: 48px 0; border-top: 1px solid var(--lijn); align-items: start; }
+.v3-stap:first-child { border-top: 0; padding-top: 0; }
+.v3-nr { font-family: var(--mono); font-size: 13px; color: var(--label); font-variant-numeric: tabular-nums; }
+.v3-stap h3 { font-size: 26px; letter-spacing: -0.02em; margin: 10px 0 12px; }
+.v3-stap-tekst p { color: var(--tekst); max-width: 34ch; line-height: 1.6; }
+.v3-mee { display: flex; align-items: baseline; gap: 10px; margin-top: 18px; font-family: var(--mono); font-size: 13.5px; color: var(--inkt) !important; }
+.v3-mee i { background: var(--oranje); border-color: var(--oranje); transform: translateY(-1px); }
+
+.v3-uitsnede { margin: 0; max-width: var(--breed, 100%); }
+.v3-vel { position: relative; border: 1px solid var(--lijn); border-radius: 12px; overflow: hidden; background: #FCFCFD; }
+.v3-doek { position: relative; }
+.v3-vel img { display: block; width: 100%; height: auto; }
+/* De oranje lijn om het veld dat meegaat. Zonder script, of zonder beweging, staat hij er
+   meteen; met script verschijnt hij als het scherm in beeld komt. */
+.v3-markering { position: absolute; border: 2px solid var(--oranje); border-radius: 8px; pointer-events: none; }
+.v3-js .v3-markering { opacity: 0; transition: opacity .5s ease .15s; }
+.v3-js .v3-stap.in-beeld .v3-markering { opacity: 1; }
+
+/* 3. Basis en modules: drie kolommen, elke regel een rij. */
+.v3-overzicht { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 56px; margin-top: 72px; }
+.v3-kolomkop { padding-bottom: 18px; border-bottom: 1px solid var(--inkt); }
+.v3-kolomkop h3 { font-size: 26px; letter-spacing: -0.02em; }
+.v3-stip { display: flex; align-items: center; gap: 9px; margin-top: 8px; font-size: 14.5px; color: var(--tekst); }
+.v3-overzicht dl { margin: 0; }
+.v3-overzicht dl > div { padding: 18px 0; border-bottom: 1px solid var(--lijn); }
+.v3-overzicht dt { font-family: var(--kop); font-weight: 500; font-size: 17px; color: var(--inkt); }
+.v3-overzicht dd { margin: 4px 0 0; color: var(--tekst); line-height: 1.55; font-size: 16.5px; }
+.v3-verder { display: inline-flex; gap: 8px; margin-top: 22px; font-size: 15px; color: var(--inkt); text-decoration: none; border-bottom: 1px solid var(--oranje); padding-bottom: 2px; }
+.v3-verder:hover .pijl { transform: translateX(3px); }
+.v3-verder .pijl { transition: transform .15s; }
+.v3-kolom.stil .v3-kolomkop { border-bottom-color: var(--lijn); }
+.v3-kolom.stil h3 { color: var(--label); }
+.v3-nog { padding: 18px 0; color: var(--label); font-size: 16.5px; }
+
+/* Lijsten in de kolommen: elke regel een rij. */
+.v3-overzicht ul { list-style: none; margin: 0; padding: 0; }
+.v3-overzicht li { padding: 16px 0; border-bottom: 1px solid var(--lijn); color: var(--tekst); line-height: 1.55; font-size: 16.5px; }
+
+/* 4. Wat het kost: de prijs groot, zoals een winkel hem noemt. */
+section.v3-kosten, section.v3-vloeren { padding: 120px 0; border-top: 1px solid var(--lijn); }
+.v3-prijs { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 22px; margin: 64px 0 0; }
+.v3-prijs b { font-family: var(--kop); font-weight: 600; font-size: clamp(72px, 9vw, 128px); line-height: .9; letter-spacing: -0.045em; color: var(--inkt); }
+.v3-prijs span { font-size: 19px; color: var(--tekst); max-width: 24ch; line-height: 1.45; }
+.v3-kosten .v3-overzicht { margin-top: 56px; }
+
+/* 5. Vloeren: de foto's links, de feiten rechts. Foto's vullen een vaste hoogte, zodat de
+   staande en de liggende foto op een lijn staan. */
+.v3-vloeren-raster { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 64px; margin-top: 72px; align-items: start; }
+.v3-fotos { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 7fr); gap: 16px; }
+.v3-fotos figure { margin: 0; }
+.v3-fotos img { display: block; width: 100%; height: 460px; object-fit: cover; border-radius: 12px; background: var(--lijn); }
+.v3-fotos figcaption { margin-top: 12px; font-size: 14px; color: var(--label); line-height: 1.5; }
+.v3-overzicht.een { grid-template-columns: minmax(0, 1fr); margin-top: 0; }
+.v3-overzicht.een dl > div:first-child { padding-top: 0; }
+.v3-verwijzingen { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; margin-top: 26px; }
+.v3-verwijzingen .v3-verder { margin-top: 0; }
+
+/* 6. Het slot: het enige donkere vlak van de pagina. */
+section.v3-slot { padding: 120px 0; background: var(--inkt); color: #fff; }
+.v3-slot-raster { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 64px; align-items: end; }
+.v3-slot h2 { color: #fff; font-size: clamp(36px, 4.4vw, 64px); max-width: 16ch; }
+.v3-slot-tekst { margin-top: 22px; font-size: 19px; line-height: 1.55; color: rgba(255, 255, 255, .74); max-width: 46ch; }
+.v3-knoppen.links { justify-content: flex-start; margin-top: 34px; }
+.knop.wit { background: #fff; color: var(--inkt); }
+.knop.wit:hover { background: #EDEDE8; }
+.v3-contact { border-top: 1px solid rgba(255, 255, 255, .18); padding-top: 22px; color: rgba(255, 255, 255, .74); font-size: 16.5px; line-height: 1.55; }
+.v3-contact-kop { color: #fff; font-family: var(--kop); font-weight: 500; font-size: 19px; margin-bottom: 4px; }
+.v3-contact-regels { display: flex; flex-wrap: wrap; gap: 8px 26px; margin-top: 16px; }
+.v3-contact-regels a { color: #fff; text-decoration: none; font-family: var(--mono); font-size: 16px; border-bottom: 1px solid var(--oranje); padding-bottom: 2px; }
+.v3-voor-wie { margin-top: 22px; font-size: 14.5px; color: rgba(255, 255, 255, .56); }
+
+.v3-voet { padding: 48px 0 64px; }
+.v3-voet .v3-binnen { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 24px; font-size: 14.5px; color: var(--label); }
+.v3-voet .merk { font-size: 22px; }
+.v3-voet-menu { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-left: auto; }
+.v3-voet-menu a { color: var(--tekst); text-decoration: none; }
+.v3-voet-menu a:hover { color: var(--inkt); }
+
+/* Het proefbordje, alleen lokaal of met ?proef. */
+.v3-proef { display: none; position: fixed; left: 16px; right: 16px; bottom: 16px; z-index: 95; max-width: 760px; margin: 0 auto; background: var(--inkt); color: #fff; border-radius: 14px; padding: 12px 18px; font-family: var(--mono); font-size: 12px; line-height: 1.5; gap: 6px 18px; flex-wrap: wrap; align-items: baseline; }
+.v3-proef.zichtbaar { display: flex; }
+.v3-proef span { color: rgba(255, 255, 255, .7); flex: 1 1 280px; }
+.v3-proef a { color: #FFB38A; }
+
+@media (min-width: 2200px) {
+  .v3-binnen { max-width: 1680px; }
+}
+
+@media (max-width: 1100px) {
+  .v3-sectiekop { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .v3-hero-zij { grid-template-columns: minmax(0, 1fr); }
+  .v3-knoppen { justify-content: flex-start; }
+  .v3-stap { grid-template-columns: minmax(0, 1fr); gap: 24px; }
+  .v3-stap-tekst p { max-width: 54ch; }
+  .v3-overzicht { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 56px 40px; }
+  .v3-vloeren-raster, .v3-slot-raster { grid-template-columns: minmax(0, 1fr); gap: 48px; }
+}
+
+@media (max-width: 860px) {
+  .menu, .v3-inloggen { display: none; }
+  .balk .knop { margin-left: auto; }
+  .v3 { font-size: 17px; }
+  .v3-hero { padding: 116px 0 64px; }
+  .v3-hero h1 { font-size: clamp(32px, 9.4vw, 44px); }
+  .v3-lead { font-size: 18px; }
+  .v3-product { margin-top: 40px; }
+  .v3-product img { border-radius: 10px; }
+  section.v3-werkwijze, section.v3-modules { padding: 80px 0; }
+  .v3-stappen { margin-top: 48px; }
+  .v3-stap { padding: 36px 0; }
+  .v3-overzicht { grid-template-columns: minmax(0, 1fr); margin-top: 48px; }
+  section.v3-kosten, section.v3-vloeren, section.v3-slot { padding: 80px 0; }
+  .v3-prijs { margin-top: 44px; }
+  .v3-vloeren-raster { margin-top: 48px; }
+  .v3-fotos img { height: 300px; }
+  .v3-voet-menu { margin-left: 0; }
+}
+
+/* Op een telefoon is een heel scherm te klein om te lezen. Het venster toont dan het deel
+   met het veld dat meegaat, groter: het doek is breder dan het venster en schuift naar dat
+   deel. Per stap staat in --zoom-smal hoe breed en in --links-smal hoeveel naar links. */
+.v3-uitsnede.alleen-smal { display: none; }
+@media (max-width: 700px) {
+  .v3-doek { width: var(--zoom-smal, 100%); margin-left: var(--links-smal, 0); }
+  .v3-uitsnede.alleen-smal { display: block; }
+  .v3-uitsnede.alleen-groot { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .v3-js .v3-markering { opacity: 1; transition: none; }
+}

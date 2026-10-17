@@ -1,0 +1,384 @@
+/* Framr.One, tweede voorstel voor de beginpagina (16-10-2026).
+   De brief staat in ontwerpen/beginpagina-brief.md. Zelfde ontwerpsysteem als de rest van
+   de site (stijl.css: oranje EA5B10 als enig accent, inkt op off-white, Poppins, Public Sans,
+   IBM Plex Mono, het woordmerk in Questrial); daarbovenop diepte, beweging en twee donkere
+   platen. Alles wat beweegt doet dat met transform, opacity of clip-path, aangestuurd door
+   voorstel-2.js. Zonder beweging (de instelling van het apparaat) staat alles in zijn
+   eindstand en vervallen de vastgezette scrollstukken. Eigen voorvoegsel v2- op alle
+   klassen. */
+
+:root {
+  --nacht: #0F1114;
+  --nacht-vlak: #171A1F;
+  --licht: #F2F1EC;
+  --licht-zacht: rgba(242, 241, 236, .68);
+  --oranje-op-nacht: #FF8A4C;
+  --schaduw-ver: 0 40px 90px -30px rgba(20, 22, 26, .34), 0 0 0 1px rgba(20, 22, 26, .07);
+  --schaduw-dicht: 0 22px 50px -18px rgba(20, 22, 26, .30), 0 0 0 1px rgba(20, 22, 26, .08);
+}
+
+.v2 section { padding: 0; }
+.v2 h2 { font-size: clamp(32px, 4.2vw, 60px); letter-spacing: -0.032em; max-width: 18ch; text-wrap: balance; }
+.v2-stil { color: var(--label); font-weight: 500; }
+.v2-lead { font-size: clamp(17px, 1.4vw, 21px); color: var(--tekst); line-height: 1.55; max-width: 46ch; margin-top: 22px; text-wrap: pretty; }
+.v2-klein { font-family: var(--mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--label); }
+.v2-plak { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
+.v2-binnen { max-width: 1320px; margin: 0 auto; padding: 0 max(22px, 4.5vw); }
+.v2-onderschrift { position: absolute; right: max(22px, 4.5vw); bottom: 22px; font-family: var(--mono); font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--label); display: flex; align-items: center; gap: 10px; }
+.v2-onderschrift::before { content: ""; width: 22px; height: 1px; background: var(--maatlijn); }
+
+/* De balk: menu met een uitklap voor de modules, rechts inloggen en de actie. */
+.v2-menu .v2-groep { position: relative; }
+.v2-groep-knop { font: inherit; font-size: 14.5px; color: var(--tekst); background: none; border: 0; border-bottom: 1px solid transparent; padding: 6px 0; cursor: pointer; display: inline-flex; align-items: center; gap: 7px; }
+.v2-groep-knop:hover, .v2-groep:focus-within .v2-groep-knop { color: var(--inkt); border-bottom-color: var(--oranje); }
+.v2-pijltje { width: 7px; height: 7px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: translateY(-2px) rotate(45deg); }
+.v2-uitklap { position: absolute; top: calc(100% + 12px); left: -18px; min-width: 250px; background: var(--vlak); border: 1px solid var(--lijn); border-radius: 14px; padding: 8px; box-shadow: var(--schaduw-dicht); opacity: 0; visibility: hidden; transform: translateY(-6px); transition: opacity .18s, transform .18s, visibility .18s; }
+.v2-groep:hover .v2-uitklap, .v2-groep:focus-within .v2-uitklap, .v2-groep.open .v2-uitklap { opacity: 1; visibility: visible; transform: none; }
+.v2-uitklap::before { content: ""; position: absolute; left: 0; right: 0; top: -14px; height: 14px; }
+.menu .v2-uitklap a { display: flex; justify-content: space-between; align-items: center; gap: 18px; padding: 11px 12px; border-radius: 9px; border: 0; color: var(--inkt); }
+.menu .v2-uitklap a:hover { background: var(--grond); border: 0; }
+.v2-uitklap b { font-family: var(--kop); font-weight: 500; font-size: 15px; }
+.v2-uitklap span { font-family: var(--mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--label); }
+.v2-uitklap span.nu { color: var(--oranje); }
+.v2-rechts { display: flex; align-items: center; gap: 20px; }
+.v2-rechts .knop { white-space: nowrap; }
+.v2-inloggen { font-size: 14.5px; color: var(--tekst); text-decoration: none; white-space: nowrap; }
+.v2-inloggen:hover { color: var(--inkt); }
+
+/* 1. De opening: de echte schermen als explosietekening. */
+.v2-hero { height: 320vh; position: relative; }
+.v2-hero .v2-plak { background: var(--grond); }
+.v2-raster { position: absolute; inset: 0; background-image: linear-gradient(to right, rgba(20, 22, 26, .055) 1px, transparent 1px), linear-gradient(to bottom, rgba(20, 22, 26, .055) 1px, transparent 1px); background-size: 56px 56px; -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 62%, #000 20%, transparent 78%); mask-image: radial-gradient(ellipse 70% 60% at 50% 62%, #000 20%, transparent 78%); }
+.v2-gloed { position: absolute; inset: 0; background: radial-gradient(circle at 74% 74%, rgba(234, 91, 16, .11), transparent 42%), radial-gradient(circle at 18% 90%, rgba(234, 91, 16, .06), transparent 38%); pointer-events: none; }
+.v2-hero-tekst { position: relative; z-index: 3; max-width: 1320px; margin: 0 auto; padding: clamp(118px, 15vh, 160px) max(22px, 4.5vw) 0; }
+.v2-hero h1 { font-size: clamp(42px, 5.6vw, 92px); line-height: .98; letter-spacing: -0.042em; max-width: 13ch; text-wrap: balance; }
+.v2-hero h1 .v2-stil { color: var(--label); }
+.v2-hero .v2-lead { max-width: 44ch; }
+.v2-knoppen { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
+.v2-scene { position: absolute; left: 0; right: 0; top: 26vh; bottom: -40vh; perspective: 2200px; perspective-origin: 50% 0%; display: flex; justify-content: center; align-items: flex-start; pointer-events: none; z-index: 2; }
+.v2-stapel { position: relative; width: min(1180px, 86vw); aspect-ratio: 1440 / 900; transform-style: preserve-3d; transform-origin: 50% 40%; }
+.v2-basis { position: absolute; inset: 0; border-radius: 14px; overflow: hidden; background: #FCFCFD; box-shadow: var(--schaduw-ver); }
+.v2-basis img { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.v2-basis .vol { opacity: 0; }
+.v2-hero.rust .v2-basis .vol { opacity: 1; }
+.v2-hero.rust .v2-deel { visibility: hidden; }
+.v2-hero.rust .v2-stapel { transform-style: flat; }
+.v2-deel { position: absolute; --hoog: 1; }
+.v2-deel img { display: block; width: 100%; height: 100%; border-radius: calc(var(--hoog) * 10px); background: #FCFCFD; box-shadow: 0 calc(var(--hoog) * 26px) calc(var(--hoog) * 50px) calc(var(--hoog) * -18px) rgba(20, 22, 26, calc(var(--hoog) * .32)), 0 0 0 1px rgba(20, 22, 26, calc(var(--hoog) * .1)); }
+.v2-anker, .v2-punt { position: absolute; left: 0; top: 0; width: 1px; height: 1px; pointer-events: none; }
+.v2-maten { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 4; pointer-events: none; overflow: visible; }
+.v2-maten .val { stroke: var(--oranje); stroke-width: 1.3; stroke-dasharray: 4 5; fill: none; }
+.v2-maten .voet { fill: var(--oranje); }
+.v2-maten .kaartje rect { fill: var(--inkt); }
+.v2-maten .kaartje.landt rect { fill: var(--oranje); }
+.v2-maten .kaartje text { font-family: var(--mono); font-size: 11.5px; letter-spacing: .14em; fill: #fff; text-transform: uppercase; }
+.v2-maten .kaartje .nr { fill: rgba(255, 255, 255, .55); }
+
+/* 2. Het project: een klus loopt door het systeem (de piek). */
+.v2-keten { height: 400vh; position: relative; border-top: 1px solid var(--lijn); }
+.v2-keten .v2-plak { display: flex; align-items: center; }
+.v2-keten-binnen { width: 100%; max-width: 1320px; margin: 0 auto; padding: 64px max(22px, 4.5vw) 0; display: grid; grid-template-columns: minmax(300px, .6fr) minmax(0, 1.4fr); gap: clamp(28px, 3.6vw, 64px); align-items: center; }
+.v2-keten h2 { font-size: clamp(30px, 3.4vw, 50px); }
+
+/* De drie hoofdstukken met hun stappen; elke stap is een knop die naar die stap scrolt. */
+.v2-hoofdstukken { list-style: none; margin: 30px 0 0; padding: 0; }
+.v2-hoofdstukken > li { padding: 12px 0 8px; border-top: 1px solid var(--lijn); }
+.v2-hoofdstukken .kop { display: block; font-family: var(--mono); font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--maatlijn); margin-bottom: 4px; transition: color .25s; }
+.v2-hoofdstukken > li.aan .kop { color: var(--oranje); }
+.v2-hoofdstukken ol { list-style: none; margin: 0; padding: 0; }
+.v2-stap { width: 100%; display: grid; grid-template-columns: 30px minmax(0, 1fr); column-gap: 6px; align-items: baseline; text-align: left; background: none; border: 0; padding: 5px 0; font: inherit; color: var(--label); cursor: pointer; transition: color .2s; }
+.v2-stap:hover { color: var(--inkt); }
+.v2-stap:focus-visible { outline: 2px solid var(--oranje); outline-offset: 3px; border-radius: 4px; }
+.v2-stap .nr { font-family: var(--mono); font-size: 10.5px; letter-spacing: .14em; color: var(--maatlijn); }
+.v2-stap b { font-family: var(--kop); font-weight: 500; font-size: 16px; }
+.v2-stap .uitleg { grid-column: 2; font-size: 14.5px; line-height: 1.5; color: var(--tekst); display: none; padding-top: 2px; }
+.v2-stap.gedaan { color: var(--tekst); }
+.v2-stap.gedaan .nr { color: var(--inkt); }
+.v2-stap.aan { color: var(--inkt); }
+.v2-stap.aan .nr { color: var(--oranje); }
+.v2-stap.aan .uitleg { display: block; }
+
+/* Het scherm: een tegelijk, plat en op ware scherpte. De kaart centreert zonder transform. */
+.v2-dek { position: relative; height: min(74vh, 700px); }
+.v2-kaart { position: absolute; left: 0; right: 0; top: 0; bottom: 0; margin: auto; width: fit-content; height: fit-content; max-width: 100%; opacity: 0; }
+.v2-kaart-vel { position: relative; display: block; border-radius: 12px; background: #FCFCFD; box-shadow: var(--schaduw-ver); }
+.v2-kaart img { display: block; width: 100%; height: auto; border-radius: 12px; }
+.v2-ring { position: absolute; border: 2px solid var(--oranje); border-radius: 8px; box-shadow: 0 0 0 5px rgba(234, 91, 16, .14); opacity: var(--ring, 0); pointer-events: none; }
+.v2-ring em { position: absolute; right: -2px; bottom: calc(100% + 7px); font-style: normal; font-family: var(--mono); font-size: 10.5px; letter-spacing: .14em; text-transform: uppercase; white-space: nowrap; color: #fff; background: var(--oranje); border-radius: 999px; padding: 5px 10px; }
+.v2-uitpunt { position: absolute; pointer-events: none; }
+.v2-pakket { position: absolute; left: 0; top: 0; z-index: 5; display: inline-flex; align-items: center; gap: 9px; padding: 8px 14px 8px 11px; border-radius: 999px; background: var(--inkt); color: #fff; font-family: var(--mono); font-size: 12px; letter-spacing: .04em; white-space: nowrap; box-shadow: 0 14px 30px -12px rgba(20, 22, 26, .5); pointer-events: none; opacity: 0; }
+.v2-pakket i { width: 8px; height: 8px; border-radius: 50%; background: var(--oranje); box-shadow: 0 0 0 4px rgba(234, 91, 16, .25); }
+.v2-ketenlijn { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 4; overflow: visible; }
+.v2-ketenlijn path { fill: none; stroke: var(--oranje); stroke-width: 1.4; stroke-dasharray: 4 5; }
+
+/* 3. Basis en modules: de basis onderin, de modules komen er een voor een op. Alles is tekst
+   en staat in rust zonder transform, dus altijd scherp. */
+.v2-modules { height: 240vh; position: relative; border-top: 1px solid var(--lijn); }
+.v2-modules .v2-plak { display: flex; align-items: center; }
+.v2-modules-binnen { width: 100%; max-width: 1320px; margin: 0 auto; padding: 64px max(22px, 4.5vw) 0; display: grid; grid-template-columns: minmax(280px, .72fr) minmax(0, 1.28fr); gap: clamp(28px, 4vw, 72px); align-items: center; }
+.v2-modules h2 { font-size: clamp(30px, 3.4vw, 50px); max-width: 15ch; }
+.v2-zacht { color: var(--label); font-size: clamp(15px, 1.15vw, 17px); }
+.v2-bouwwerk { display: grid; gap: 14px; }
+.v2-sleuven { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; align-items: end; }
+.v2-mod { position: relative; border-radius: 18px; padding: 20px 22px 22px; min-height: 196px; display: flex; flex-direction: column; opacity: 0; }
+.v2-mod .stand, .v2-basisplaat .stand { font-family: var(--mono); font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; display: flex; align-items: center; gap: 8px; }
+.v2-mod .stand::before { content: ""; width: 7px; height: 7px; border-radius: 50%; box-shadow: inset 0 0 0 1px currentColor; }
+.v2-mod h3 { font-size: clamp(22px, 1.9vw, 28px); letter-spacing: -0.02em; margin: 14px 0 12px; }
+.v2-mod ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; }
+.v2-mod li, .v2-mod p { font-size: 14.5px; line-height: 1.45; }
+.v2-mod li { display: flex; gap: 9px; }
+.v2-mod li::before { content: ""; flex: none; width: 10px; height: 1px; margin-top: .75em; background: currentColor; opacity: .5; }
+.v2-mod.vloeren { background: var(--oranje); color: #fff; box-shadow: 0 24px 50px -24px rgba(234, 91, 16, .7); }
+.v2-mod.vloeren .stand::before { background: #fff; box-shadow: none; }
+.v2-mod.kozijnen { background: var(--vlak); color: var(--inkt); border: 1.5px dashed var(--inkt); margin-bottom: 26px; }
+.v2-mod.kozijnen .stand { color: var(--label); }
+.v2-mod.kozijnen li { color: var(--tekst); }
+.v2-mod.volgende { background: transparent; color: var(--label); border: 1.5px dashed var(--maatlijn); }
+.v2-mod.volgende h3 { color: var(--label); }
+/* De nokjes waarmee Vloeren op de basis klikt. */
+.v2-nok { position: absolute; bottom: -14px; width: 26px; height: 14px; background: var(--oranje); border-radius: 0 0 6px 6px; opacity: var(--nok, 0); }
+.v2-nok.links { left: 22%; }
+.v2-nok.rechts { right: 22%; }
+.v2-basisplaat { position: relative; border-radius: 20px; background: var(--inkt); color: #fff; padding: 22px 24px 24px; display: grid; grid-template-columns: auto 1fr; column-gap: 28px; align-items: center; box-shadow: 0 30px 60px -30px rgba(20, 22, 26, .6); }
+.v2-basisplaat .stand { grid-column: 1 / -1; color: rgba(255, 255, 255, .6); margin-bottom: 10px; }
+.v2-basisplaat h3 { font-family: var(--merk); font-weight: 400; font-size: clamp(26px, 2.4vw, 36px); letter-spacing: -0.01em; color: #fff; }
+.v2-basisplaat ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; justify-content: flex-end; }
+.v2-basisplaat li { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: #fff; border: 1px solid rgba(255, 255, 255, .22); border-radius: 999px; padding: 7px 12px; }
+
+/* 4. Gratis: harde overgang naar de donkere plaat, 0 euro wordt opgemeten. */
+.v2-donker { background: var(--nacht); color: var(--licht); }
+.v2-donker h2, .v2-donker h3 { color: var(--licht); }
+.v2-donker .v2-stil { color: rgba(242, 241, 236, .5); }
+.v2-donker .v2-lead { color: var(--licht-zacht); }
+.v2-kosten { height: 210vh; position: relative; }
+.v2-kosten .v2-plak { display: flex; align-items: center; }
+.v2-kosten .v2-plak::before { content: ""; position: absolute; inset: 0; background-image: linear-gradient(to right, rgba(242, 241, 236, .045) 1px, transparent 1px), linear-gradient(to bottom, rgba(242, 241, 236, .045) 1px, transparent 1px); background-size: 56px 56px; -webkit-mask-image: radial-gradient(ellipse 60% 60% at 50% 55%, #000, transparent 75%); mask-image: radial-gradient(ellipse 60% 60% at 50% 55%, #000, transparent 75%); }
+.v2-kosten-binnen { position: relative; width: 100%; max-width: 1320px; margin: 0 auto; padding: 0 max(22px, 4.5vw); }
+.v2-kosten h2 { max-width: 22ch; font-size: clamp(28px, 3.4vw, 50px); }
+.v2-nul-vak { position: relative; margin-top: clamp(30px, 6vh, 64px); display: inline-block; }
+.v2-nul { display: flex; align-items: flex-end; gap: clamp(14px, 2vw, 28px); margin: 0; }
+.v2-nul-getal { font-family: var(--kop); font-weight: 600; font-size: clamp(150px, 30vw, 470px); line-height: .8; letter-spacing: -0.06em; color: var(--licht); clip-path: inset(-10% calc((1 - var(--q, 1)) * 100%) -10% 0); }
+.v2-nul-per { font-family: var(--mono); font-size: clamp(12px, 1.1vw, 15px); letter-spacing: .2em; text-transform: uppercase; color: var(--oranje-op-nacht); padding-bottom: 1.2em; opacity: var(--per, 1); }
+.v2-nul-maat { position: absolute; left: 0; top: -38px; width: 100%; height: 26px; overflow: visible; }
+.v2-nul-maat line { stroke: var(--oranje-op-nacht); stroke-width: 1.2; }
+.v2-nul-maat .lat { transform-origin: left; transform: scaleX(var(--q, 1)); }
+.v2-nul-maat text { font-family: var(--mono); font-size: 11px; fill: var(--oranje-op-nacht); letter-spacing: .14em; }
+.v2-nul-maat .eind, .v2-nul-maat text { opacity: var(--per, 1); }
+.v2-kosten-onder { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 40px; align-items: end; margin-top: clamp(28px, 5vh, 52px); opacity: var(--na, 1); transform: translateY(calc((1 - var(--na, 1)) * 18px)); }
+.v2-kosten-onder .v2-lead { margin: 0; }
+.v2-feiten { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; }
+.v2-feiten li { font-family: var(--mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--licht-zacht); display: flex; align-items: center; gap: 10px; }
+.v2-feiten li::before { content: ""; width: 14px; height: 1px; background: var(--oranje-op-nacht); }
+
+/* De balk boven een donkere plaat wordt zelf donker. */
+.balk.op-donker.vast { background: rgba(15, 17, 20, .86); border-bottom-color: rgba(242, 241, 236, .08); }
+.balk.op-donker .merk, .balk.op-donker .menu a, .balk.op-donker .v2-groep-knop, .balk.op-donker .v2-inloggen { color: var(--licht); }
+.balk.op-donker .menu .v2-uitklap a { color: var(--inkt); }
+.balk.op-donker .knop.inkt { background: var(--licht); color: var(--inkt); }
+
+/* 5. Vloeren en wat een module meer kan dan software; Kozijnen klein. */
+.v2-vakken-kop { max-width: 760px; margin-bottom: clamp(36px, 6vh, 64px); }
+.v2-voordelen { list-style: none; margin: 26px 0 0; padding: 0; border-top: 1px solid var(--lijn); }
+.v2-voordelen li { padding: 14px 0 14px 22px; border-bottom: 1px solid var(--lijn); position: relative; }
+.v2-voordelen li::before { content: ""; position: absolute; left: 0; top: 23px; width: 12px; height: 1px; background: var(--oranje); }
+.v2-voordelen b { display: block; font-family: var(--kop); font-weight: 500; font-size: 16.5px; color: var(--inkt); }
+.v2-voordelen span { display: block; font-size: 14.5px; color: var(--tekst); margin-top: 3px; line-height: 1.5; }
+.v2-voordelen li.marge { background: var(--oranje-zacht); border-radius: 12px; border-bottom: 0; margin-top: 10px; padding: 14px 16px 14px 36px; }
+.v2-voordelen li.marge::before { left: 16px; top: 24px; }
+.v2-voordelen li.marge b { color: var(--oranje-donker); }
+.v2-vakken { padding: clamp(110px, 16vh, 180px) 0 clamp(110px, 15vh, 170px) !important; }
+.v2-vloeren { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); background: var(--vlak); border: 1px solid var(--lijn); border-radius: 28px; overflow: hidden; box-shadow: 0 30px 80px -50px rgba(20, 22, 26, .35); }
+.v2-vloeren-beeld { position: relative; min-height: 560px; overflow: hidden; }
+.v2-vloeren-beeld > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 30% 60%; }
+.v2-zweef { position: absolute; right: 26px; bottom: 26px; width: min(44%, 300px); border-radius: 12px; overflow: hidden; box-shadow: 0 30px 60px -20px rgba(20, 22, 26, .5); }
+.v2-zweef img { display: block; width: 100%; height: auto; }
+.v2-vloeren-tekst { padding: clamp(32px, 4vw, 58px); display: flex; flex-direction: column; }
+.v2-stand { font-family: var(--mono); font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: var(--label); display: inline-flex; align-items: center; gap: 9px; }
+.v2-stand::before { content: ""; width: 8px; height: 8px; border-radius: 50%; box-shadow: inset 0 0 0 1px var(--label); }
+.v2-stand.nu { color: var(--oranje); }
+.v2-stand.nu::before { background: var(--oranje); box-shadow: 0 0 0 4px rgba(234, 91, 16, .15); }
+.v2-vloeren-tekst h3, .v2-kozijnen h3 { font-size: clamp(30px, 2.8vw, 42px); letter-spacing: -0.03em; margin: 18px 0 10px; }
+.v2-vloeren-tekst .v2-lead { margin-top: 0; font-size: 18px; }
+.v2-vloeren-tekst .knop { margin-top: auto; align-self: flex-start; }
+.v2-kozijnen { margin-top: 20px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 300px); gap: 32px; align-items: center; border: 1px dashed var(--maatlijn); border-radius: 24px; padding: clamp(26px, 3vw, 40px); }
+.v2-kozijnen h3 { font-size: clamp(24px, 2vw, 30px); margin: 14px 0 8px; }
+.v2-kozijnen p { color: var(--tekst); max-width: 52ch; }
+.v2-kozijnen svg { width: 100%; height: auto; }
+.v2-kozijnen svg .teken { stroke-dasharray: 1; stroke-dashoffset: calc(1 - var(--kz, 1)); }
+
+/* 6. De showcase: zelf door de schermen. */
+.v2-show { padding: clamp(110px, 15vh, 170px) 0 clamp(110px, 15vh, 170px) !important; border-top: 1px solid var(--lijn); background: linear-gradient(var(--grond), #EFEFEA); }
+.v2-show-kop { display: flex; justify-content: space-between; align-items: flex-end; gap: 30px; flex-wrap: wrap; }
+.v2-tabs { display: flex; gap: 6px; flex-wrap: wrap; background: var(--vlak); border: 1px solid var(--lijn); border-radius: 999px; padding: 5px; }
+.v2-tab { font-family: var(--kop); font-weight: 500; font-size: 14.5px; border: 0; background: transparent; color: var(--tekst); border-radius: 999px; padding: 10px 17px; cursor: pointer; transition: background .2s, color .2s; }
+.v2-tab:hover { color: var(--inkt); }
+.v2-tab[aria-selected="true"] { background: var(--inkt); color: #fff; }
+.v2-tab:focus-visible { outline: 2px solid var(--oranje); outline-offset: 2px; }
+.v2-show-zin { margin-top: 18px; font-size: 17px; color: var(--tekst); min-height: 1.6em; }
+.v2-podium { margin-top: 44px; perspective: 1800px; }
+.v2-scherm { position: relative; border-radius: 18px; overflow: hidden; background: var(--vlak); box-shadow: 0 60px 120px -50px rgba(20, 22, 26, .45), 0 0 0 1px rgba(20, 22, 26, .08); aspect-ratio: 1440 / 900; transform-origin: 50% 0; }
+.v2-scherm img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: top left; opacity: 0; transform: scale(1.015); transition: opacity .45s ease, transform .6s ease; }
+.v2-scherm img.aan { opacity: 1; transform: none; }
+
+/* 7. Van scherm naar bouwplaats. */
+.v2-bouw { height: 180vh; position: relative; }
+.v2-bouw .v2-plak { padding: 84px 16px 16px; }
+.v2-bouwvlak { position: relative; height: 100%; border-radius: 26px; overflow: hidden; background: var(--inkt); }
+.v2-bouwvlak > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.v2-voor { object-position: 50% 62%; transform: scale(calc(1.06 - var(--lijn, 0) * .06)); }
+.v2-na { object-position: 50% 62%; clip-path: inset(0 0 0 calc((1 - var(--veeg, 0)) * 100%)); }
+.v2-veegrand { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--oranje); left: calc((1 - var(--veeg, 0)) * 100%); opacity: calc(var(--veeg, 0) * (1 - var(--veeg, 0)) * 4); box-shadow: 0 0 0 6px rgba(234, 91, 16, .18); }
+.v2-vloermaten { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.v2-vloermaten .lijn { fill: none; stroke: #fff; stroke-width: 1.5; stroke-dasharray: 1; stroke-dashoffset: calc(1 - var(--lijn, 0)); }
+.v2-vloermaten text { font-family: var(--mono); font-size: 15px; fill: #fff; letter-spacing: .08em; opacity: var(--lijn, 0); }
+.v2-bouw-scrim { position: absolute; left: 0; top: 0; width: min(720px, 80%); height: 60%; background: radial-gradient(ellipse at 0% 0%, rgba(15, 17, 20, .62), transparent 70%); pointer-events: none; }
+.v2-bouw-tekst { position: absolute; left: clamp(24px, 4vw, 56px); top: clamp(26px, 5vh, 52px); max-width: 560px; color: #fff; }
+.v2-bouw-tekst h2 { color: #fff; }
+.v2-bouw-tekst p { color: rgba(255, 255, 255, .84); font-size: clamp(16px, 1.3vw, 19px); line-height: 1.55; margin-top: 16px; max-width: 42ch; }
+.v2-bouwchip { position: absolute; right: clamp(20px, 4vw, 56px); top: 46%; width: min(520px, 46%); border-radius: 12px; overflow: hidden; box-shadow: 0 30px 70px -20px rgba(0, 0, 0, .55); opacity: var(--chip, 0); }
+.v2-bouwchip img { display: block; width: 100%; height: auto; }
+.v2-bouwlabel { position: absolute; right: clamp(20px, 4vw, 56px); bottom: 22px; font-family: var(--mono); font-size: 10.5px; letter-spacing: .16em; text-transform: uppercase; color: rgba(255, 255, 255, .8); display: flex; gap: 18px; }
+.v2-bouwlabel span { opacity: calc(1 - var(--veeg, 0)); }
+.v2-bouwlabel span + span { opacity: var(--veeg, 0); color: #fff; }
+
+/* 8. Kort en eerlijk: vier vragen met een echt antwoord. Stilstaand. */
+.v2-eerlijk { padding: clamp(110px, 15vh, 170px) 0 !important; border-top: 1px solid var(--lijn); }
+.v2-vragen { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(20px, 2.4vw, 40px); margin-top: clamp(40px, 6vh, 64px); }
+.v2-vraag { border-top: 2px solid var(--inkt); padding-top: 22px; }
+.v2-vraag h3 { font-size: 19px; letter-spacing: -0.01em; display: flex; gap: 12px; align-items: baseline; margin-bottom: 14px; }
+.v2-vraag h3 .nr { font-family: var(--mono); font-size: 10.5px; letter-spacing: .14em; color: var(--oranje); font-weight: 400; }
+.v2-vraag p { font-size: 15.5px; line-height: 1.6; color: var(--inkt); }
+.v2-vraag p.klein { font-size: 14.5px; color: var(--tekst); margin-top: 10px; }
+.v2-contact { display: flex; flex-direction: column; gap: 4px; margin-top: 10px; }
+.v2-contact a { font-family: var(--kop); font-weight: 600; font-size: 18px; letter-spacing: -0.01em; color: var(--inkt); text-decoration: none; border-bottom: 1px solid transparent; align-self: flex-start; }
+.v2-contact a:hover { border-bottom-color: var(--oranje); }
+.v2-vraag-links { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+.v2-vraag-links a { font-family: var(--kop); font-weight: 500; font-size: 15px; color: var(--oranje-donker); text-decoration: none; display: inline-flex; gap: 8px; align-items: center; }
+.v2-vraag-links a:hover { color: var(--oranje); }
+.v2-vraag-links a .pijl { transition: transform .15s; }
+.v2-vraag-links a:hover .pijl { transform: translateX(3px); }
+
+/* 9. Het slot: de lijnen tekenen het merk. */
+.v2-slotplaat { position: relative; padding: clamp(110px, 16vh, 180px) 0 0 !important; overflow: hidden; }
+.v2-slot-raster { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(30px, 5vw, 90px); align-items: center; }
+.v2-merkteken { width: min(420px, 80%); justify-self: center; overflow: visible; }
+.v2-merkteken .omtrek { fill: none; stroke: var(--licht); stroke-width: 2; stroke-dasharray: 1; stroke-dashoffset: calc(1 - var(--trek, 1)); }
+.v2-merkteken .vul { fill: var(--licht); opacity: var(--vul, 1); }
+.v2-merkteken .stip { fill: var(--oranje); transform-box: fill-box; transform-origin: center; transform: scale(var(--stip, 1)); }
+.v2-merkteken .hulp { stroke: rgba(242, 241, 236, .22); stroke-width: 1; stroke-dasharray: 4 6; opacity: calc(1 - var(--vul, 1)); }
+.v2-slotplaat h2 { font-size: clamp(36px, 4.6vw, 70px); max-width: 14ch; }
+.v2-slotplaat .knop.open { color: var(--licht); border-color: rgba(242, 241, 236, .3); }
+.v2-slotplaat .knop.open:hover { border-color: var(--licht); }
+.v2-slotplaat .knop.oranje:hover { background: #FF6A1F; }
+.v2-voet { margin-top: clamp(90px, 14vh, 150px); border-top: 1px solid rgba(242, 241, 236, .12); padding: 32px 0 44px; display: flex; justify-content: space-between; gap: 30px; flex-wrap: wrap; align-items: center; }
+.v2-voet .merk { color: var(--licht); font-size: 24px; }
+.v2-voet nav { display: flex; gap: 26px; flex-wrap: wrap; }
+.v2-voet nav a { color: var(--licht-zacht); text-decoration: none; font-size: 14.5px; }
+.v2-voet nav a:hover { color: var(--licht); }
+
+/* Alleen op de eigen machine: een kaartje dat zegt welk voorstel dit is. */
+.v2-proef { position: fixed; left: 16px; bottom: 16px; z-index: 95; display: none; gap: 12px; align-items: center; background: var(--inkt); color: #fff; border-radius: 999px; padding: 9px 16px; font-family: var(--mono); font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; }
+.v2-proef a { color: #FFB98F; text-decoration: none; }
+.v2-proef.zichtbaar { display: flex; }
+
+/* Ultrawide: de opening groeit mee, de rest houdt zijn leesbreedte. */
+@media (min-width: 2200px) {
+  .v2-hero-tekst, .v2-keten-binnen, .v2-modules-binnen, .v2-kosten-binnen { max-width: 1700px; }
+  .v2-stapel { width: min(1500px, 70vw); }
+  .v2-hero h1 { font-size: 112px; }
+  .v2-dek { height: min(72vh, 960px); }
+}
+
+/* Tablet en kleiner. */
+@media (max-width: 1100px) {
+  .v2-keten-binnen { grid-template-columns: minmax(0, 1fr); padding-top: 76px; gap: 18px; align-content: start; }
+  .v2-keten .v2-plak { align-items: flex-start; }
+  .v2-hoofdstukken { margin-top: 14px; }
+  .v2-hoofdstukken > li { display: none; padding: 8px 0 0; }
+  .v2-hoofdstukken > li.aan { display: block; }
+  .v2-hoofdstukken ol li { display: none; }
+  .v2-hoofdstukken ol li.aan { display: block; }
+  .v2-dek { height: 52vh; }
+  .v2-modules-binnen { grid-template-columns: minmax(0, 1fr); padding-top: 80px; gap: 0; align-content: start; }
+  .v2-modules .v2-plak { align-items: flex-start; }
+  .v2-slot-raster { grid-template-columns: 1fr; }
+  .v2-vragen { grid-template-columns: 1fr 1fr; row-gap: 40px; }
+  .v2-vloeren { grid-template-columns: 1fr; }
+  .v2-vloeren-beeld { min-height: 380px; }
+  .v2-kozijnen { grid-template-columns: 1fr; }
+  .v2-kozijnen svg { max-width: 260px; }
+}
+@media (max-width: 860px) {
+  .v2-rechts .v2-inloggen { display: none; }
+  .v2-rechts { margin-left: auto; }
+  .v2-hero { height: 190vh; }
+  .v2-hero h1 { font-size: clamp(36px, 10vw, 52px); }
+  .v2-scene { top: 72vh; }
+  .v2-maten .kaartje text { font-size: 10px; }
+  .v2-dek { height: 48vh; }
+  .v2-ring em { font-size: 9.5px; padding: 4px 8px; }
+  /* Liggend is het scherm laag: de tekening blijft dan zo smal dat ze er onder de balk en met de
+     namen erboven in past (176 = balk 82, namen 80, marge 14; zie voorstel-2-maat.js). */
+  .v2-stapel { width: min(92vw, calc((100vh - 176px) * 1.6)); width: min(92vw, calc((100svh - 176px) * 1.6)); }
+  .v2-keten { height: 380vh; }
+  .v2-modules { height: 220vh; }
+  .v2-sleuven { grid-template-columns: 1fr; gap: 10px; }
+  .v2-mod { min-height: 0; padding: 14px 16px 16px; }
+  .v2-mod h3 { margin: 8px 0 6px; }
+  .v2-mod ul { grid-template-columns: 1fr; gap: 3px; }
+  .v2-mod li, .v2-mod p { font-size: 13.5px; }
+  .v2-mod.kozijnen { margin-bottom: 8px; }
+  /* Onder elkaar: Vloeren onderaan, direct op de basis, zodat het vastklikken blijft kloppen. */
+  .v2-mod.volgende { order: 1; }
+  .v2-mod.kozijnen { order: 2; }
+  .v2-mod.vloeren { order: 3; }
+  .v2-mod.kozijnen ul, .v2-mod.volgende p { display: none; }
+  .v2-mod.kozijnen h3, .v2-mod.volgende h3 { margin-bottom: 0; }
+  .v2-modules h2 { font-size: 28px; }
+  .v2-basisplaat { grid-template-columns: 1fr; }
+  .v2-basisplaat ul { justify-content: flex-start; margin-top: 12px; }
+  .v2-modules-tekst .v2-zacht { display: none; }
+  .v2-kosten { height: 170vh; }
+  .v2-kosten-onder { grid-template-columns: 1fr; gap: 24px; }
+  .v2-show-kop { align-items: flex-start; }
+  .v2-vragen { grid-template-columns: 1fr; row-gap: 32px; }
+  .v2-tabs { border-radius: 18px; }
+  .v2-bouw { height: 160vh; }
+  .v2-bouw .v2-plak { padding: 72px 10px 10px; }
+  .v2-bouwchip { left: 16px; right: 16px; width: auto; top: auto; bottom: 64px; }
+  .v2-bouw-scrim { width: 100%; height: 70%; }
+}
+
+/* Zonder beweging: geen vastgezette stukken, alles in zijn eindstand. */
+@media (prefers-reduced-motion: reduce) {
+  .v2-hero, .v2-keten, .v2-modules, .v2-kosten, .v2-bouw { height: auto; }
+  .v2-plak { position: relative; height: auto; min-height: 100vh; overflow: visible; }
+  .v2-hero .v2-plak { min-height: 0; padding-bottom: 60px; }
+  .v2-scene { position: relative; top: auto; bottom: auto; margin-top: 60px; }
+  .v2-maten, .v2-ketenlijn, .v2-pakket { display: none; }
+  .v2-keten .v2-plak, .v2-modules .v2-plak, .v2-kosten .v2-plak { padding: 110px 0; }
+  .v2-dek { height: auto; display: grid; gap: 34px; margin-top: 30px; }
+  .v2-kaart { position: relative; inset: auto; margin: 0; width: auto !important; max-width: 1120px; height: auto; opacity: 1 !important; transform: none !important; }
+  .v2-ring { opacity: 1; }
+  .v2-stap .uitleg { display: block; }
+  .v2-hoofdstukken > li, .v2-hoofdstukken ol li { display: block; }
+  .v2-bouw .v2-plak { height: 100vh; }
+  .v2-uitklap, .v2-scherm img, .v2-zweef { transition: none; }
+}
+
+/* Zonder script (het laadt niet, of staat uit): dezelfde stilstaande versie. */
+html:not(.v2-js) .v2-hero, html:not(.v2-js) .v2-keten, html:not(.v2-js) .v2-modules, html:not(.v2-js) .v2-kosten, html:not(.v2-js) .v2-bouw { height: auto; }
+html:not(.v2-js) .v2-plak { position: relative; height: auto; min-height: 100vh; overflow: visible; }
+html:not(.v2-js) .v2-hero .v2-plak { min-height: 0; padding-bottom: 60px; }
+html:not(.v2-js) .v2-scene { position: relative; top: auto; bottom: auto; margin-top: 60px; }
+html:not(.v2-js) .v2-maten, html:not(.v2-js) .v2-ketenlijn, html:not(.v2-js) .v2-pakket { display: none; }
+html:not(.v2-js) .v2-keten .v2-plak, html:not(.v2-js) .v2-modules .v2-plak, html:not(.v2-js) .v2-kosten .v2-plak { padding: 110px 0; }
+html:not(.v2-js) .v2-dek { height: auto; display: grid; gap: 34px; margin-top: 30px; }
+html:not(.v2-js) .v2-kaart { position: relative; inset: auto; margin: 0; width: auto !important; max-width: 1120px; height: auto; opacity: 1 !important; transform: none !important; }
+html:not(.v2-js) .v2-ring { opacity: 1; }
+html:not(.v2-js) .v2-stap .uitleg { display: block; }
+html:not(.v2-js) .v2-hoofdstukken > li, html:not(.v2-js) .v2-hoofdstukken ol li { display: block; }
+html:not(.v2-js) .v2-bouw .v2-plak { height: 100vh; }
+html:not(.v2-js) .v2-uitklap, html:not(.v2-js) .v2-scherm img, html:not(.v2-js) .v2-zweef { transition: none; }
+html:not(.v2-js) .v2-mod { opacity: 1; }
+html:not(.v2-js) .v2-nok { opacity: 1; }
